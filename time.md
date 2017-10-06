@@ -1,5 +1,7 @@
 # Time in Go
 
+Go includes a good set of primitives for dealing with time in the standard library, with few problems. 
+
 ## AddDate
 
 The AddDate function adjusts dates according to rollover rules. Adding years and days is relatively straightforward. If you add 7 years to a date, you'll find it has the same, unless that date doesn't exist in the year, in which case the day before is chosen. For example
@@ -9,6 +11,8 @@ The AddDate function adjusts dates according to rollover rules. Adding years and
 You might get some unexpected results if you add months with it, because the rollover rules for days are used, so subtracting 1 month or adding 1 month may not always mean you end up in the month before or after your initial date. For example:
 
 ## Time Zones
+
+Go handles time zones. 
 
 ## Monotonic time
 
@@ -20,9 +24,5 @@ Times may not contain a monotonic clock reading if they pass through functions l
 
 # Time on Go Playground
 
-The playground doesn't support certain operations, and functions which deal with time, 
-
-
-
-
+The playground starts with the same time for every run, so output is deterministic, so be aware examples including time may not function as you expect on the playground. For more details see [Inside the Go Playground.](https://blog.golang.org/playground)
 

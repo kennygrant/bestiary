@@ -4,17 +4,15 @@ The `go` keyword is one of the distinguishing features of Go, but it can lead to
 
 ## Goroutines not completing
 
-When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish. Use a wait group to make sure your goroutines are completed before the app terminates. 
+When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish. Use a wait group to make sure your goroutines are completed before the app terminates.
 
-Example. 
-
-
+Example.
 
 ## ListenAndServe
 
 After spawning a server with http.ListenAndServe, don't expect control to return to your main function until the end of the program.
 
-Example 
+Example
 
 ## Range & `go`
 
@@ -35,7 +33,7 @@ If you provide a blocking function as the argument to a function in a go routine
 go f(fb())
 ```
 
+## Setting `GOMAXPROCS`
 
-
-
+You don't need to set `GOMAXPROCS`, though it was for early versions of Go set to 1, it is now set for you intelligently by the [runtime](https://golang.org/pkg/runtime/#GOMAXPROCS). 
 

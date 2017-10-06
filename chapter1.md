@@ -45,41 +45,48 @@ To define multi-line strings, including literal control characters like newline,
  world`
 ```
 
-## Range on Strings
-
-If you range a string, you will receive the runes which make up the string, not the bytes. In an ASCII string every byte corresponds exactly to one rune, so ranging "hello" will return:
-
-```
-'h', 'e', 'l', 'l', 'o'
-```
-
-however ranging over "日本語" will return the runes, not the bytes:
-
-```
-'日', '本', '語'
-```
-
 ## Runes
 
 Runes in Go represent a code point in unicode, rather than a character. They may be a single character, or they may be part of a character or a modifier. They are an alias for the type `int32`.
 
 For example the string:
 
-> Hello, 世界
+Hello, 世界
 
 Is represented by these bytes:
 
-```
- [72 101 108 108 111 44 32 228 184 150 231 149 140]
-```
+> \[72 101 108 108 111 44 32 228 184 150 231 149 140\]
 
 but is represented by these runes:
 
-```
-[72 101 108 108 111 44 32 19990 30028]
-```
+> \[72 101 108 108 111 44 32 19990 30028\]
 
 as you can see if you range over it.
+
+## Range on Strings
+
+If you range a string, you will receive the runes which make up the string, not the bytes. In an ASCII string every byte corresponds exactly to one rune, so ranging "hello" will return:
+
+> 'h', 'e', 'l', 'l', 'o'
+
+however ranging over "日本語" will return the runes, not the bytes:
+
+> '日', '本', '語'
+
+## Index on Strings
+
+Somewhat confusingly, given how ranging works, if you take the index of a string you'll get the byte at that index, not the rune:
+
+```go
+s := "日本語"
+// This returns a byte at index 2, not the second rune as you might expect
+b := s[2]  // the byte at index 2
+fmt.Println(b)
+```
+
+Returns the third byte, not the third rune as you might expect:
+
+> 165
 
 ## Encodings
 
@@ -95,7 +102,7 @@ They have a zero value of "", and you cannot assign nil to a string.
 
 Converting Strings to Ints
 
-You can use the [strconv](https://golang.org/pkg/strconv/) package to convert Strings to other types like ints and floats and back again. 
+You can use the [strconv](https://golang.org/pkg/strconv/) package to convert Strings to other types like ints and floats and back again.
 
 ```go
  // Itoa converts an int to a string
@@ -105,6 +112,10 @@ You can use the [strconv](https://golang.org/pkg/strconv/) package to convert St
  // Print both types
  fmt.Printf("string:%s int:%d", s, i)
 ```
+
+Returns
+
+> string:99 int:99
 
 
 
