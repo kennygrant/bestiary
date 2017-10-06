@@ -4,10 +4,11 @@
 * [Setup](setup.md)
 * [Packages](packages.md)
 * [Strings](chapter1.md)
-* Slices
-* Maps
-* Interfaces
+* [Slices](slices.md)
+* [Maps](maps.md)
 * [Goroutines](goroutines.md)
-* Channels
-* [Setup](setup.md)
+* [Channels](channels.md)
+* [Functions & Scope](scope.md)
+* [Interfaces](interfaces.md)
+* [Net](net.md)
 
