@@ -26,17 +26,107 @@ You can use your own type for error, as long as it conforms to this interface, i
 
 ## Stack traces
 
-If you want to get a stack trace at the point of error, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace.
+If you want to get a stack trace at the point of error, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr, you can panic. 
 
 ## Recovering from a panic
 
-You should use defer to recover from a [panic](https://blog.golang.org/defer-panic-and-recover).
+You should recover within a **deferred function** to recover from a [panic](https://blog.golang.org/defer-panic-and-recover). Without a defer to make sure the recover executes last, recover will return nil and have no other effect. If the current goroutine is in a panic, a call to recover will capture the value given in panic, and swallow it. For example this will not work:
 
-## Recover doesn't catch all panics
+```go
+func p() {
+	// Recover does nothing outwith a defer
+	if r := recover(); r != nil {
+		fmt.Println("recover", r)
+	}
 
-If you have panics two go routines deep \(say your web server spawns a goroutine for a handler, which then spawns its own goroutine\), recover at the top level in the web server won't help you. You need a recover for each goroutine spawned.
+	// Something is wrong, this panic will end the program
+	panic("panic")
+}
+```
 
-EXAMPLE
+You need to use defer to recover:
+
+```go
+
+func main() {
+        // Start
+	fmt.Println("calling p")
+	
+	// Call p to panic and recover
+	p()
+	
+	// Recovered
+	fmt.Println("panic over")
+}
+
+// p panics and recovers
+func p() {
+	// Defer recover to the end of this function
+	defer func() {
+		// Recover from panic
+		if r := recover(); r != nil {
+			fmt.Println("recover", r)
+		}
+	}()
+
+	// Something is wrong
+	panic("panic")
+}
+
+```
+
+## Recover must be in the same goroutine
+
+You can only recover from panics in the current goroutine. If you have panics to goroutines deep, recovering at the top level won't catch them \(for example in a web server handler, which then spawns another goroutine, you must protect against panics within the goroutine spawned\). 
+
+```go
+// if a is run in a goroutine, this panic will crash the program
+func a() {
+	panic("panic a")
+}
+
+func main() {
+        // This recover does nothing
+	defer func() {
+		if x := recover(); x != nil {
+			fmt.Println("catch panic main")
+		}
+	}()
+
+	fmt.Println("start")
+	go a() // use of go means recover above won't work
+	time.Sleep(1 * time.Second)
+}
+
+```
+
+In order to catch the panic in a, a recover within that goroutine is required. Note this is not to do with function scope \(removing the go before a\(\) would allow the recover in main to work. For more detail see [Handling Panics](https://golang.org/ref/spec#Handling_panics) in the Go spec. 
+
+```go
+// if a is run in a goroutine, this panic will not crash the program
+func a() {
+	// This recover is required to catch the panic in a
+	defer func() {
+		if x := recover(); x != nil {
+			fmt.Println("catch panic a")
+		}
+	}()
+	panic("panic a")
+}
+
+func main() {
+        // this recover does nothing
+	defer func() {
+		if x := recover(); x != nil {
+			fmt.Println("catch panic main")
+		}
+	}()
+	fmt.Println("start")
+	go a() // use of go makes the recover above redundant
+	time.Sleep(1 * time.Second)
+}
+
+```
 
 ## Don't use panic too much
 

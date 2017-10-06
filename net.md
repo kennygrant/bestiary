@@ -78,18 +78,18 @@ After spawning a server with http.ListenAndServe convenience function, don't exp
 
 ```go
 func main() {
-	http.HandleFunc("/hello", HelloServer)
-	err := http.ListenAndServe(":12345", nil)
-	if err != nil {
-	   log.Fatal(err)
-	}
-	log.Println("this line will never execute")	
+    http.HandleFunc("/hello", HelloServer)
+    err := http.ListenAndServe(":12345", nil)
+    if err != nil {
+       log.Fatal(err)
+    }
+    log.Println("this line will never execute")    
 }
 ```
 
 ## Panics in goroutines
 
-The server will trap any panics in your goroutines. Will it catch panics within subgoroutines?
+If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic. 
 
 ## Cryptography
 
@@ -104,12 +104,12 @@ If generating random numbers for a server, you probably want them to be unpredic
 // NewEncryptionKey generates a random 256-bit key for Encrypt() and
 // Decrypt(). It panics if the source of randomness fails.
 func NewEncryptionKey() *[32]byte {
-	key := [32]byte{}
-	_, err := io.ReadFull(rand.Reader, key[:])
-	if err != nil {
-		panic(err)
-	}
-	return &key
+    key := [32]byte{}
+    _, err := io.ReadFull(rand.Reader, key[:])
+    if err != nil {
+        panic(err)
+    }
+    return &key
 }
 ```
 

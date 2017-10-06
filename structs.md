@@ -1,6 +1,6 @@
-# Structs
+# Structs & Types
 
-A struct in Go is a sequence of fields, each of which has a name and type public and private rules are the same as names in packages - lowercase names are private , names starting with uppercase are exported. Structs can also have methods, which allows them to fulfill interfaces. Structs do not inherit from each other, but they can embed another struct to gain its fields and behaviour. The embedder does not know anything about the struct it is embedded in and cannot access it.
+A struct in Go is a sequence of fields, each of which has a name and type public and private rules are the same as names in packages - lowercase names are private , names starting with uppercase are exported. Structs can also have methods, which allows them to fulfil interfaces. Structs do not inherit from each other, but they can embed another struct to gain its fields and behaviour. The embedder does not know anything about the struct it is embedded in and cannot access it.
 
 ## Inheritance - let it go
 
@@ -131,7 +131,20 @@ make([]int, 10, 100) // A slice with 10 zero entries, and a capacity of 100
 c := make(chan int)  // An unbuffered channel of integers
 ```
 
-###  {#new_and_make}
+## Enums
+
+There are no first class enums in Go. You can use the keyword iota to increment constants from a known base, so the closest to an enum is a set of constants in a file:
+
+```go
+// Describe the constants here
+const (
+   RoleAnon = iota 
+   RoleReader
+   RoleAdmin
+)
+```
+
+
 
 
 

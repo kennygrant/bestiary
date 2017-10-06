@@ -23,7 +23,7 @@ for _, v := range values {
 
 > last last last
 
-If instead the value is frozen before passing in to the goroutine, it works as expected:
+If instead the value is fixed in a local variable before passing in to the goroutine, it works as expected:
 
 ```go
 for _, v := range values {

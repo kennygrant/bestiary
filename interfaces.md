@@ -12,9 +12,9 @@ An interface will only be nil when both their type and value fields are nil, so 
 
 ## Keep interfaces simple
 
-Interfaces are at their most powerful when they express a simple contract that any type can easily conform to. If they start to demand a laundry list of functions \(say over around 5\), they have very little advantage over a concrete type as an argument, because the caller is not going to be able to create an alternative type without substantially recreating the original. 
+Interfaces are at their most powerful when they express a simple contract that any type can easily conform to. If they start to demand a laundry list of functions \(say over around 5\), they have very little advantage over a concrete type as an argument, because the caller is not going to be able to create an alternative type without substantially recreating the original.
 
-# Accept interfaces, return types
+## Accept interfaces, return types
 
 Interfaces are a way of avoiding tight coupling between different packages, so they are most useful when defined at their point of use, and only used there. If you export an interface as a return type, you are forcing others to use this interface only forever, or to attempt to cast your interface back into a concrete type.
 
