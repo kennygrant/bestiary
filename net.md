@@ -22,8 +22,6 @@ Don't close the response body before you check if there was an error.
  defer r.Body.Close()
 ```
 
-## 
-
 ## Serving Files
 
 If using [http.ServeFile](https://golang.org/pkg/net/http/#ServeFile) to serve files, make sure you sanitise the path first and check the file exists, then serve:
@@ -89,7 +87,7 @@ func main() {
 
 ## Panics in goroutines
 
-If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic. 
+If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic.
 
 ## Cryptography
 

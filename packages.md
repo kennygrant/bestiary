@@ -24,7 +24,7 @@ If you structure your apps this way you will avoid cyclic imports and you should
 
 ## Using goimports
 
-If you choose to use [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) instead of go fmt on save, and have several packages with the same name at different places in your `GOPATH`, it may not choose imports in the same package. There is a [fix](https://github.com/golang/go/issues/17557) almost ready for this, but that leaves the problem of imports from third party packages which might be replaced by an import from another package by mistake. So if you use this tool use it with caution and always check the imports inserted.
+If you choose to use [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) instead of go fmt on save, and have several packages with the same name at different places in your `GOPATH`, it may not choose the correct imports, or even those closest to the importing package. There is a [fix](https://github.com/golang/go/issues/17557) almost ready for this, but that leaves the problem of imports from third party packages which might be replaced by an import from another package with the same name and similar code by mistake. So if you use this tool use it with caution and always check the imports inserted.
 
 ## Using go get
 

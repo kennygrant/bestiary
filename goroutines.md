@@ -2,7 +2,7 @@
 
 Prefix a function or method call with the `go` keyword to run the call in a new goroutine, asynchronously. The `go` keyword is one of the distinguishing features of Go, but it can lead to some bugs if not used carefully.
 
-## Goroutines & range
+## Goroutines & range {#goroutines-range}
 
 If you range over values and launch a goroutine within your range, the value v sent to the goroutine will not change each time. . This is because the variable v is reused for each iteration of the for loop. Given a func f that prints the arguments:
 
@@ -23,13 +23,11 @@ for _, v := range values {
 
 > last last last
 
-If instead the value is fixed in a local variable before passing in to the goroutine, it works as expected:
+If instead the value is passed as an argument to the goroutine function, it works as expected:
 
 ```go
 for _, v := range values {
-    // Freeze the value before passing in
-    value := v
-    go func() { f(value) }()
+    go func(val string) { f(val) }(v)
 }
 ```
 

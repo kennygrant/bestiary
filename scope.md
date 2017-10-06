@@ -1,62 +1,55 @@
 # Functions & Scope
 
-Go scope is defined by blocks, to summarise:
+Go scope is defined by blocks. A block is a possibly empty sequence of declarations and statements within matching brace brackets. The levels of blocks are roughly:
 
-1. Package block - any top level identifier outside a function
-2. Function block - receivers, arguments, return values and identifiers within a function
-3. Block - identifiers declared within an inner block in a function end at the end of that block
+1. Universal block - predeclared identifiers, keywords etc
+2. Package block - any top level identifier outside a function
+3. Function block - receivers, arguments, return values and identifiers within a function
+4. Inner Blocks - identifiers declared within an inner block in a function end at the end of that block
 
 For example package block identifiers:
 
 ```
 // An exported variable
-var Exported  = "hello"
+var Exported = "hello"
 
 // A private variable
-var pkgOnly  = 1
+var pkgOnly = 1
 ```
 
 Function block identifiers:
 
 ```
-func (receiver *T)Example(argument int) (returnValue int) {
-   var f int
+func (receiver T)Function(argument int) (returnValue int) {
+   var v int
 }
 ```
 
-Block within a function: 
+Block within a function:
 
 ```
-func (r *Receiver)Example(argument int) (returnValue int) {
-   var f int
-   if argument > 0 {
-      // Inner block scope 
-      var f int
-   } // inner no longer valid
-   fmt.Printf("%d",f)
+func (receiver T) Function(argument int) (returnValue int) {
+    var v int
+
+    // Inner block begins
+    if argument > 0 {
+        var v int // shadows outer v
+        v = 4 + v
+    } 
+    // block ends 
+
+    fmt.Printf("v=%d\n", f)
+    return v
+}
+
+func main() {
+    T{}.Function(1)
 }
 ```
 
+The full rules for scope in Go are set out in the [Language Spec](https://golang.org/ref/spec#Declarations_and_scope). It is broadly similar to other languages in the C family, and there are few surprises here apart from shadowing variables inadvertently \(see below\). 
 
-
-The full rules for scope in Go are set out in the [Language Spec](https://golang.org/ref/spec#Declarations_and_scope). 
-
-
-
-The scope of a
-
-1. [predeclared identifier](https://golang.org/ref/spec#Predeclared_identifiers) is the universe block.
-2. The scope of an identifier denoting a constant, type, variable, or function \(but not method\) declared at top level \(outside any function\) is the package block.
-3. The scope of the package name of an imported package is the file block of the file containing the import declaration.
-4. The scope of an identifier denoting a method receiver, function parameter, or result variable is the function body.
-5. The scope of a constant or variable identifier declared inside a function begins at the end of the ConstSpec or VarSpec \(ShortVarDecl for short variable declarations\) and ends at the end of the innermost containing block.
-6. The scope of a type identifier declared inside a function begins at the identifier in the TypeSpec and ends at the end of the innermost containing block.
-
-
-
-In go the scope of function params and return values is the same as the function body.
-
-## Block Scope
+## Shadowing
 
 Be careful if you use the automatic assignment operator := that you don't accidentally shadow variables from the outer block. In the case below err is created twice, and if you relied on err being set in the outside scope it would not be. In most cases this isn't a problem but it's something to be aware of.
 

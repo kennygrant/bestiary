@@ -118,7 +118,7 @@ func callFoo(i FI) { i.Foo() }
 
 You can read more about this on this wiki entry on [Method Sets](https://github.com/golang/go/wiki/MethodSets).
 
-### Why do new and make exist? {#new_and_make}
+## Why do new and make exist?
 
 You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead. Perhaps it shouldn't exist?
 
@@ -143,8 +143,6 @@ const (
    RoleAdmin
 )
 ```
-
-
 
 
 

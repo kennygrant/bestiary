@@ -70,6 +70,10 @@ Some of the most widely used editors for Go programmers, roughly in order of pop
 
 You should always run [go fmt](https://blog.golang.org/go-fmt-your-code) on your code, and ideally a linter like gometalinter too. Try to set up your editor initially you run these on save. Almost all public go code is run through go fmt, and if interacting with other go programmers, this is taken as a given. Most editors have a go plugin like [vscode-go](https://github.com/Microsoft/vscode-go/) or [vim-go](https://github.com/fatih/vim-go) which will take care of this for you.
 
+#### Linter Warnings
+
+If you pay attention to linter warnings, and make sure you fix them all, you'll find your go code is more idiomatic and you will avoid common errors like executing goroutines with values from a range loop.
+
 ## Go Playground
 
 The Go Playground is a web service that runs on golang.org's servers. The service receives a Go program, compiles, links, and runs the program inside a sandbox, then returns the output. The intention is for go playground links to last forever \(in internet time that's at least a few years\).
