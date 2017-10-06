@@ -40,7 +40,7 @@ JSON only handles floats, so if you Marshal json you'll have to be aware of this
 
 #### Private fields in JSON
 
-Private fields will not be marshalled or unmarshalled, so make fields public if you want them to show up in JSON. 
+Private fields will not be marshalled or unmarshalled, so make fields public if you want them to show up in JSON.
 
 #### Hiding fields from export
 
@@ -56,9 +56,25 @@ Set the timeouts on http client.
 
 ## Bad Requests
 
-The built in Go server will reject bad requests before they hit your handlers, so you will never see them. It will return 400 Bad Request to the client. There is at present no way to override this. 
+The built in Go server will reject bad requests before they hit your handlers, so you will never see them. It will return a code 400 Bad Request to the client. There is at present no way to override this. Normally this isn't a problem but it's something to be aware of.
 
-## Errors
+## Panics in goroutines
 
 The server will trap any panics in your goroutines. Will it catch panics within subgoroutines?
+
+## Cryptography
+
+If you're trying to work with cryptography in go, definitely view this talk from [George Tankersley](https://www.golangnews.com/stories/1469-video-crypto-for-go-developers-gophercon-crypto) at CoreOS on Crypto for Go developers, which comes with example code. 
+
+### Random Numbers
+
+If generating random numbers for a server, you probably want them to be unpredictable, so use crypto/rand, not math/rand. 
+
+### Comparing Passwords
+
+If you're comparing passwords or other sensitive data, to avoid timing attacks, make use of the [crypto/subtle](https://golang.org/pkg/crypto/subtle/) subtle.ConstantTimeCompare, or better still use the [bcrypt](https://godoc.org/golang.org/x/crypto/bcrypt) package library functions  bcrypt.CompareHashAndPassword. 
+
+## 
+
+
 

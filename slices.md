@@ -1,5 +1,7 @@
 # Slices
 
+Slices 
+
 To get to grips with how slices work internally in Go, see this [Go Slices: usage and internals](https://blog.golang.org/go-slices-usage-and-internals) article from the Go blog, and for an interesting overview of the reasons slices came to their current form, see this [blog post](https://blog.golang.org/slices) by Rob Pike on the Go blog.
 
 ## Casting slices of Interface

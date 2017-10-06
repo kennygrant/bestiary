@@ -1,6 +1,6 @@
 # Strings
 
-Source code in Go is in UTF-8 encoding. This means string literals you create will be UTF strings, and the source files themselves are UTF-8. For a detailed overview of the internal workings of strings in Go see this [strings overview](https://blog.golang.org/strings) on the official Go blog.
+Source code in Go is in the UTF-8 encoding. This means string literals you create will be UTF strings, and the source files themselves are UTF-8. The string type offers no such guarantees, it stores an array of bytes, but by convention it is usually UTF-8, and you should convert to Unicode at the boundaries of your app. For a detailed overview of the internal workings of strings in Go see this [strings overview](https://blog.golang.org/strings) on the official Go blog.
 
 ## Declaring strings
 

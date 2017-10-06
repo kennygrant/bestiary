@@ -1,6 +1,6 @@
 # Go Bugs
 
-### A bestiary of common Go programming bugs
+### Common Go programming bugs & ways to avoid them
 
 ---
 
