@@ -2,7 +2,9 @@
 
 Scope in go is fairly straightfoward.
 
-## 
+Closures
+
+In go closures 
 
 ## Defer arguments are frozen
 
@@ -22,9 +24,22 @@ The defer statement freezes its arguments the instant it is evaluated \(the line
 
 The defer statement does not run at the end of a block, but at the end of the containing function.
 
-## Switch
+## Switch fallthrough
 
-Case statements inside a switch in go do not fall through by default, so break is not required.
+Case statements inside a switch in go **do not fall through by default**, so break is not required. You can use the fallthrough keyword to do so if you require. 
+
+```go
+switch(i) {
+case 0:
+// do something
+case 1:
+// do something
+case 3:
+fallthrough // the fallthrough keyword is required to fall through explicitly
+default:
+// do something
+}
+```
 
 ## Block Scope
 
@@ -37,7 +52,18 @@ if err != nil {
 }
 ```
 
-Enums
+## Enums
 
-There are no first class enums in Go. 
+There are no first class enums in Go. You can use the keyword iota to increment constants from a known base, so the closest to an enum is a set of constants in a file:
+
+```go
+// Describe the constants here
+const (
+   RoleAnon = iota 
+   RoleReader
+   RoleAdmin
+)
+```
+
+
 

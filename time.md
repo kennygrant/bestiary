@@ -1,6 +1,29 @@
 # Time in Go
 
-Go includes a good set of primitives for dealing with time in the standard library, with few problems. 
+Go includes a good set of primitives for dealing with time in the standard library. There are a few oddities detailed below.
+
+## Time Formatting
+
+Datetime formatting in Go is rather unusual. It uses a format string which functions as an example, unfortunately in practice this is rather difficult to remember. The Parse and Format functions take this format layout:
+
+```
+Mon Jan 2 15:04:05 -0700 MST 2006
+```
+
+the default time format for dates is and the time package uses the memorable [constant](https://golang.org/src/time/format.go?s=15291:15333#L66) `time.RFC3339` for timestamps in international date format ISO 8601:
+
+```
+"2006-01-02T15:04:05Z07:00"
+```
+
+There is no format just for these dates unfortunately, so you may want to define some constants for the formats you normally use, to avoid constantly referring to the time package, something like:
+
+```go
+const (
+   Date     = "2006-01-02"
+   DateTime = "2006-01-02 15:04"
+)
+```
 
 ## AddDate
 
@@ -12,7 +35,17 @@ You might get some unexpected results if you add months with it, because the rol
 
 ## Time Zones
 
-Go handles time zones. 
+You should **strongly** prefer to store times as **UTC**, and convert them for display. This makes comparisons and calculations straightforward, and allows you to customise display for the user's current location. When creating times or comparing with the current time, always use the t.UTC\(\) function to be sure you compare the UTC time.
+
+If you need to convert times, you can convert times from a given zone to a location easily enough:
+
+```go
+// Load a set location 
+l, err := time.LoadLocation("America/Mexico_City")
+
+// Set the time zone
+now := t.In(l)
+```
 
 ## Monotonic time
 

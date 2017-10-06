@@ -68,6 +68,10 @@ GOOS=linux GOARCH=arm go build -o hello-linux $GOPATH/src/hello.go
 
 This will give you a binary which runs on linux arm \(or any other platform you choose\), without any extra fuss.
 
+# Editors
+
+Some of the most widely used editors for Go programmers, roughly in order of popularity are: [VSCode](https://code.visualstudio.com/), Vim \(with [vim-go](https://github.com/fatih/vim-go)\), [IntelliJ IDEA](https://www.jetbrains.com/idea/), and [Atom](https://atom.io/). Since go just requires text files and doesn't require any special support, you can easily switch between editors, but make sure your editor has support for running go fmt on save, and ideally support for looking up definitions from within the editor. Another useful tool for browsing go source code is [sourcegraph](https://sourcegraph.com) \(which happens to be written in Go\).
+
 ## Go Playground
 
 The Go Playground is a web service that runs on golang.org's servers. The service receives a Go program, compiles, links, and runs the program inside a sandbox, then returns the output. The intention is for go playground links to last forever \(in internet time that's at least a few years\).

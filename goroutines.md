@@ -33,7 +33,7 @@ If you provide a blocking function as the argument to a function in a go routine
 go f(fb())
 ```
 
-## Setting `GOMAXPROCS`
+## `GOMAXPROCS`
 
-You don't need to set `GOMAXPROCS`, though it was for early versions of Go set to 1, it is now set for you intelligently by the [runtime](https://golang.org/pkg/runtime/#GOMAXPROCS). 
+`GOMAXPROCS` sets how many processors the Go runtime uses to run your goroutines on. Though it was set to 1 by default in early versions of Go for performance reasons, you  don't need to set`GOMAXPROCS`, as it is now set for you intelligently by the [runtime](https://golang.org/pkg/runtime/#GOMAXPROCS).
 
