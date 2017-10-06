@@ -2,18 +2,18 @@
 
 Source code in Go is in the UTF-8 encoding. This means string literals you create will be UTF strings, and the source files themselves are UTF-8. The string type offers no such guarantees, it stores an array of bytes, but by convention it is usually UTF-8, and you should convert to Unicode at the boundaries of your app. For a detailed overview of the internal workings of strings in Go see this [strings overview](https://blog.golang.org/strings) on the official Go blog.
 
-## Declaring strings
+## Declaring strings {#declaring}
 
 Quotation marks in Go source code behave slightly differently from other languages.
 
-If you use double quotes you will get a string, and can include escape codes, like \n for newline:
+If you use double quotes you will get a string, and can include escape codes, like \n for newline but not newlines:
 
 ```go
 // hello is a string ending in newline
 hello := "hello\n" -> "hello\n"
 ```
 
-If you use back quotes escape codes will not be interpreted:
+If you use back quotes escape codes will not be interpreted, and it can contain newlines:
 
 ```go
 // hello is a string ending with n
@@ -35,7 +35,7 @@ This is why if you try to define a string with single quotes, you'll get an erro
 
 > 'invalid character literal \(more than one character\)'
 
-## Multi-line strings
+## Multi-line strings {#multi-line}
 
 To define multi-line strings, including literal control characters like newline, use back quotes, for example:
 
@@ -45,7 +45,7 @@ To define multi-line strings, including literal control characters like newline,
  world`
 ```
 
-## Runes
+## Runes {#runes}
 
 Runes in Go represent a code point in unicode, rather than a character. They may be a single character, or they may be part of a character or a modifier. They are an alias for the type `int32`.
 
@@ -63,17 +63,17 @@ but is represented by these runes:
 
 as you can see if you range over it.
 
-## Range on Strings
+## Range on Strings {#range}
 
 If you range a string, you will receive the runes which make up the string, not the bytes. In an ASCII string every byte corresponds exactly to one rune, so ranging "hello" will return:
 
 > 'h', 'e', 'l', 'l', 'o'
 
-however ranging over "日本語" will return the runes, not the bytes:
+and ranging over "日本語" will return the runes, not the bytes:
 
 > '日', '本', '語'
 
-## Index on Strings
+## Index on Strings {#indexing-strings}
 
 Somewhat confusingly, given how ranging works, if you take the index of a string you'll get the byte at that index, not the rune:
 
@@ -88,19 +88,23 @@ Returns the third byte, not the third rune as you might expect:
 
 > 165
 
-## Encodings
+## Encodings {#encodings}
 
 Most of the time when working with unicode strings in Go you won't have to do anything special. If you need to convert from another encoding like Windows 1252 you can use the [encoding](https://godoc.org/golang.org/x/text/encoding) package under golang.org/x/text. There are other utility packages for dealing with text there.
 
-## Strings are immutable
+## Strings are immutable {#immutable}
 
-Strings in Go are immutable, you are not allowed to change the individual bytes. You can copy the string
+Strings in Go are immutable, you are not allowed to change the backing bytes, and this is dangerous anyway as the string may contain several bytes for each character/rune.
 
-## Strings are never nil
+## Don't use pointers to strings
+
+A string value is a fixed size and[ should not be passed as a pointer](https://github.com/golang/go/wiki/CodeReviewComments#pass-values).
+
+## Strings are never nil {#zero-value}
 
 They have a zero value of "", and you cannot assign nil to a string.
 
-## Converting Strings to Ints
+## Converting Strings to Ints {#atoi}
 
 You can use the [strconv](https://golang.org/pkg/strconv/) package to convert Strings to other types like ints and floats and back again.
 

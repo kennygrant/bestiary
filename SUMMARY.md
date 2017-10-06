@@ -3,6 +3,7 @@
 * [Introduction](README.md)
 * [Setup](setup.md)
 * [Packages](packages.md)
+* [Structs](structs.md)
 * [Strings](chapter1.md)
 * [Slices](slices.md)
 * [Maps](maps.md)
@@ -14,4 +15,6 @@
 * [Databases](databases.md)
 * [Time](time.md)
 * [Errors](errors.md)
+
+
 

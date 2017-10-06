@@ -1,12 +1,10 @@
-
-
 # Interfaces
 
 An interface in go is a contract specifying which method signatures a type must have. Crucially, it is specified by the user of the interface, not the code which satisfies it.
 
 ## Don't use pointers to interface
 
-You probably meant to use a pointer to your real type.
+You probably meant to use a pointer to your real type. This will usually cause a compile time error. 
 
 ## Interfaces are not pointers
 
@@ -16,9 +14,9 @@ An interface will only be nil when both their type and value fields are nil, so 
 
 _If you stare long enough into the Abyss, the Abyss stares back into you – Nietzsche_
 
-Don't overuse empty interface - it means nothing. 
+Don't overuse empty interface - it means nothing.
 
-If you find yourself using empty interface and then switching on type, consider instead defining separate functions which operate on concrete types. Don't try to use empty interface as a poor man's generics, it won't end well. 
+If you find yourself using empty interface and then switching on type, consider instead defining separate functions which operate on concrete types. Don't try to use empty interface as a poor man's generics, it won't end well.
 
 # Define at point of use
 

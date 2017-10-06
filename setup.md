@@ -54,10 +54,6 @@ You should see the output:
 
 If you don't, your installation is not working and you should recheck the steps above.
 
-## 
-
-
-
 ## Cross Compiling
 
 You can use Go to compile programs not just for the platform you're on, but for another supported platform, like Windows or Linux if you're working on a mac. This makes it very easy to deploy programs as single binaries, without worrying about the dependencies or building on your server. For example if you want to build the hello.go program above for the Linux platform, you could use:

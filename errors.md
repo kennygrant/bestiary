@@ -2,6 +2,10 @@
 
 [Errors](https://blog.golang.org/error-handling-and-go) and [logging](https://golang.org/pkg/log/) are one area of Go which does perhaps does deserve the label of simplistic rather than simple. The log package has no levels or interfaces, it simply prints to standard error by default. For many applications, this is enough.
 
+## Either log or return an error
+
+If you're logging an error, you've decided it's not important enough to handle. If you're returning an error \(usually with annotation\), you want the caller to handle it \(which might include logging or reporting it to the user\). 
+
 ## Don't use log.Fatalf or log.Panic
 
 For the same reasons, don't use log.Fatalf or log.Panic except in tests or short programs, because they will halt your program without cleanup. Better to explicitly call os.Exit if required, but in almost all cases you can recover gracefully.
@@ -34,9 +38,9 @@ If you have panics two go routines deep \(say your web server spawns a goroutine
 
 EXAMPLE
 
-## Don't use panic
+## Don't use panic \(much\)
 
-[Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason. Try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
+[Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason.
 
-
+Panic is fine for programming errors, or really exceptional situations, but try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
 

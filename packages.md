@@ -22,7 +22,11 @@ If you run into cyclic imports, you have a package A which imports package B whi
 
 If you structure your apps this way you will avoid cyclic imports and you should consider them a hint that something is wrong with your design.
 
+## Using goimports
+
+If you choose to use [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) instead of gofmt on save, and have several packages with the same name at different places in your gopath, it may not choose imports in the same package. There is a [fix](https://github.com/golang/go/issues/17557) almost ready for this, but that leaves the problem of imports from third party packages which might be replaced by an import from another package by mistake. So if you use this tool use it with caution and always check the imports inserted. 
+
 ## Vendoring packages
 
-There is no official vendoring tool as yet in Go, though work is progressing on one \(go dep\).
+There is no official package manager tool as yet in Go, though work is progressing on one \(go [dep](https://github.com/golang/dep)\). For now you can vendor your packages inside a vendor directory in your project, and those imports will be used instead of the imports currently. You can read more about this behaviour in the go command documentation under [Vendor Directories](https://golang.org/cmd/go/#hdr-Vendor_Directories).
 
