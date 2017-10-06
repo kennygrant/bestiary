@@ -4,7 +4,7 @@ An interface in go is a contract specifying which method signatures a type must 
 
 ## Don't use pointers to interface
 
-You probably meant to use a pointer to your real type. This will usually cause a compile time error. 
+You probably meant to use a pointer to your real type, or just a plain old Interface. 
 
 ## Interfaces are not pointers
 

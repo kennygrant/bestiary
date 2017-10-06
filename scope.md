@@ -39,6 +39,8 @@ default:
 
 ## Block Scope
 
+Be careful if you use the automatic assignment operator := that you don't accidentally shadow variables from the outer block. In the case below err is created twice, and if you relied on err being set in the outside scope it would not be. In most cases this isn't a problem but it's something to be aware of. 
+
 ```go
 // err is created
 err := f()

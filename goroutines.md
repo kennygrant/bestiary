@@ -71,7 +71,7 @@ wg.Wait()
 
 ## Data Races
 
-If two goroutines access the same memory without access control, this causes a race condition. Race detection is not yet automatic at compile time, but fortunately it's easy to detect at runtime with the [race detector](https://golang.org/doc/articles/race_detector.html).  To find data races, run your program with the -race option and it will warn you if races are detected: 
+If two goroutines access the same memory without access control, this causes a race condition. Race detection is not yet automatic at compile time, but fortunately it's easy to detect at runtime with the [race detector](https://golang.org/doc/articles/race_detector.html).  To find data races, run your program with the -race option and it will warn you if races are detected:
 
 ```
 go run -race race.go
@@ -90,12 +90,13 @@ go func() {
 }()
 
 m["2"] = "b" // Second conflicting access.
-
 ```
 
-To avoid races, you can pass copies of values, or wrap access with a mutex from the [sync](https://golang.org/pkg/sync/) package. 
+To avoid races, you can pass copies of values, or wrap access with a mutex from the [sync](https://golang.org/pkg/sync/) package.
 
 ## `GOMAXPROCS`
 
-`GOMAXPROCS` sets how many processors the Go runtime uses to run your goroutines on. Though it was set to 1 by default in early versions of Go for performance reasons, you  don't need to set`GOMAXPROCS`, as it is now set for you intelligently by the [runtime](https://golang.org/pkg/runtime/#GOMAXPROCS).
+`GOMAXPROCS` sets how many processors the Go runtime uses to run goroutines on. Though it was set to 1 by default in early versions of Go for performance reasons, programs usually don't need to set`GOMAXPROCS,` as it is now set intelligently by the [runtime](https://golang.org/pkg/runtime/#GOMAXPROCS) based on the machine. Parallel programs might benefit from a further increase in `GOMAXPROCS` but be aware that [concurrency is not parallelism](https://blog.golang.org/2013/01/concurrency-is-not-parallelism.html).
+
+.
 
