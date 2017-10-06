@@ -24,5 +24,9 @@ There is no ForEach, just use a range on the slice, and perform the action on th
 
 ## Zero Value
 
-The zero value of a slice is equivalent in most cases to an empty slice, but . 
+The zero value of a slice is equivalent in most cases to an empty slice, but .
+
+## Multi-dimensional slices
+
+Go doesn't have multi-dimensional arrays or slices, you have to create them by hand. 
 

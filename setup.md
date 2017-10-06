@@ -1,10 +1,8 @@
-
-
 # Setting up Go
 
-To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation. This installs go much like any other project. 
+To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation. This installs go much like any other project.
 
-You can find the latest installers at the [download](https://golang.org/dl/) page. 
+You can find the latest installers at the [download](https://golang.org/dl/) page.
 
 ## Setting GOPATH
 
@@ -16,13 +14,15 @@ $HOME/go
 
 So you don't need to set it explicitly, but you do need to put all your go code under `$GOPATH/src`  for go tools to work correctly.
 
-## Setting GOROOT
+You can use go run on code anywhere, but if you use go get to fetch code, it will be placed in src, under a path corresponding to the path on the server. For example code fetched from GOPATH
 
-`GOROOT`  needs to be set **only when installing to a custom location**. In most circumstances you can ignore GOROOT, and it is not required for a normal Go setup. 
+You may find projects sometimes use folders called pkg or src internally inside their main go gettable folder, but this is unrelated to gopath and is just a way of organising their code. 
 
-## Checking your setup 
+The similarly named ENV variable `GOROOT`  need only be set** if installing to a custom location**. In most circumstances you can ignore `GOROOT`, as it is not required for a normal Go setup. You may find some old instructions which reference it, but you can safely ignore it. 
 
-To test your setup, try the go command 
+## Checking your setup
+
+To test your setup, try the go command
 
 ```
 go version
@@ -54,15 +54,15 @@ You should see the output:
 
 > hello, 世界
 
-If you don't, your installation is not working and you should recheck the steps above. 
+If you don't, your installation is not working and you should recheck the steps above.
 
-## Cross Compiling 
+## Cross Compiling
 
 You can use Go to compile programs not just for the platform you're on, but for another platform, like Windows or Linux if you're working on a mac. This makes it very easy to deploy programs as single binaries, without worrying about the dependencies or building on your server. For example if you want to build the hello.go program above for the Linux platform, you could use:
 
+Go Playground
 
+The intention is for go playground links to last forever, so you can safely link to them knowing that they will work for at least a few years.
 
-
-
-
+Using Stack Overflow
 
