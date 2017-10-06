@@ -1,12 +1,10 @@
 # Slices
 
-Slices 
+Slices are views into arrays of data, offering an efficient way of working with arrays of data. To get to grips with how slices work internally in Go, see this [Go Slices: usage and internals](https://blog.golang.org/go-slices-usage-and-internals) article from the Go blog, and for an interesting overview of the reasons slices came to their current form, see this [blog post](https://blog.golang.org/slices) by Rob Pike on the Go blog. Slices have been kept intentionally simple, which means you'll be using the for range idiom a lot to perform operations on them. 
 
-To get to grips with how slices work internally in Go, see this [Go Slices: usage and internals](https://blog.golang.org/go-slices-usage-and-internals) article from the Go blog, and for an interesting overview of the reasons slices came to their current form, see this [blog post](https://blog.golang.org/slices) by Rob Pike on the Go blog.
+## Nil slices
 
-## Casting slices of Interface
-
-If you have a slice which contains Interfaces rather than concrete types, you'll need to write a for loop to convert it to a slice of a concrete type, or more efficiently do your type conversions on each element rather than converting the slice.
+The zero value of a slice is a nil slice. It has no underlying array, and has 0 length. You can use it just like a normal slice though and start using it without further initialisation \(unlike maps\).
 
 ## Slicing
 
@@ -46,9 +44,9 @@ for _, v := range s {
 }
 ```
 
-## Nil slices
+## Casting slices of Interface
 
-The zero value of a slice is a nil slice. It has no underlying array, and has 0 length. You can use it just like a normal slice though and start using it without further initialisation \(unlike maps\).
+If you have a slice which contains Interfaces rather than concrete types, you'll need to write a for loop to convert it to a slice of a concrete type, or more efficiently do your type conversions on each element rather than converting the slice.
 
 ## Multi-dimensional slices
 

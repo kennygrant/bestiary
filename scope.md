@@ -1,10 +1,6 @@
 # Functions & Scope
 
-Scope in go is fairly straightfoward.
-
-Closures
-
-In go closures 
+In go the scope of function params and return values is the same as the function body.
 
 ## Defer arguments are frozen
 
@@ -26,7 +22,7 @@ The defer statement does not run at the end of a block, but at the end of the co
 
 ## Switch fallthrough
 
-Case statements inside a switch in go **do not fall through by default**, so break is not required. You can use the fallthrough keyword to do so if you require. 
+Case statements inside a switch in go **do not fall through by default**, so break is not required. You can use the fallthrough keyword to do so if you require.
 
 ```go
 switch(i) {

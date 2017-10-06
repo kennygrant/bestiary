@@ -4,6 +4,16 @@ When writing servers in go, you'll probably make extensive use of the standard l
 
 The net and net/http packages are some of the most widely used in the Go ecosystem, and come with some unique pitfalls.
 
+## ListenAndServe
+
+After spawning a server with http.ListenAndServe, don't expect control to return to your main function until the end of the program.
+
+Example
+
+## Goroutines
+
+The http server uses goroutines to run your handlers, so each handler is in a new goroutine. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex.
+
 ## Handling Responses
 
 Don't close the response body before you check if there was an error.
@@ -17,6 +27,8 @@ Don't close the response body before you check if there was an error.
  // It's safe to defer close once you know there was no error
  defer r.Body.Close()
 ```
+
+## 
 
 ## Serving Files
 
@@ -64,15 +76,15 @@ The server will trap any panics in your goroutines. Will it catch panics within 
 
 ## Cryptography
 
-If you're trying to work with cryptography in go, definitely view this talk from [George Tankersley](https://www.golangnews.com/stories/1469-video-crypto-for-go-developers-gophercon-crypto) at CoreOS on Crypto for Go developers, which comes with example code. 
+If you're trying to work with cryptography in go, definitely view this talk from [George Tankersley](https://www.golangnews.com/stories/1469-video-crypto-for-go-developers-gophercon-crypto) at CoreOS on Crypto for Go developers, which comes with example code.
 
 ### Random Numbers
 
-If generating random numbers for a server, you probably want them to be unpredictable, so use crypto/rand, not math/rand. 
+If generating random numbers for a server, you probably want them to be unpredictable, so use crypto/rand, not math/rand.
 
 ### Comparing Passwords
 
-If you're comparing passwords or other sensitive data, to avoid timing attacks, make use of the [crypto/subtle](https://golang.org/pkg/crypto/subtle/) subtle.ConstantTimeCompare, or better still use the [bcrypt](https://godoc.org/golang.org/x/crypto/bcrypt) package library functions  bcrypt.CompareHashAndPassword. 
+If you're comparing passwords or other sensitive data, to avoid timing attacks, make use of the [crypto/subtle](https://golang.org/pkg/crypto/subtle/) subtle.ConstantTimeCompare, or better still use the [bcrypt](https://godoc.org/golang.org/x/crypto/bcrypt) package library functions  bcrypt.CompareHashAndPassword.
 
 ## 
 

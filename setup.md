@@ -54,9 +54,9 @@ You should see the output:
 
 If you don't, your installation is not working and you should recheck the steps above.
 
-## Go fmt
+## 
 
-You should always run [go fmt](https://blog.golang.org/go-fmt-your-code) on your code, and ideally a linter like gometalinter too. Try to set up your editor initially yo run these on save. Almost all public go code is run through go fmt, and if interacting with other go programmers, this is taken as a given. Most editors have a go plugin like [vscode-go](https://github.com/Microsoft/vscode-go/) or [vim-go](https://github.com/fatih/vim-go) which will take care of this for you.
+
 
 ## Cross Compiling
 
@@ -71,6 +71,8 @@ This will give you a binary which runs on linux arm \(or any other platform you 
 # Editors
 
 Some of the most widely used editors for Go programmers, roughly in order of popularity are: [VSCode](https://code.visualstudio.com/), Vim \(with [vim-go](https://github.com/fatih/vim-go)\), [IntelliJ IDEA](https://www.jetbrains.com/idea/), and [Atom](https://atom.io/). Since go just requires text files and doesn't require any special support, you can easily switch between editors, but make sure your editor has support for running go fmt on save, and ideally support for looking up definitions from within the editor. Another useful tool for browsing go source code is [sourcegraph](https://sourcegraph.com) \(which happens to be written in Go\).
+
+You should always run [go fmt](https://blog.golang.org/go-fmt-your-code) on your code, and ideally a linter like gometalinter too. Try to set up your editor initially you run these on save. Almost all public go code is run through go fmt, and if interacting with other go programmers, this is taken as a given. Most editors have a go plugin like [vscode-go](https://github.com/Microsoft/vscode-go/) or [vim-go](https://github.com/fatih/vim-go) which will take care of this for you.
 
 ## Go Playground
 

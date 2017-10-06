@@ -1,6 +1,6 @@
 # Packages
 
-In go packages are a way of scoping code, and map exactly to folders. Within a package, code can refer to any identifier within that package, public or private, while those importing the package may only reference public identifiers beginning with an uppercase letter. Each go file in a package begins with a declaration at the top of the file
+In go packages are a way of scoping code, and map exactly to folders. Within a package, code can refer to any identifier within that package, public or private, while those importing the package may only reference public identifiers beginning with an uppercase letter. Each package can contain multiple go files, and each go file in a package begins with a declaration at the top of the file for the form:
 
 ```
 package x
@@ -18,11 +18,11 @@ You should never try to import the main package. Always try to import from the t
 
 ## Cyclic dependencies
 
-If you run into cyclic imports, you have a package A which imports package B which then imports package A. To avoid this, try to keep your imports in one direction, importing small packages into the top level one. For example for a git command line tool you might have a main command, which imported a package which contains all the git specific structures and could be used as a library by that command, a server or any other type of app. 
+If you run into cyclic imports, you have a package A which imports package B which then imports package A. To avoid this, try to keep your imports in one direction, importing small packages into the top level one. For example for a git command line tool you might have a main command, which imported a package which contains all the git specific structures and could be used as a library by that command, a server or any other type of app.
 
-If you structure your apps this way you will avoid cyclic imports and you should consider them a hint that something is wrong with your design. 
+If you structure your apps this way you will avoid cyclic imports and you should consider them a hint that something is wrong with your design.
 
-## Vendoring
+## Vendoring packages
 
 There is no official vendoring tool as yet in Go, though work is progressing on one \(go dep\).
 
