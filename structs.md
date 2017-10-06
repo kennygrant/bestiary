@@ -52,14 +52,13 @@ While it is common in other languages, it is frowned upon in Go to use [self or 
 
 You can define methods either on the struct value or struct pointer. You should follow these rules for deciding which to use
 
-* **If in doubt, use a pointer receiver **
+* **If in doubt, use a pointer receiver**
 * If the method modifies the receiver, it must be on a pointer receiver 
-
 * If the receiver is large, e.g. a big struct, it is cheaper to use a pointer receiver
 * If you need any pointer receivers, make them all pointer receivers
 * If the type is stored in a map or interface, it is not addressable and T cannot use \*T methods
 
-For small structs you may want to use values, but for large structs or structs which modify themselves, you will want to use pointer receivers.
+For small structs you may want to use values for efficiency, but for large structs or structs which modify themselves, you will want to use pointer receivers.
 
 You _normally_ don't have to worry about method sets as the compiler will transform pointers or values to the other in order to use methods defined on the other as a convenience, but this breaks down in some circumstances. The exceptions to this are if a type is stored in a map, or stored in an Interface, or if you want to mutate the value of the receiver within the method. This is a gnarly detail, and effective go is somewhat confusing on this score:
 
