@@ -100,7 +100,7 @@ Strings in Go are immutable, you are not allowed to change the individual bytes.
 
 They have a zero value of "", and you cannot assign nil to a string.
 
-Converting Strings to Ints
+## Converting Strings to Ints
 
 You can use the [strconv](https://golang.org/pkg/strconv/) package to convert Strings to other types like ints and floats and back again.
 
