@@ -16,9 +16,9 @@ So you don't need to set it explicitly, but you do need to put all your go code 
 
 You can use go run on code anywhere, but if you use go get to fetch code, it will be placed in src, under a path corresponding to the path on the server. For example code fetched from GOPATH
 
-You may find projects sometimes use folders called pkg or src internally inside their main go gettable folder, but this is unrelated to gopath and is just a way of organising their code. 
+You may find projects sometimes use folders called pkg or src internally inside their main go gettable folder, but this is unrelated to gopath and is just a way of organising their code.
 
-The similarly named ENV variable `GOROOT`  need only be set** if installing to a custom location**. In most circumstances you can ignore `GOROOT`, as it is not required for a normal Go setup. You may find some old instructions which reference it, but you can safely ignore it. 
+The similarly named ENV variable `GOROOT`  need only be set** if installing to a custom location**. In most circumstances you can ignore `GOROOT`, as it is not required for a normal Go setup. You may find some old instructions which reference it, but you can safely ignore it. So for a new version of Go install don't need to set `GOROOT`  or `GOPATH` .
 
 ## Checking your setup
 
@@ -58,11 +58,21 @@ If you don't, your installation is not working and you should recheck the steps 
 
 ## Cross Compiling
 
-You can use Go to compile programs not just for the platform you're on, but for another platform, like Windows or Linux if you're working on a mac. This makes it very easy to deploy programs as single binaries, without worrying about the dependencies or building on your server. For example if you want to build the hello.go program above for the Linux platform, you could use:
+You can use Go to compile programs not just for the platform you're on, but for another supported platform, like Windows or Linux if you're working on a mac. This makes it very easy to deploy programs as single binaries, without worrying about the dependencies or building on your server. For example if you want to build the hello.go program above for the Linux platform, you could use:
 
-Go Playground
+```
+GOOS=linux GOARCH=arm go build -o hello-linux $GOPATH/src/hello.go
+```
 
-The intention is for go playground links to last forever, so you can safely link to them knowing that they will work for at least a few years.
+This will give you a binary which runs on linux arm \(or any other platform you choose\), without any extra fuss. 
 
-Using Stack Overflow
+## Go Playground
+
+The Go Playground is a web service that runs on golang.org's servers. The service receives a Go program, compiles, links, and runs the program inside a sandbox, then returns the output. The intention is for go playground links to last forever \(in internet time that's at least a few years\).
+
+The playground has certain limitations, mostly for security reasons it restricts certain operations like writing files or accessing the network, and the time is the same for each run. There are also limits on execution time and on CPU and memory usage. See [Inside the Go playground](https://blog.golang.org/playground) for more details. 
+
+## Using Stack Overflow
+
+You can find the answer to many questions about Go on [stackoverflow](https://stackoverflow.com/questions/tagged/go), in particular small questions of grammar. Be sure to search for related questions before you post your own. Try to use the right tags and post a full explanation of your problem with code to get a good response. 
 

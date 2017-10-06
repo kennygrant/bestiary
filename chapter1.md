@@ -91,5 +91,20 @@ Strings in Go are immutable, you are not allowed to change the individual bytes.
 
 ## Strings are never nil
 
-They have a zero value of "", and you cannot assign nil to a string. 
+They have a zero value of "", and you cannot assign nil to a string.
+
+Converting Strings to Ints
+
+You can use the [strconv](https://golang.org/pkg/strconv/) package to convert Strings to other types like ints and floats and back again. 
+
+```go
+ // Itoa converts an int to a string
+ s := strconv.Itoa(99)
+ // Atoi converts a string to an int
+ i,_ := strconv.Atoi(s)
+ // Print both types
+ fmt.Printf("string:%s int:%d", s, i)
+```
+
+
 

@@ -6,15 +6,23 @@ The net and net/http packages are some of the most widely used in the Go ecosyst
 
 ## Handling Responses
 
-Don't close the response body before you check if there was an error. 
+Don't close the response body before you check if there was an error.
+
+## Serving Files
+
+A common anti-pattern which has sprouted up to serve files in Go is: 
 
 
 
-Serving Files
-
-
-
-Working with JSON
+## Working with JSON
 
 JSON only handles floats, so if you Marshal json you'll have to be aware of this.
+
+## Server Timeouts
+
+Set the timeouts on your server explicitly. 
+
+## Client Timeouts
+
+Set the timeouts on http client. 
 
