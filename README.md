@@ -20,5 +20,7 @@ The biggest problem with dependencies in the long term is change - the more depe
 
 ## Formatting
 
-Go is opinionated about formatting \(as about so much else\) and provides the tool [go fmt](https://blog.golang.org/go-fmt-your-code) to enforce the suggested formatting. There is one standard style for code, including brace positions, spacing etc, enforced by the tools. This has been embraced by users of go, and it turns out it doesn't really matter where you place your braces or whether you use spaces or tabs, so you can now spend your time worrying about more important things, like whether go should have generics. 
+Go is opinionated about formatting \(as about so much else\) and provides the tool [go fmt](https://blog.golang.org/go-fmt-your-code) to enforce the suggested formatting. There is one standard style for code, including brace positions, spacing etc, enforced by the tools. This has been embraced by users of go, and it turns out it doesn't really matter where you place your braces or whether you use spaces or tabs, so you can now spend your time worrying about more important things, like whether go should have generics.
+
+_The limits of my language, define the limits of my world – Wittgenstein_
 
