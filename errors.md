@@ -4,7 +4,7 @@
 
 ## Either log or return an error
 
-If you're logging an error, you've decided it's not important enough to handle. If you're returning an error \(usually with annotation\), you want the caller to handle it \(which might include logging or reporting it to the user\). 
+If you're logging an error, you've decided it's not important enough to handle. If you're returning an error \(usually with annotation\), you want the caller to handle it \(which might include logging or reporting it to the user\).
 
 ## Don't use log.Fatalf or log.Panic
 
@@ -38,7 +38,7 @@ If you have panics two go routines deep \(say your web server spawns a goroutine
 
 EXAMPLE
 
-## Don't use panic \(much\)
+## Don't use panic too much
 
 [Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason.
 

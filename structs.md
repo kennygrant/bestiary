@@ -52,8 +52,9 @@ While it is common in other languages, it is frowned upon in Go to use [self or 
 
 You can define methods either on the struct value or struct pointer. You should follow these rules for deciding which to use
 
-* **If the method modifies the receiver, it must be on a pointer receiver **
-* If some of the methods of the type must have pointer receivers, the rest should too for consistency
+* **If in doubt, use a pointer receiver **
+* If the method modifies the receiver, it must be on a pointer receiver 
+
 * If the receiver is large, e.g. a big struct, it is cheaper to use a pointer receiver
 * If you need any pointer receivers, make them all pointer receivers
 * If the type is stored in a map or interface, it is not addressable and T cannot use \*T methods
@@ -116,7 +117,7 @@ func callBar(i I)  { i.Bar() }
 func callFoo(i FI) { i.Foo() }
 ```
 
-You can read more about this on this wiki entry on [Method Sets](https://github.com/golang/go/wiki/MethodSets). 
+You can read more about this on this wiki entry on [Method Sets](https://github.com/golang/go/wiki/MethodSets).
 
 ### Why do new and make exist? {#new_and_make}
 
