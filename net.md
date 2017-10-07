@@ -2,10 +2,6 @@
 
 When writing servers in go, you'll probably make extensive use of the standard library.The net and net/http packages are some of the most widely used in the Go ecosystem, and come with some unique pitfalls.
 
-## Implicit goroutines
-
-The http server uses goroutines to run your handlers and serve multiple requests in parallel, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex.
-
 ## Running a server
 
 You should not use the http.DefaultServeMux, in case other packages have decided to register handlers on it, and you expose those handlers without knowing about it.
@@ -23,9 +19,9 @@ srv := &http.Server{
 log.Println(srv.ListenAndServeTLS("", ""))
 ```
 
-## Accidental exposure
+## Implicit goroutines
 
-If you import net/http/pprof it has the unfortunate behaviour of registering endpoints on the http.DefaultServeMux within its init function, so merely importing the package is enough to register endpoints. You should avoid importing this package in production, and only use it for profiling while testing, and/or avoid using http.DefaultServeMux so that any handlers registered on it will be ignored.
+The http server uses goroutines to run your handlers and serve multiple requests in parallel, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex.
 
 ## Client Timeouts
 
@@ -87,9 +83,9 @@ fileServer := http.FileServer(http.Dir("./public/static"))
 http.Handle("/static/", http.StripPrefix("/static", fileServer))
 ```
 
-If you are using os.Stat, ioutil.ReadAll, or [http.ServeFile](https://www.gitbook.com/book/kennygrant/go-bestiary/edit#) or similar functions with user input \(be that in the request url or params\), be sure to sanitise the file path first, and root it at a known public path. The default mux will usually strip .. from urls before presenting to handlers and ServeFile has some protections against directory traversal, but it is better to be very careful when accessing local files based on anything from user input.  
+If you are using os.Stat, ioutil.ReadAll, or [http.ServeFile](https://www.gitbook.com/book/kennygrant/go-bestiary/edit#) or similar functions with user input \(be that in the request url or params\), be sure to sanitise the file path first, and root it at a known public path. The default mux will usually strip .. from urls before presenting to handlers and ServeFile has some protections against directory traversal, but it is better to be very careful when accessing local files based on anything from user input.
 
-If you wish to serve static content but present a custom 404 page to users, set up a file handler which checks if files exist and returns 404 or 401 in case of problems accessing the file, but otherwise calls ServeFile. 
+If you wish to serve static content but present a custom 404 page to users, set up a file handler which checks if files exist and returns 404 or 401 in case of problems accessing the file, but otherwise calls ServeFile.
 
 ```go
 // Clean the path and prefix with our public dir
@@ -176,7 +172,15 @@ func NewEncryptionKey() *[32]byte {
 
 If you're comparing passwords or other sensitive data, to avoid timing attacks, make use of the [crypto/subtle](https://golang.org/pkg/crypto/subtle/) subtle.ConstantTimeCompare, or better still use the [bcrypt](https://godoc.org/golang.org/x/crypto/bcrypt) package library functions bcrypt.CompareHashAndPassword.
 
-## 
+## Profiling
 
+The [http/pprof](https://golang.org/pkg/net/http/pprof/) package provides excellent support for profiling your server, and can be used to generate data for use in flame graphs or other graphical representations of your program.
 
+To use it, simply import the package:
+
+```
+import _ "net/http/pprof"
+```
+
+**Beware **though if you register it there are hidden side effects. It will attach endpoints to the default serve mux during init. For this and performances reasons you should not import it in production. You can find out more about profiling in [Profiling Go Programs](https://blog.golang.org/profiling-go-programs).
 

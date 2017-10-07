@@ -4,7 +4,7 @@ Channels are a queue of values of a specific type which can be used to share inf
 
 ## Stopping a goroutine
 
-Stopping a goroutine using a channel to signal completion.
+You can use a channel to stop a goroutine by using the channel to signal completion.
 
 ```go
 // create a signal channel 
@@ -32,6 +32,26 @@ go func() {
 done <- true
 ```
 
+## Nil Channels
+
+Sending to a nil channel blocks forever
+
+```go
+func main() {
+    var c chan string
+    c <- "test" // send to nil channel blocks forever
+}
+```
+
+Receive on a nil channel blocks forever
+
+```go
+func main() {
+    var c chan string
+    fmt.Println(<-c) // receive on nil blocks forever
+}
+```
+
 ## Closed Channels
 
 Sending to a closed channel causes a panic
@@ -48,38 +68,6 @@ func main() {
     write(output, 2) // send 
     close(output)    // close 
     write(output, 3) // send after close = panic
-}
-```
-
-```go
-package main
-
-import "fmt"
-
-func main() {
-    var wg sync.WaitGroup
-    out := make(chan int)
-
-    // Start an output goroutine for each input channel in cs.  output
-    // copies values from c to out until c is closed, then calls wg.Done.
-    output := func(c <-chan int) {
-        for n := range c {
-            out <- n
-        }
-        wg.Done()
-    }
-    wg.Add(len(cs))
-    for _, c := range cs {
-        go output(c)
-    }
-
-    // Start a goroutine to close out once all the output goroutines are
-    // done.  This must start after the wg.Add call.
-    go func() {
-        wg.Wait()
-        close(out)
-    }()
-    return out
 }
 ```
 
@@ -120,26 +108,6 @@ func main() {
 }
 ```
 
-## Nil Channels
-
-Sending to a nil channel blocks forever
-
-```go
-func main() {
-    var c chan string
-    c <- "test" // send to nil channel blocks forever
-}
-```
-
-Receive on a nil channel blocks forever
-
-```go
-func main() {
-    var c chan string
-    fmt.Println(<-c) // receive on nil blocks forever
-}
-```
-
 ## Deadlocks
 
 Go channels created with make\(chan T\) without a size are not buffered. An unbuffered channel is synchronous, you can only send when there is a receiver. If the reads don't match the writes, the anon goroutines deadlock.
@@ -150,18 +118,17 @@ package main
 import "fmt"
 
 func main() {
-	channel := make(chan string)
-	done_channel := make(chan bool)
-	go func() {
-		channel <- "value" // write 1
-		channel <- "value" // write 2
-		done_channel <- true
-	}()
-	variable := <-channel // read 1	
-	ok <-done_channel
-	fmt.Println(variable,ok)
+    channel := make(chan string)
+    done_channel := make(chan bool)
+    go func() {
+        channel <- "value" // write 1
+        channel <- "value" // write 2
+        done_channel <- true
+    }()
+    variable := <-channel // read 1    
+    ok <-done_channel
+    fmt.Println(variable,ok)
 }
-
 ```
 
 > fatal error: all goroutines are asleep - deadlock!
@@ -172,17 +139,17 @@ package main
 import "fmt"
 
 func main() {
-	channel := make(chan string)
-	done_channel := make(chan bool)
-	go func() {
-		channel <- "write1" // write 1
-		channel <- "write2" // write 2
-		done_channel <- true
-	}()
-	variable := <-channel // read 1
-	variable = <-channel  // read 2 required to finish
-	ok := <-done_channel
-	fmt.Println(variable, ok)
+    channel := make(chan string)
+    done_channel := make(chan bool)
+    go func() {
+        channel <- "write1" // write 1
+        channel <- "write2" // write 2
+        done_channel <- true
+    }()
+    variable := <-channel // read 1
+    variable = <-channel  // read 2 required to finish
+    ok := <-done_channel
+    fmt.Println(variable, ok)
 }
 ```
 
@@ -190,7 +157,9 @@ func main() {
 
 ## Counting channel elements
 
-```
+If you want to know how many elements are in a channel, you can just use len\(channel\)
+
+```go
 package main
 
 import "fmt"
