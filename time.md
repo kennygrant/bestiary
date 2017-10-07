@@ -27,11 +27,24 @@ const (
 
 ## AddDate
 
-The AddDate function adjusts dates according to rollover rules. Adding years and days is relatively straightforward. If you add 7 years to a date, you'll find it has the same, unless that date doesn't exist in the year, in which case the day before is chosen. For example
+The AddDate function adjusts dates according to fixed overflow rules to ensure that results are reversible. If adding Years or days, the results will generally be as expected, but if adding months, the results may not be as users expect.
 
-2015+
+For example subtracting one month from October 31 yields October 1st
 
-You might get some unexpected results if you add months with it, because the rollover rules for days are used, so subtracting 1 month or adding 1 month may not always mean you end up in the month before or after your initial date. For example:
+```go
+	// Oct 31st minus 1 month is Oct 1st, not Sept 30th according to Go
+	// because of rollov
+	input := time.Date(2016, 10, 31, 0, 0, 0, 0, time.UTC)
+	output := time.Date(2016, 9, 30, 0, 0, 0, 0, time.UTC)
+	result := input.AddDate(0, -1, 0)
+	if result != output {
+	    fmt.Printf("got:%v want:%v\n", result, output)
+	}
+```
+
+The results will be unpredictable and depend on the day chosen and the number of days in the end month. If the number of days of the start month and the end month do not match, results will be unexpected. 
+
+There is no way round this except writing your own code to handle adding months. 
 
 ## Time Zones
 

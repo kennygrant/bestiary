@@ -2,13 +2,69 @@
 
 When writing servers in go, you'll probably make extensive use of the standard library.The net and net/http packages are some of the most widely used in the Go ecosystem, and come with some unique pitfalls.
 
-## Goroutines
+## Implicit goroutines
 
-The http server uses goroutines to run your handlers, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex.
+The http server uses goroutines to run your handlers and serve multiple requests in parallel, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex.
+
+## Running a server
+
+You should not use the http.DefaultServeMux, in case other packages have decided to register handlers on it, and you expose those handlers without knowing about it. 
+
+Set the timeouts on your server explicitly to sensible defaults. You can read more about these timeouts in[ the complete guide to net/http timeouts](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/). 
+
+```
+srv := &http.Server{  
+    ReadTimeout:  5 * time.Second,
+    WriteTimeout: 10 * time.Second,
+    IdleTimeout:  120 * time.Second,
+    TLSConfig:    tlsConfig, // set TLS config 
+    Handler:      serveMux, // always set this to avoid using http.DefaultServeMux
+}
+log.Println(srv.ListenAndServeTLS("", ""))  
+```
+
+## Accidental exposure
+
+If you import net/http/pprof it has the unfortunate behaviour of registering endpoints on the http.DefaultServeMux within its init function, so merely importing the package is enough to register endpoints. You should avoid importing this package in production, and only use it for profiling while testing, and/or avoid using http.DefaultServeMux so that any handlers registered on it will be ignored. 
+
+## Client Timeouts
+
+The http client has no default timeout, which can be a problem. In this example problem the client waits 1 hour before exiting. 
+
+```go
+package main
+import (
+  “fmt”
+  “net/http”
+  “net/http/httptest”
+  “time”
+)
+func main() {
+  svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    // handler sleeps for 10 minutes
+    time.Sleep(10 * time.Minute)
+  }))
+  defer svr.Close()
+  
+  // Make a get request with default client
+  fmt.Println(“making request”)
+  http.Get(svr.URL)
+  fmt.Println(“finished request”)
+}
+```
+
+Instead, you should create a client explicitly with a timeout:
+
+```
+var netClient = &http.Client{
+  Timeout: time.Second * 10,
+}
+response, _ := netClient.Get(url)
+```
 
 ## Handling Responses
 
-#### Closing the response body
+### Closing the response body
 
 Don't close the response body before you check if there was an error.
 
@@ -22,7 +78,7 @@ Don't close the response body before you check if there was an error.
  defer r.Body.Close()
 ```
 
-## Serving Files
+### Serving Files
 
 If using [http.ServeFile](https://golang.org/pkg/net/http/#ServeFile) to serve files, make sure you sanitise the path first and check the file exists, then serve:
 
@@ -38,27 +94,7 @@ fileServer := http.FileServer(http.Dir("./public/static"))
 http.Handle("/static/", http.StripPrefix("/static", fileServer))
 ```
 
-## Working with JSON
-
-JSON only handles floats, so if you Marshal json you'll have to be aware of this.
-
-#### Private fields in JSON
-
-Private fields will not be marshalled or unmarshalled, so make fields public if you want them to show up in JSON.
-
-#### Hiding fields from export
-
-You can use struct tags for this
-
-## Server Timeouts
-
-Set the timeouts on your server explicitly.
-
-## Client Timeouts
-
-Set the timeouts on http client.
-
-## Bad Requests
+### Bad Requests
 
 The built in Go server will reject bad requests before they hit your handlers, so you will never see them. It will return a code 400 Bad Request to the client. There is at present no way to override this. Normally this isn't a problem but it's something to be aware of. For example this bad request would never hit your handlers:
 
@@ -72,7 +108,7 @@ and would simply return to the client:
 
 ## ListenAndServe
 
-After spawning a server with http.ListenAndServe convenience function, don't expect control to return to your main function until the end of the program.
+If you launch the http server in your main goroutine, don't expect control to return to your main function until the end of the program, because it blocks waiting for input until an error occurs.
 
 ```go
 func main() {
@@ -87,7 +123,7 @@ func main() {
 
 ## Panics in goroutines
 
-If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic.
+If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic. See the errors chapter for more details. 
 
 ## Cryptography
 

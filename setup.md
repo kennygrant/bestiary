@@ -84,3 +84,13 @@ The playground has certain limitations, mostly for security reasons it restricts
 
 You can find the answer to many questions about Go on [stackoverflow](https://stackoverflow.com/questions/tagged/go), in particular small questions of grammar. Be sure to search for related questions before you post your own. Try to use the right tags and post a full explanation of your problem with code to get a good response.
 
+## Dependencies
+
+There is a culture of limiting dependencies in Go, unlike some other ecosystems, the design of Go does not encourage importing libraries for trivial functions. 
+
+> Duplication is far cheaper than the wrong abstraction - Sandi Metz
+
+The biggest problem with dependencies in the long term is change - the more dependencies you have, the greater the chance of changes which break your build \(for security, or api changes, or new features\), and the more painful it becomes to keep up to date with the ecosystem you've bought into. This is why it is useful to limit your dependencies, and explicitly version those you have, and why vendoring \(taking a copy of dependencies frozen at a given version\) has become an accepted solution in the Go community to importing dependencies.
+
+You should not assume that if dependencies change and your code compiles everything is working. A change to a dependency might make subtle changes to defaults or values which while they still compile result in the wrong behaviour. The only solution to managing dependencies is to freeze them at the import version and inspect changes carefully before upgrading.
+

@@ -8,7 +8,7 @@
 * [Maps](maps.md)
 * [Goroutines](goroutines.md)
 * [Channels](channels.md)
-* [Packages](packages.md)
+* [Scope](scope.md)
 * [Packages](packages.md)
 * [Interfaces](interfaces.md)
 * [Servers](net.md)

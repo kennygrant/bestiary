@@ -2,6 +2,36 @@
 
 Prefix a function or method call with the `go` keyword to run the call in a new goroutine, asynchronously. The `go` keyword is one of the distinguishing features of Go, but it can lead to some bugs if not used carefully.
 
+## Waiting for go
+
+When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish, and you're left waiting for godot. 
+
+```go
+func main() {
+    fmt.Println("waiting...")
+    go func() {
+    defer wg.Done()
+        fmt.Println("godot") // doesn't arrive
+    }()
+wg.Wait()
+}
+```
+
+Use a wait group to make sure your goroutines are completed before the app terminates.
+
+```go
+func main() {
+  var wg sync.WaitGroup
+  fmt.Println("hello world")
+  wg.Add(1)
+  go func() {
+    defer wg.Done()
+    fmt.Println("goodbye, cruel world")
+  }()
+  wg.Wait()
+}
+```
+
 ## Goroutines & range {#goroutines-range}
 
 If you range over values and launch a goroutine within your range, the value v sent to the goroutine will not change each time. . This is because the variable v is reused for each iteration of the for loop. Given a func f that prints the arguments:
@@ -50,21 +80,6 @@ Instead an anonymous function could be used:
 go func() {
  f(fb())
 }()
-```
-
-## Goroutines not completing
-
-When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish. Use a wait group to make sure your goroutines are completed before the app terminates.
-
-```go
-var wg sync.WaitGroup
-fmt.Println("hello world")
-wg.Add(1)
-go func() {
-    defer wg.Done()
-    fmt.Println("goodbye, cruel world")
-}()
-wg.Wait()
 ```
 
 ## Data Races
