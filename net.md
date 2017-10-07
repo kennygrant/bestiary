@@ -8,9 +8,9 @@ The http server uses goroutines to run your handlers and serve multiple requests
 
 ## Running a server
 
-You should not use the http.DefaultServeMux, in case other packages have decided to register handlers on it, and you expose those handlers without knowing about it. 
+You should not use the http.DefaultServeMux, in case other packages have decided to register handlers on it, and you expose those handlers without knowing about it.
 
-Set the timeouts on your server explicitly to sensible defaults. You can read more about these timeouts in[ the complete guide to net/http timeouts](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/). 
+Set the timeouts on your server explicitly to sensible defaults. You can read more about these timeouts in[ the complete guide to net/http timeouts](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/) and [So you want to expose go on the internet](https://blog.cloudflare.com/exposing-go-on-the-internet/) by @filosottile at cloudflare. If you're interested in networking, the cloudflare blog has a lot of good articles on Go.
 
 ```
 srv := &http.Server{  
@@ -20,16 +20,16 @@ srv := &http.Server{
     TLSConfig:    tlsConfig, // set TLS config 
     Handler:      serveMux, // always set this to avoid using http.DefaultServeMux
 }
-log.Println(srv.ListenAndServeTLS("", ""))  
+log.Println(srv.ListenAndServeTLS("", ""))
 ```
 
 ## Accidental exposure
 
-If you import net/http/pprof it has the unfortunate behaviour of registering endpoints on the http.DefaultServeMux within its init function, so merely importing the package is enough to register endpoints. You should avoid importing this package in production, and only use it for profiling while testing, and/or avoid using http.DefaultServeMux so that any handlers registered on it will be ignored. 
+If you import net/http/pprof it has the unfortunate behaviour of registering endpoints on the http.DefaultServeMux within its init function, so merely importing the package is enough to register endpoints. You should avoid importing this package in production, and only use it for profiling while testing, and/or avoid using http.DefaultServeMux so that any handlers registered on it will be ignored.
 
 ## Client Timeouts
 
-The http client has no default timeout, which can be a problem. In this example problem the client waits 1 hour before exiting. 
+The http client has no default timeout, which can be a problem. In this example problem the client waits 1 hour before exiting.
 
 ```go
 package main
@@ -45,7 +45,7 @@ func main() {
     time.Sleep(10 * time.Minute)
   }))
   defer svr.Close()
-  
+
   // Make a get request with default client
   fmt.Println(“making request”)
   http.Get(svr.URL)
@@ -80,18 +80,43 @@ Don't close the response body before you check if there was an error.
 
 ### Serving Files
 
-If using [http.ServeFile](https://golang.org/pkg/net/http/#ServeFile) to serve files, make sure you sanitise the path first and check the file exists, then serve:
-
-```go
-p := filepath.Join("./public/static/", filepath.Clean(r.URL.Path[1:]))
-http.ServeFile(w, r, p)
-```
-
-don't perform file operations on paths before you clean them, and root them at a known good path. If you're serving an entire directory of files, consider using http.FileServer instead of http.ServeFile:
+Don't perform **any** file operations on paths before you clean them, and root them at a known good path. If you're serving an entire directory of files, consider using http.FileServer instead of http.ServeFile:
 
 ```go
 fileServer := http.FileServer(http.Dir("./public/static"))
 http.Handle("/static/", http.StripPrefix("/static", fileServer))
+```
+
+If you are using os.Stat, ioutil.ReadAll, or [http.ServeFile](https://www.gitbook.com/book/kennygrant/go-bestiary/edit#) or similar functions with user input \(be that in the request url or params\), be sure to sanitise the file path first, and root it at a known public path. The default mux will usually strip .. from urls before presenting to handlers and ServeFile has some protections against directory traversal, but it is better to be very careful when accessing local files based on anything from user input.  
+
+If you wish to serve static content but present a custom 404 page to users, set up a file handler which checks if files exist and returns 404 or 401 in case of problems accessing the file, but otherwise calls ServeFile. 
+
+```go
+// Clean the path and prefix with our public dir
+localPath := "./public" + path.Clean(r.URL.Path)
+
+// Check the file exists
+s, err := os.Stat(localPath)
+if err != nil {
+    // If file not found return 404 page
+    if os.IsNotExist(err) {
+        renderNotFound()
+        return
+    }
+
+    // For other file errors render unauthorised and return
+    http.Error(w, "Not Authorized", http.StatusUnauthorized)
+    return
+}
+
+// If not a file return 404 page
+if s.IsDir() {
+    renderNotFound()
+    return
+}
+
+// Serve the file content
+http.ServeFile(w, r, localPath)
 ```
 
 ### Bad Requests
@@ -123,7 +148,7 @@ func main() {
 
 ## Panics in goroutines
 
-If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic. See the errors chapter for more details. 
+If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic. See the errors chapter for more details.
 
 ## Cryptography
 

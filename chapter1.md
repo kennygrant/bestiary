@@ -88,6 +88,37 @@ Returns the third byte, not the third rune as you might expect:
 
 > 165
 
+## Trimming strings {#encodings}
+
+The strings package contains. Since you'll be using this a lot, you should read it in its entirety at least once. Go do that now. Since you have, it'll come as no surprise that strings.Trim doesn't do quite what you might expect:
+
+```
+s := "les mots, et les choses"
+t := strings.Trim(s,"les ")
+fmt.Println(t)
+```
+
+The result may be unexpected:
+
+> mots, et les cho
+
+This function takes a **cutset** string, not a prefix or suffix. If you want to trim a full prefix or suffix, use strings.TrimPrefix and strings.TrimSuffix:
+
+```
+s := "les mots, et les choses"
+t := strings.TrimPrefix(s,"les ")
+fmt.Println(t)
+```
+
+## Formatting Strings {#encodings}
+
+The usual Printf and Sprintf variants are available in the fmt package, so that you can format strings using a [template string](https://golang.org/pkg/fmt/#hdr-Printing) and variables. %v prints the value in a default format and is useful for debugging. 
+
+```go
+fmt.Printf("%s at %v", "hello world", time.Now())
+s := fmt.Sprintf("%s at %v", "hello world", time.Now())
+```
+
 ## Encodings {#encodings}
 
 Most of the time when working with unicode strings in Go you won't have to do anything special. If you need to convert from another encoding like Windows 1252 you can use the [encoding](https://godoc.org/golang.org/x/text/encoding) package under golang.org/x/text. There are other utility packages for dealing with text there.
@@ -120,6 +151,57 @@ You can use the [strconv](https://golang.org/pkg/strconv/) package to convert St
 Returns
 
 > string:99 int:99
+
+## Parsing floats
+
+Floats are [imprecise ](http://floating-point-gui.de/)and rounding can be unpredictable. When parsing them from strings and working with them, you need to be aware of this.
+
+```
+price := "655.18"
+f, _ := strconv.ParseFloat(price, 64)
+c := int(f * 100)
+fmt.Printf("string:%s float:%f cents:%d", price, f, c)
+```
+
+> string:655.18 float:655.180000 cents:65517
+
+If you're parsing a float for a currency value, you should store it as an integer cents value, so consider converting the string to a value in cents first, as you will have work to do anyway to strip currency amounts and deal with missing cents. You can then parse as an integer and avoid any problems with float calculations.
+
+## Reading files 
+
+You can read an entire file with ioutil.. 
+
+```go
+b, err := ioutil.ReadFile("path/to/file")
+if err != nil {
+   fmt.Println("error reading file: %s", err)
+}
+
+fmt.Printf("%s", b)
+```
+
+But if the file is large this will use a large amount of memory. 
+
+Unless you are ready small files like config files, consider reading the file in chunks. The easiest way to read a line-based file is with [bufio.Scanner](https://golang.org/pkg/bufio/). You can also read the entire file into memory with ioutil, but this won't be suitable for parsing large files. 
+
+```go
+file, err := os.Open("path/to/file")
+if err != nil {
+    fmt.Println("error opening file: %s", err)
+    return
+}
+defer file.Close()
+
+scanner := bufio.NewScanner(file)
+for scanner.Scan() {
+    // Do something with line
+    fmt.Println("line:%s", scanner.Text())
+}
+
+if err := scanner.Err(); err != nil {
+    fmt.Println("error reading file: %s", err)
+}
+```
 
 
 

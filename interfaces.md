@@ -6,13 +6,74 @@ An interface in go is a contract specifying which method signatures a type must 
 
 Interfaces are a way of avoiding tight coupling between different packages, so they are most useful when defined at their point of use, and only used there. If you export an interface as a return type, you are forcing others to use this interface only forever, or to attempt to cast your interface back into a concrete type.
 
-Do not design interfaces for mocking, design them for real world use, and don't add methods to them before you have a concrete use for the methods.
+Do not design interfaces for mocking, design them for real world use, and don't add methods to them before you have a concrete use for the methods. The exception to this is of course the extremely common error interface. 
 
 ## Keep interfaces simple
 
 Interfaces are at their most powerful when they express a simple contract that any type can easily conform to. If they start to demand a laundry list of functions \(say over around 5\), they have very little advantage over a concrete type as an argument, because the caller is not going to be able to create an alternative type without substantially recreating the original.
 
-## Avoid the empty Interface 
+Some examples of useful interfaces from the standard library are:
+
+[error](https://golang.org/ref/spec#Errors) 
+
+Error represents an error condition, and only returns a string with a description of the error. 
+
+```
+type error interface {
+	Error() string
+}
+```
+
+[fmt.Stringer](https://golang.org/pkg/fmt/#Stringer)
+
+Used when formatting values for fmt.Printf and friends. 
+
+```
+type Stringer interface {
+        String() string
+}
+```
+
+[io.Reader ](https://golang.org/pkg/io/#Reader)
+
+Read reads len\(p\) bytes from the data stream. 
+
+```
+type Reader interface {
+        Read(p []byte) (n int, err error)
+}
+```
+
+[io.Writer](https://golang.org/pkg/io/#Writer)
+
+Write writes len\(p\) bytes from p to a data .stream. 
+
+```
+type Writer interface {
+        Write(p []byte) (n int, err error)
+
+```
+
+[http.ResponseWriter](https://golang.org/pkg/net/http/#ResponseWriter)
+
+HTTP handlers are passed a ResponseWriter to write the HTTP response to a request. 
+
+```
+type ResponseWriter interface {
+        // Header returns the header map used to set headers.
+        Header() Header
+
+        // Write writes the data to the connection as part of an HTTP reply.
+        Write([]byte) (int, error)
+
+        // WriteHeader writes an HTTP response header with just a status code - used for errors.
+        WriteHeader(int)
+}
+```
+
+You'll notice that all of these extremely popular interfaces have one thing in common - they all require very few functions. For this reason they are used throughout the standard library. 
+
+## Avoid the empty Interface
 
 The empty interface is written like this, but unlike interfaces it requires nothing:
 
