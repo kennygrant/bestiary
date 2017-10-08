@@ -121,11 +121,11 @@ func ReadUser(columns map[string]interface{}) *User {
 }
 ```
 
-### Handling Relations
+## Handling Relations
 
-This can seem a bit more fiddly than other languages, however I think the best approach is a straightforward one - retrieve the indexes of relations, and then if you require all of their information, retrieve the relations separately from the database. You can of course retrieve them with a join at the same time, but in complex apps it helps to separate retrieving relations from retrieving the actual relation records, which is not always necessary \(for example you might need to know a user has 8 images, and which ids they have, but not all the image captions and image data\). 
+This can seem a bit more fiddly than other languages, however I think the best approach is a straightforward one - retrieve the indexes of relations, and then if you require all of their information, retrieve the relations separately from the database. You can of course retrieve them with a join at the same time, but in complex apps it helps to separate retrieving relations from retrieving the actual relation records, which is not always necessary \(for example you might need to know a user has 8 images, and which ids they have, but not all the image captions and image data\).
 
-### Connections are recycled
+## Connections are recycled
 
 Your connections may be called from many goroutines and connections are pooled by the driver. So you shouldn't use stateful sql commands like USE, BEGIN or COMMIT, LOCK TABLES etc and instead use the facilities offered by the sql driver. There’s no default limit on the number of connections, so it is possible to exhaust the number of connections allowed by your database. You can use  SetMaxOpenConns and SetMaxIdleConns to control this behaviour.
 
@@ -134,11 +134,11 @@ db.SetMaxIdleConns(10)
 db.SetMaxOpenConns(100)
 ```
 
-### Null values
+## Null values
 
 If your database may contain null values, you should guard against them. One way to do this is to scan into a map of empty interface and then assert that the interface{} contains the type you \(as opposed to a special null value\). If it fails, use the zero value of the type instead.
 
-### Getting Database columns
+## Getting Database columns
 
 If you wish to know which columns are in a row, you can call:
 
@@ -149,7 +149,7 @@ cols, err := rows.Columns()
 
 This might be useful if you vary selects \(e.g. sometimes select just id and created at, sometimes select the full model\), and yet wish to always use a standard constructor for models which can be passed a map\[string\]interface{} with the values.
 
-### Writing to the database
+## Writing to the database
 
 ```go
 // Insert a row
@@ -160,7 +160,7 @@ err = row.Scan(&id)
 return id, err
 ```
 
-### Multiple Statements
+## Multiple Statements
 
 The database/sql  doesn't specify that drivers should support multiple statements, which means the behaviour is undefined and it's probably best to send single statements, unless your driver explicitly supports it.
 

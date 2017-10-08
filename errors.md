@@ -4,7 +4,7 @@
 
 ## The Error Type
 
-The [error](https://blog.golang.org/error-handling-and-go) type in go is a very simple interface, with one method. Errors offer no introspection into what went wrong or storage of other data. Often errors are nested, so that one error.
+The [error](https://blog.golang.org/error-handling-and-go) type in go is a very simple interface, with one method. Errors offer no introspection into what went wrong or storage of other data. Often errors are nested, as one error may be annotated several times as it passes up the stack. Try to prefer handling an error as close to the site of the error as possible.
 
 ```go
 type error interface {
@@ -22,8 +22,14 @@ The convention in Go code is always to return an error as the last argument of a
 
 ```go
 func DoSomething() error {
+    to, err := human()
+    if err != nil [
+      // Annotate the error and return
+      return fmt.Errorf("pkgname: failed to human %s",err) 
+    }
+    // no, error, use value to
     ...
-    return fmt.Errorf("pkgname: failed to do something got:%d",value) 
+    return nil
 }
 
 func DoSomethingElse() (value, value, error) {
@@ -40,11 +46,11 @@ func DoSomethingElse() (value, value, error) {
 
 The caller should always check for errors before using values. _You should favour returning an error over returning nothing or simply a value_, even if you don't think initially you might encounter many errors, unless your function is just a few lines with no external calls. Functions rarely become simpler over time and it's always better to explicitly report errors rather than silently return zero data.
 
-## Always handle Errors
+## _Always_ handle Errors
 
 You should never discard errors using \_ variables in production code. If a function returns an error, make sure you check it before using any values returned by that function. Usually if there is an error returned, values are undefined. Handle the error by logging or reporting, or return it, never both.
 
-## Either log or return an error
+## _Either_ log _or_ return an error
 
 If you're logging an error, you've decided it's not important enough to handle. If you're returning an error \(usually with annotation\), you want the caller to handle it \(which might include logging or reporting it to the user\).
 
@@ -178,9 +184,9 @@ func main() {
 }
 ```
 
-## Don't use panic too much
+## Don't panic
 
-[Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason.
+[Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason. In servers, you may never need to use the keyword panic, and should prefer not to.
 
 Panic is fine for programming errors, or really exceptional situations \(this should never happen\), but try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
 
@@ -190,5 +196,5 @@ For the same reasons, don't use log.Fatalf or log.Panic except in tests or short
 
 ## Asserts & Exceptions
 
-Go doesn't provide asserts or exceptions by design. 
+Go doesn't provide asserts or exceptions by design. Go is boring.
 
