@@ -6,9 +6,9 @@ Slices are views into arrays of data, offering an efficient way of working with 
 
 The zero value of a slice is a nil slice. It has no underlying array, and has 0 length. You can use it just like a normal slice though and start using it without further initialisation \(unlike maps\).
 
-## Slicing
+## Slicing shares data
 
-When you use the slice operator, be aware that the backing data might be shared, using the same underlying array. If you need an independent copy of a slice to manipulate the underlying data, take a copy of it first. After you slice, the new slice will be a view onto the same data, but further operations \(like append\) on that new slice may mean it is copied, so it is usually better not to rely on slices sharing data if you wish to mutate that data.
+When you use the slice operator, be aware that the backing data will be shared, using the same underlying array. If you need an independent copy of a slice to manipulate the underlying data, take a copy of it first. After you slice, the new slice will be a view onto the same data, but further operations \(like append\) on that new slice may mean it is copied, so it is usually better not to rely on slices sharing data if you wish to mutate that data.
 
 ```go
 a := []int{0,1,2,3,4,5}
@@ -37,6 +37,18 @@ func readHeader(file string) {
     return c   
 }
 ```
+
+## Index out of range
+
+One of the most common slice mistakes is to attempt to access an index past the length of an array or slice, due to programmer error. This will result in a panic:
+
+> panic: runtime error: index out of range
+
+While this may seem like a trivial mistake to make, it causes a panic at runtime, and you should take care to avoid it by always bounding index operations at the length of the slice. To catch this kind of error with varied input you should try running your code through [go-fuzz](https://github.com/dvyukov/go-fuzz#trophies). You can read more about how to use Go Fuzz in this article about [Fuzzing a DNS Parser](https://blog.cloudflare.com/dns-parser-meet-go-fuzzer/). 
+
+## Slicing is limited by cap
+
+Conversely, slicing is limited by 0 and cap, not by len, as stated in the [spec](https://golang.org/ref/spec#Slice_expressions), which may seem a little counter-intuitive, and you probably shouldn't rely on. This means in some circumstances you can retrieve the backing data for a slice even outside its range, as long as it is between len and cap. You shouldn't depend on this behaviour though, and should instead keep a copy of the original slice to make your intent clear. The slice backing data will be retained in memory no matter how much you cut down the window into it in your slice.
 
 ## Appending elements
 
@@ -95,7 +107,7 @@ for _, v := range s {
 
 ## Converting slice types
 
-If you have a slice of \[\]T and wish to convert it to a slice of type \[\]interface{}, or vice versa, you will have to do it by hand with a for loop. They do not have the same representation in memory and there is no convenient way to do it. 
+If you have a slice of \[\]T and wish to convert it to a slice of type \[\]interface{}, or vice versa, you will have to do it by hand with a for loop. They do not have the same representation in memory and there is no convenient way to do it.
 
 ```
 t := []int{1, 2, 3, 4}

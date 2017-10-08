@@ -4,7 +4,7 @@ Prefix a function or method call with the `go` keyword to run the call in a new 
 
 ## Waiting for go
 
-When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish, and you're left waiting for godot. 
+When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish, and you're left waiting for godot.
 
 ```go
 func main() {

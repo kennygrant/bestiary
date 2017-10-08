@@ -112,10 +112,11 @@ fmt.Println(t)
 
 ## Formatting Strings {#encodings}
 
-The usual Printf and Sprintf variants are available in the fmt package, so that you can format strings using a [template string](https://golang.org/pkg/fmt/#hdr-Printing) and variables. %v prints the value in a default format and is useful for debugging. 
+The usual Printf and Sprintf variants are available in the fmt package, so that you can format strings using a [template string](https://golang.org/pkg/fmt/#hdr-Printing) and variables. %v prints the value in a default format and is useful for debugging.
 
 ```go
 fmt.Printf("%s at %v", "hello world", time.Now())
+// Print to a string
 s := fmt.Sprintf("%s at %v", "hello world", time.Now())
 ```
 
@@ -167,9 +168,9 @@ fmt.Printf("string:%s float:%f cents:%d", price, f, c)
 
 If you're parsing a float for a currency value, you should store it as an integer cents value, so consider converting the string to a value in cents first, as you will have work to do anyway to strip currency amounts and deal with missing cents. You can then parse as an integer and avoid any problems with float calculations.
 
-## Reading files 
+## Reading text files
 
-You can read an entire file with ioutil.. 
+You can read an entire file with ioutil, but if the file is large this will use a large amount of memory:
 
 ```go
 b, err := ioutil.ReadFile("path/to/file")
@@ -180,9 +181,7 @@ if err != nil {
 fmt.Printf("%s", b)
 ```
 
-But if the file is large this will use a large amount of memory. 
-
-Unless you are ready small files like config files, consider reading the file in chunks. The easiest way to read a line-based file is with [bufio.Scanner](https://golang.org/pkg/bufio/). You can also read the entire file into memory with ioutil, but this won't be suitable for parsing large files. 
+Unless you are ready small files like config files, consider reading the file in chunks. The easiest way to read a line-based file is with [bufio.Scanner](https://golang.org/pkg/bufio/). You can also read the entire file into memory with ioutil, but this won't be suitable for parsing large files.
 
 ```go
 file, err := os.Open("path/to/file")

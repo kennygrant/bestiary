@@ -32,19 +32,19 @@ The AddDate function adjusts dates according to fixed overflow rules to ensure t
 For example subtracting one month from October 31 yields October 1st
 
 ```go
-	// Oct 31st minus 1 month is Oct 1st, not Sept 30th according to Go
-	// because of rollov
-	input := time.Date(2016, 10, 31, 0, 0, 0, 0, time.UTC)
-	output := time.Date(2016, 9, 30, 0, 0, 0, 0, time.UTC)
-	result := input.AddDate(0, -1, 0)
-	if result != output {
-	    fmt.Printf("got:%v want:%v\n", result, output)
-	}
+    // Oct 31st minus 1 month is Oct 1st, not Sept 30th according to Go
+    // because of rollov
+    input := time.Date(2016, 10, 31, 0, 0, 0, 0, time.UTC)
+    output := time.Date(2016, 9, 30, 0, 0, 0, 0, time.UTC)
+    result := input.AddDate(0, -1, 0)
+    if result != output {
+        fmt.Printf("got:%v want:%v\n", result, output)
+    }
 ```
 
-The results will be unpredictable and depend on the day chosen and the number of days in the end month. If the number of days of the start month and the end month do not match, results will be unexpected. 
+The results will be unpredictable and depend on the day chosen and the number of days in the end month. If the number of days of the start month and the end month do not match, results will be unexpected.
 
-There is no way round this except writing your own code to handle adding months. 
+There is no way round this except writing your own code to handle adding months.
 
 ## Time Zones
 
@@ -66,7 +66,7 @@ Since `Go 1.9`, the [time](https://golang.org/pkg/time/) package now transparent
 
 If Times t and u both contain monotonic clock readings, the operations t.After\(u\), t.Before\(u\), t.Equal\(u\), and t.Sub\(u\) are carried out using the monotonic clock readings alone, ignoring the wall clock readings. If either t or u contains no monotonic clock reading, these operations fall back to using the wall clock readings.
 
-Times may not contain a monotonic clock reading if they pass through functions like AddDate Round or Truncate, or if they come from parsed external sources.
+Times may not contain a monotonic clock reading if they pass through functions like AddDate Round or Truncate, or if they come from parsed external sources, so don't assume they always will have.
 
 # Time on Go Playground
 

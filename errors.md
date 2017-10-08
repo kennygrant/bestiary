@@ -2,33 +2,83 @@
 
 [Errors](https://blog.golang.org/error-handling-and-go) and [logging](https://golang.org/pkg/log/) are one area of Go which does perhaps does deserve the label of simplistic rather than simple. The log package has no levels or interfaces, it simply prints to standard error by default. For many applications, this is enough.
 
-## Always handle Errors
-
-You should never discard errors using \_ variables in production code. If a function returns an error, make sure you check it before using any values returned by that function. Usually if there is an error returned, values are undefined. Handle the error by logging or reporting, or return it, never both. 
-
-## Either log or return an error
-
-If you're logging an error, you've decided it's not important enough to handle. If you're returning an error \(usually with annotation\), you want the caller to handle it \(which might include logging or reporting it to the user\).
-
-## Don't use log.Fatalf or log.Panic
-
-For the same reasons, don't use log.Fatalf or log.Panic except in tests or short programs, because they will halt your program without cleanup and are equivalent to calling panic.In almost all cases you can recover gracefully from errors.
-
 ## The Error Type
 
 The [error](https://blog.golang.org/error-handling-and-go) type in go is a very simple interface, with one method. Errors offer no introspection into what went wrong or storage of other data. Often errors are nested, so that one error.
 
-```
+```go
 type error interface {
   Error() string
 }
 ```
 
-The convention is always to return an error as the last argument of a function
+You can use your own type for error, as long as it conforms to this interface, in some cases you might want to use a more complex type than the string only errors favoured by the standard library, to record an http status code for example.
 
-You can use your own type for error, as long as it conforms to this interface, in some cases you might want to use a more complex type than the string only errors favoured by the standard library, to record an http status code for example. If you're defining interfaces, prefer requiring the error interface rather than a concrete type. You can use type assertions to determine if an error is of the type you're interested in.
+If you're defining interfaces, prefer requiring the error interface rather than a concrete type. You can use type assertions to determine if an error is of the type you're interested in.
 
-## Stack traces
+## to, err := human\(\)
+
+The convention in Go code is always to return an error as the last argument of a function, so if it has multiple arguments. Return an error as the last argument, and try to make it as specific as possible:
+
+```go
+func DoSomething() error {
+    ...
+    return fmt.Errorf("pkgname: failed to do something got:%d",value) 
+}
+
+func DoSomethingElse() (value, value, error) {
+    ...
+    if err != nil {
+       // Annotate the error and return nil value + error
+       return nil, nil, fmt.Errorf("pkgname: failed to do something %s",err) 
+    }
+    ...
+    // Return completed values and nil error 
+    return v, vv, nil
+}
+```
+
+The caller should always check for errors before using values. _You should favour returning an error over returning nothing or simply a value_, even if you don't think initially you might encounter many errors, unless your function is just a few lines with no external calls. Functions rarely become simpler over time and it's always better to explicitly report errors rather than silently return zero data.
+
+## Always handle Errors
+
+You should never discard errors using \_ variables in production code. If a function returns an error, make sure you check it before using any values returned by that function. Usually if there is an error returned, values are undefined. Handle the error by logging or reporting, or return it, never both.
+
+## Either log or return an error
+
+If you're logging an error, you've decided it's not important enough to handle. If you're returning an error \(usually with annotation\), you want the caller to handle it \(which might include logging or reporting it to the user\).
+
+Don't both log and return errors:
+
+```go
+// Don't do this
+if err != nil {
+// Don't do this
+    log.Printf("pkgname: failed to log stats:%s",err)
+    return err
+}
+```
+
+If it's not important, log and move on, if it stops processing in this function, return the error and let the caller decide how to handle it \(usually to report to user and/or log\):
+
+```go
+func DoSomething() error {
+
+   // For an error you can handle in this function without telling the user:
+   if err != nil {
+     // Not important, just log the error and continue with processing
+     log.Printf("pkgname: failed to log stats %s",err) 
+   }
+    ...
+    // For an important error return it (usually annotated) and let caller decide how to report
+    if err != nil  {
+       return fmt.Errorf("pkgname: failed to do something %s",err) 
+    }
+
+}
+```
+
+## Stack traces on errors
 
 If you want to get a stack trace at the point of error which is not a panic, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr, you can panic.
 
@@ -132,5 +182,13 @@ func main() {
 
 [Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason.
 
-Panic is fine for programming errors, or really exceptional situations, but try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
+Panic is fine for programming errors, or really exceptional situations \(this should never happen\), but try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
+
+## Don't use log.Fatalf or log.Panic
+
+For the same reasons, don't use log.Fatalf or log.Panic except in tests or short programs, because they will halt your program without cleanup and are equivalent to calling panic.In almost all cases you can recover gracefully from errors.
+
+## Asserts & Exceptions
+
+Go doesn't provide asserts or exceptions by design. 
 

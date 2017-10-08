@@ -1,6 +1,6 @@
 # Setting up Go
 
-To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation. This installs go much like any other project. You can find the latest installers at the [download](https://golang.org/dl/) page.
+To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation. This installs go much like any other project. You can find the latest installers at the [download](https://golang.org/dl/) page. If you have already written and compiled Go code you can probably skip this section.
 
 ## Setting GOPATH
 
@@ -74,6 +74,16 @@ You should always run [go fmt](https://blog.golang.org/go-fmt-your-code) on your
 
 If you pay attention to linter warnings, and make sure you fix them all, you'll find your go code is more idiomatic and you will avoid common errors like executing goroutines with values from a range loop.
 
+## Dependencies
+
+There is a culture of limiting dependencies in Go, unlike some other ecosystems, the design of Go does not encourage importing libraries for trivial functions.
+
+> Duplication is far cheaper than the wrong abstraction - Sandi Metz
+
+The biggest problem with dependencies in the long term is change - the more dependencies you have, the greater the chance of changes which break your build \(for security, or api changes, or new features\), and the more painful it becomes to keep up to date with the ecosystem you've bought into. This is why it is useful to limit your dependencies, and explicitly version those you have, and why vendoring \(taking a copy of dependencies frozen at a given version\) has become an accepted solution in the Go community to importing dependencies.
+
+You should not assume that if dependencies change and your code compiles everything is working. A change to a dependency might make subtle changes to defaults or values which while they still compile result in the wrong behaviour. The only solution to managing dependencies is to freeze them at the import version and inspect changes carefully before upgrading.
+
 ## Go Playground
 
 The Go Playground is a web service that runs on golang.org's servers. The service receives a Go program, compiles, links, and runs the program inside a sandbox, then returns the output. The intention is for go playground links to last forever \(in internet time that's at least a few years\).
@@ -84,13 +94,39 @@ The playground has certain limitations, mostly for security reasons it restricts
 
 You can find the answer to many questions about Go on [stackoverflow](https://stackoverflow.com/questions/tagged/go), in particular small questions of grammar. Be sure to search for related questions before you post your own. Try to use the right tags and post a full explanation of your problem with code to get a good response.
 
-## Dependencies
+## Resources
 
-There is a culture of limiting dependencies in Go, unlike some other ecosystems, the design of Go does not encourage importing libraries for trivial functions. 
+You should start by working through the[ Go Tour](https://tour.golang.org/welcome/1)
 
-> Duplication is far cheaper than the wrong abstraction - Sandi Metz
+You should then skim [Effective Go](https://golang.org/doc/effective_go.html) \(you will want to come back to this later\) 
 
-The biggest problem with dependencies in the long term is change - the more dependencies you have, the greater the chance of changes which break your build \(for security, or api changes, or new features\), and the more painful it becomes to keep up to date with the ecosystem you've bought into. This is why it is useful to limit your dependencies, and explicitly version those you have, and why vendoring \(taking a copy of dependencies frozen at a given version\) has become an accepted solution in the Go community to importing dependencies.
+You should read the [docs](https://golang.org/pkg/) from the standard library, which contain lots of examples 
 
-You should not assume that if dependencies change and your code compiles everything is working. A change to a dependency might make subtle changes to defaults or values which while they still compile result in the wrong behaviour. The only solution to managing dependencies is to freeze them at the import version and inspect changes carefully before upgrading.
+You might want to refer to [Go By Example](https://gobyexample.com/) - a set of code snippets
+
+## Community
+
+There are many partially overlapping online communities for Go which you should be aware of.
+
+[The Go Forum](https://forum.golangbridge.org/) is a friendly place to ask beginner questions
+
+The [Go Time](https://changelog.com/gotime) podcast interviews luminaries in the Go community
+
+[Golang News](https://golangnews.com) provides links to articles, videos etc. about Go
+
+The Go [subreddit](https://www.reddit.com/r/golang/) is another source of links and news
+
+The [Gopher Slack ](https://gophers.slack.com)has an active community of slackers
+
+The [Golang Nuts](https://groups.google.com/forum/#!forum/golang-nuts) mailing list has a lot of activity if you prefer email
+
+There are many videos from Go conferences at [GopherVids](https://gophervids.appspot.com/)
+
+[Just for func](https://www.youtube.com/channel/UC_BzFbxG2za3bp5NRRRXJSw) is a great podcast on Go programming by the inimitable [@francesc](https://twitter.com/francesc)
+
+## Writing Idiomatic Go {#style}
+
+For a guide to idiomatic Go, you can refer to the wiki [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments), which is a summary of comments made on contributions to the Go project and a lot of good advice on structure and names in Go code.
+
+Go is opinionated about formatting \(as about so much else\) and provides the tool [go fmt](https://blog.golang.org/go-fmt-your-code) to enforce the suggested formatting. There is one standard style for code, including brace positions, spacing etc, enforced by the tools. This has been embraced by users of go, and it turns out it doesn't really matter where you place your braces or whether you use spaces or tabs, so you can now spend your time worrying about more important things, like whether go should have generics.
 

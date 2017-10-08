@@ -48,6 +48,25 @@ A.Foo will call A.Bar, not B.Foo as it might if B inherited from A, so it will o
 
 While it is common in other languages, it is frowned upon in Go to use [self or this](https://github.com/golang/go/wiki/CodeReviewComments#Receiver_Names) in receiver names, instead use the first letter of the receiver. Go has no language support for these words, it does not use them as keywords as other languages do and it is therefore confusing to use them in a Go context.
 
+## Nil pointer dereference
+
+This error is usually caused by failing to check errors properly \(i.e. using a value without checking that there were no errors\), or storing a nil pointer and later trying to use it. **Check and handle all errors**. Never use  \_ as a shortcut in production code. 
+
+```go
+// Don't do this, value may be invalid
+value, _ := f() 
+...
+
+// Do this 
+value, err := f()
+if err != nil {
+   // Deal with error 
+   return fmt.Errorf("msg %s",err)
+}
+// use value
+... 
+```
+
 ## Pointers vs Values for Methods
 
 You can define methods either on the struct value or struct pointer. You should follow these rules for deciding which to use
@@ -120,7 +139,7 @@ You can read more about this on this wiki entry on [Method Sets](https://github.
 
 ## Why do new and make exist?
 
-You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead. Perhaps it shouldn't exist?
+You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead. Perhaps it shouldn't exist? There has been some debate about removing it in a Go version 2. If you wish you can avoid it by using &T{}, or use it if you feel it is clearer. 
 
 `make` is required for used with maps, slices and channels to initialise them with a given size, for example:
 

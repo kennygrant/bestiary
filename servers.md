@@ -1,6 +1,6 @@
 # Writing Servers in Go
 
-When writing servers in go, you'll probably make extensive use of the standard library.The net and net/http packages are some of the most widely used in the Go ecosystem, and come with some unique pitfalls.
+When writing servers in go, you'll probably make extensive use of the standard library.The net and net/http packages are some of the most widely used in the Go ecosystem, and come with some unique pitfalls. The source to the [net/http package](https://golang.org/pkg/net/http/) is surprisingly straightforward and readable, and if you're going to write servers, you should read through the docs and the source of this package at least once to see what is available.
 
 ## Running a server
 
@@ -21,7 +21,7 @@ log.Println(srv.ListenAndServeTLS("", ""))
 
 ## Implicit goroutines
 
-The http server uses goroutines to run your handlers and serve multiple requests in parallel, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex.
+The http server uses goroutines to run your handlers and serve multiple requests in parallel, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex. 
 
 ## Client Timeouts
 
@@ -51,7 +51,8 @@ func main() {
 
 Instead, you should create a client explicitly with a timeout:
 
-```
+```go
+// Create a client with a timeout of 10 seconds
 var netClient = &http.Client{
   Timeout: time.Second * 10,
 }
