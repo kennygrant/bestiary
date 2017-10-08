@@ -2,6 +2,12 @@
 
 # 
 
+# 
+
+# 
+
+# 
+
 # The Go Bestiary
 
 The Go language is deceptively simple, with only 25 [keywords](https://golang.org/ref/spec#Keywords) and few data structures. The syntax is very like other languages in the C family. This means programmers coming from other languages in this family \(C, C++, Java\) find it easy to get started, and sometimes frustrating at first as they find their way around Go idioms and the rather rigid style guidelines, and feel the lack of familiar tools which Go simply leaves out - inheritance, assertions, exceptions, the ternary operator, enums, and generics are all missing [by design](https://golang.org/doc/faq#Why_doesnt_Go_have_feature_X).
