@@ -6,20 +6,20 @@ The corollary to this culture of simplicity, and one of the most rewarding aspec
 
 ### Bugs
 
-Though it aspires to simplicity and  Go code, . A look at the [Trophy Cabinet](https://github.com/dvyukov/go-fuzz#trophies) of bugs found by [Go Fuzz](https://github.com/dvyukov/go-fuzz) should disabuse us of the notion that most bugs are esoteric or difficult to defend against, or even specific to Go as a language. Often the same errors crop up again and again - of bounds not checked or nil pointers. The most common bugs encountered \(even from experienced programmers\) are:
+Though it aspires to simplicity, Go code, like any other program, is subject to bugs. A look at the [Trophy Cabinet](https://github.com/dvyukov/go-fuzz#trophies) of bugs found by [Go Fuzz](https://github.com/dvyukov/go-fuzz) should disabuse us of the notion that most bugs are esoteric or difficult to defend against, or even specific to Go as a language. Often the same errors crop up again and again – bounds not checked or nil pointers. The most common bugs encountered \(even from experienced programmers\) are:
 
 * Index out of range 
 * Slice bounds out of range
 * Nil pointer dereferences
 * Failing to check errors
 
-These are trivial errors, but are easy to make in a sufficiently large program, and are usually due to expectations about data passed in from outside the program which don't hold true \(hence they are easier to find with a fuzzer\). There are also some mistakes which are easy to make in go which a fuzzer might not detect, like not correctly passing values to a goroutine within a range loop.
+These are trivial errors, but are easy to make in any sufficiently large program, and are usually due to expectations about data passed in from outside the program which don't hold true \(hence they are easier to find with a fuzzer\). There are also a few mistakes which are easy to make when learning Go which a fuzzer might not detect, like not correctly passing values to a goroutine within a range loop, which is covered in the goroutines section of this book.
 
 ### Why read this book?
 
-The intention of this book is to let a programmer who has some experience in other languages get up to speed quickly on Go, while being aware of the idioms and possible bugs lurking in their new Go code. The book therefore presents a mix of advice for structuring your Go programs and descriptions of common mistakes to avoid, with liberal code examples.
+The intention of this book is to let a programmer who has some experience in other languages get up to speed quickly on Go, while being aware of the idioms, problems and possible bugs lurking in their new Go code. The book therefore presents a mix of advice for structuring your Go programs and descriptions of common mistakes to avoid, with liberal code examples.
 
-If you're familiar with Go but not an expert, hopefully there will also be a few interesting facts about the language you haven't yet uncovered, and some potential bugs which you might not be aware of. You may want to skip the sections on setup and packages for example if you are already familiar with Go.
+If you're familiar with Go but not an expert, hopefully there will also be a few interesting facts about the language you haven't yet uncovered, and some potential bugs which you might not be aware of. You may want to skip the sections on setup and packages if you are already familiar with Go, as they will cover familiar ground.
 
-If you're new to Go, but experienced in other languages, you'll find succinct descriptions of the most important differences in Go which usually trip up learners \(for example declaring strings, strings vs runes, using goroutines within a for loop\), descriptions of bugs which beginners often fall prey to, and plenty of links to in depth articles about unique aspects of the language like goroutines and slices.
+If you're new to Go, but experienced in other languages, you'll find succinct descriptions of the most important differences in Go which usually trip up learners \(for example declaring strings, strings vs runes, copying slices, using goroutines within a for loop\), descriptions of bugs which beginners often fall prey to, and plenty of links to in depth articles about unique aspects of the language like goroutines and slices.
 
