@@ -2,7 +2,7 @@
 
 * [Introduction](README.md)
 * [Setup](setup.md)
-* [Strings](chapter1.md)
+* [Strings](strings.md)
 * [Structs](structs.md)
 * [Slices](slices.md)
 * [Maps](maps.md)
@@ -11,7 +11,7 @@
 * [Functions](scope.md)
 * [Packages](packages.md)
 * [Interfaces](interfaces.md)
-* [Servers](net.md)
+* [Servers](servers.md)
 * [Databases](databases.md)
 * [Time](time.md)
 * [Errors](errors.md)
