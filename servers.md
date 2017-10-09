@@ -21,7 +21,7 @@ log.Println(srv.ListenAndServeTLS("", ""))
 
 ## Implicit goroutines
 
-The http server uses goroutines to run your handlers and serve multiple requests in parallel, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex. 
+The http server uses goroutines to run your handlers and serve multiple requests in parallel, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex.
 
 ## Client Timeouts
 
@@ -179,9 +179,9 @@ The [http/pprof](https://golang.org/pkg/net/http/pprof/) package provides excell
 
 To use it, simply import the package:
 
-```
+```go
 import _ "net/http/pprof"
 ```
 
-**Beware **though if you register it there are hidden side effects. It will attach endpoints to the default serve mux during init. For this and performances reasons you should not import it in production. You can find out more about profiling in [Profiling Go Programs](https://blog.golang.org/profiling-go-programs).
+**Beware **though if you register it there are hidden side effects. It will attach endpoints to the default serve mux during init. For this and performance reasons you should not import it in production. You can find out more about profiling in [Profiling Go Programs](https://blog.golang.org/profiling-go-programs).
 

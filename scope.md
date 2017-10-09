@@ -47,11 +47,11 @@ func main() {
 }
 ```
 
-The full rules for scope in Go are set out in the [Language Spec](https://golang.org/ref/spec#Declarations_and_scope). It is broadly similar to other languages in the C family, and there are few surprises here apart from shadowing variables inadvertently \(see below\). 
+The full rules for scope in Go are set out in the [Language Spec](https://golang.org/ref/spec#Declarations_and_scope). It is broadly similar to other languages in the C family, and there are few surprises here apart from shadowing variables inadvertently \(see below\).
 
 ## Shadowing
 
-Be careful if you use the automatic assignment operator := that you don't accidentally shadow variables from the outer block. In the case below err is created twice, and if you relied on err being set in the outside scope it would not be. In most cases this isn't a problem but it's something to be aware of.
+Be careful when using the automatic assignment operator := that you don't accidentally shadow variables from the outer block. In the case below err is created twice, and if you relied on err being set in the outside scope it would not be. In most cases this isn't a problem but it's something to be aware of. Most linters warn about any dangerous instances of shadowing so if you use a linter it is not usually a problem in practice. 
 
 ```go
 // err is created
@@ -61,6 +61,10 @@ if err != nil {
    v, err := f()
 }
 ```
+
+## Defer runs at the end of the function
+
+The defer statement does not run at the end of a block, but at the end of the containing function.
 
 ## Defer arguments are frozen
 
@@ -76,10 +80,6 @@ The defer statement freezes its arguments the instant it is evaluated \(the line
   s = "hello world"
 ```
 
-## Defers run at the end of the function
-
-The defer statement does not run at the end of a block, but at the end of the containing function.
-
 ## Switch fallthrough
 
 Case statements inside a switch in go **do not fall through by default**, so break is not required. You can use the fallthrough keyword to do so if you require.
@@ -91,7 +91,7 @@ case 0:
 case 1:
 // do something
 case 3:
-fallthrough // the fallthrough keyword is required to fall through explicitly
+   fallthrough // the fallthrough keyword is required to fall through explicitly
 default:
 // do something
 }

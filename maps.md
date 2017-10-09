@@ -4,9 +4,9 @@ Maps in Go are hash tables, which provide fast access to values for a given key,
 
 ## Maps and Goroutines
 
-Go maps are not thread safe. If you need to access a map across goroutines \(for example in a handler\), you should use a [mutex](https://golang.org/pkg/sync/#Mutex) to protect access and make it a private variable protected by that mutex. Any access to the map should lock the mutex first, perform the operation, and then unlock it again. You can also use a RWMutex if you have a lot of reads and few writes. 
+Go maps are not thread safe. If you need to access a map across goroutines \(for example in a handler\), you should use a [mutex](https://golang.org/pkg/sync/#Mutex) to protect access and make it a private variable protected by that mutex. Any access to the map should lock the mutex first, perform the operation, and then unlock it again. You can also use a RWMutex if you have a lot of reads and few writes.
 
-Be careful when using mutexes or maps not to inadvertently make copies of them \(for example if you passed Data below by value to a function, the mutex would be copied along with the data\). For this reason you will sometimes see mutexes declared as pointers, but the important point is not to copy them \(or their data\). 
+Be careful when using mutexes or maps not to inadvertently make copies of them \(for example if you passed Data below by value to a function, the mutex would be copied along with the data\). For this reason you will sometimes see mutexes declared as pointers, but the important point is not to copy them \(or their data\).
 
 ```go
 type Data struct {
@@ -21,7 +21,6 @@ func (d *Data)Add(k,v int) {
   d.values[k] = v
   d.mu.Unlock
 }
-
 ```
 
 ## Map values
@@ -58,7 +57,7 @@ for i := 0; i < 5; i++ {
 }
 ```
 
-The output or ranging on a map is not deterministic
+The output of ranging on a map is not deterministic:
 
 > \(2:2\)\(3:3\)\(4:4\)\(5:5\)\(1:1\)
 >
@@ -68,7 +67,7 @@ To range map keys in order, get the keys,  sort them to some predefined order, t
 
 ## Keys not in the map
 
-A map retrieval yields a zero value when the key is not present, so always check a key is present before using it, if this distinction is important to you \(for example if you want to treat an empty string stored in the map differently from a missing value\).
+A map retrieval yields a zero value when the key is not present, so always check a key is present before using it if this distinction is important to you \(for example if you want to treat an empty string stored in the map differently from a missing value\).
 
 ```go
 key := "foo"
@@ -85,7 +84,7 @@ v := m[key]
 
 ## Nil Maps
 
-You cannot add items to a nil map, it causes a panic, so you must always initialise map variables before use. So while you can use a nil slice, you cannot use a nil map.
+Maps must always be initialised before use, the zero value is not useful. 
 
 ```go
 // Allowed 
@@ -98,10 +97,8 @@ m := make(map[string]int, 10)
 // This is ok
 m["key"] = 1
 
-// If you assign to a nil map
+// If you assign to a nil map - panic
 var mnil map[string]int
-
-// This panics
 mnil["key"] = 1
 ```
 

@@ -1,6 +1,6 @@
 # Goroutines
 
-Prefix a function or method call with the `go` keyword to run the call in a new goroutine, asynchronously. The `go` keyword is one of the distinguishing features of Go, but it can lead to some bugs if not used carefully.
+Prefix a function or method call with the `go` keyword to run the call in a new goroutine, asynchronously. The `go` keyword is one of the distinguishing features of Go, but it can lead to subtle bugs if not used carefully.
 
 ## Waiting for go
 
@@ -10,12 +10,12 @@ When a program's main ends,  all running goroutines that were created by the pro
 func main() {
     fmt.Println("waiting...")
     go func() {
-    defer wg.Done()
-        fmt.Println("godot") // doesn't arrive
+	fmt.Println("godot") // doesn't arrive
     }()
-wg.Wait()
 }
 ```
+
+> waiting...
 
 Use a wait group to make sure your goroutines are completed before the app terminates.
 
@@ -31,6 +31,9 @@ func main() {
   wg.Wait()
 }
 ```
+
+> hello world  
+> goodbye, cruel world
 
 ## Goroutines & range {#goroutines-range}
 
@@ -62,6 +65,8 @@ for _, v := range values {
 ```
 
 > first second last
+
+**This is probably the most common error when using goroutines. **
 
 ## Goroutines & Blocking functions
 
@@ -109,7 +114,7 @@ To avoid races, you can pass copies of values, or wrap access with a mutex from 
 
 ## `GOMAXPROCS`
 
-`GOMAXPROCS` sets how many processors the Go runtime uses to run goroutines on. Though it was set to 1 by default in early versions of Go for performance reasons, programs usually don't need to set`GOMAXPROCS,` as it is now set intelligently by the [runtime](https://golang.org/pkg/runtime/#GOMAXPROCS) based on the machine. Parallel programs might benefit from a further increase in `GOMAXPROCS` but be aware that [concurrency is not parallelism](https://blog.golang.org/2013/01/concurrency-is-not-parallelism.html).
+`GOMAXPROCS` sets how many processors the Go runtime uses to run goroutines on. Though it was set to 1 by default in early versions of Go for performance reasons, programs usually don't need to set`GOMAXPROCS,` as it is now set intelligently by the [runtime](https://golang.org/pkg/runtime/#GOMAXPROCS) based on the machine. Parallel programs might benefit from a further increase in `GOMAXPROCS` but be aware that [concurrency is not parallelism](https://blog.golang.org/2013/01/concurrency-is-not-parallelism.html). You may find this set in older source code, but it is very rarely necessary.
 
 .
 

@@ -8,6 +8,10 @@ Unbuffered channels combine communication — the exchange of a value — with s
 
 A goroutine is a function executing concurrently with other goroutines in the same address space. It is a lightweight alternative to threads invoked by using the go keyword.
 
+## Interfaces
+
+Interfaces in Go provide a way to specify the behaviour of an object by defining a required method set. Commonly used interfaces like io.Writer and io.Reader usually only have very few methods. 
+
 ## Slices
 
 Slices wrap arrays to give a more general, powerful, and convenient interface to sequences of data. Except for items with explicit dimension such as transformation matrices, most array programming in Go is done with slices rather than simple arrays.

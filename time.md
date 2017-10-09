@@ -16,7 +16,7 @@ the default time format for dates is and the time package uses the memorable [co
 "2006-01-02T15:04:05Z07:00"
 ```
 
-There is no format just for these dates unfortunately, so you may want to define some constants for the formats you normally use, to avoid constantly referring to the time package, something like:
+You may want to define some constants for any date formats you normally use, to avoid constantly referring to the time package, for example:
 
 ```go
 const (
@@ -27,13 +27,12 @@ const (
 
 ## AddDate
 
-The AddDate function adjusts dates according to fixed overflow rules to ensure that results are reversible. If adding Years or days, the results will generally be as expected, but if adding months, the results may not be as users expect.
+The AddDate function adjusts dates according to arbitrary overflow rules to ensure that results are reversible. If adding Years or days, the results will generally be as expected, but if adding months, the results may not be as users expect and does not match the output of popular programs like excel. 
 
 For example subtracting one month from October 31 yields October 1st
 
 ```go
     // Oct 31st minus 1 month is Oct 1st, not Sept 30th according to Go
-    // because of rollov
     input := time.Date(2016, 10, 31, 0, 0, 0, 0, time.UTC)
     output := time.Date(2016, 9, 30, 0, 0, 0, 0, time.UTC)
     result := input.AddDate(0, -1, 0)
@@ -42,13 +41,13 @@ For example subtracting one month from October 31 yields October 1st
     }
 ```
 
-The results will be unpredictable and depend on the day chosen and the number of days in the end month. If the number of days of the start month and the end month do not match, results will be unexpected.
+The results will be unpredictable and depend on the day chosen and the number of days in the end month. If the number of days of the start month and the end month do not match, results will be unexpected. This is important if your users expect to add 9 months and 1 day to a given date to conform with accounting rules for example - typically this means 9 calendar months without rollover. 
 
-There is no way round this except writing your own code to handle adding months.
+There is no way round this except writing your own code to handle adding months in a more predictable way. I have a solution to this but the margin is too small to contain it.
 
 ## Time Zones
 
-You should **strongly** prefer to store times as **UTC**, and convert them for display. This makes comparisons and calculations straightforward, and allows you to customise display for the user's current location. When creating times or comparing with the current time, always use the t.UTC\(\) function to be sure you compare the UTC time.
+You should **strongly** prefer to store times as **UTC**, and convert them for display. This makes comparisons and calculations straightforward, and allows you to customise display for the user's current location at the time of viewing. When creating times or comparing with the current time, always use the t.UTC\(\) function to be sure you compare the UTC time.
 
 If you need to convert times, you can convert times from a given zone to a location easily enough:
 
@@ -64,11 +63,11 @@ now := t.In(l)
 
 Since `Go 1.9`, the [time](https://golang.org/pkg/time/) package now transparently tracks monotonic time in each Time value, making computing durations between two Time values a safe operation in the presence of wall clock adjustments.
 
-If Times t and u both contain monotonic clock readings, the operations t.After\(u\), t.Before\(u\), t.Equal\(u\), and t.Sub\(u\) are carried out using the monotonic clock readings alone, ignoring the wall clock readings. If either t or u contains no monotonic clock reading, these operations fall back to using the wall clock readings.
+> If Times t and u both contain monotonic clock readings, the operations t.After\(u\), t.Before\(u\), t.Equal\(u\), and t.Sub\(u\) are carried out using the monotonic clock readings alone, ignoring the wall clock readings. If either t or u contains no monotonic clock reading, these operations fall back to using the wall clock readings.
 
 Times may not contain a monotonic clock reading if they pass through functions like AddDate Round or Truncate, or if they come from parsed external sources, so don't assume they always will have.
 
 # Time on Go Playground
 
-The playground starts with the same time for every run, so output is deterministic, so be aware examples including time may not function as you expect on the playground. For more details see [Inside the Go Playground.](https://blog.golang.org/playground)
+The playground starts with the same time for every run to make sure output is deterministic, so examples including time may not function as you expect on the playground. For more details see [Inside the Go Playground.](https://blog.golang.org/playground)
 

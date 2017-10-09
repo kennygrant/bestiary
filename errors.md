@@ -1,6 +1,6 @@
 # Errors & Logging
 
-[Errors](https://blog.golang.org/error-handling-and-go) and [logging](https://golang.org/pkg/log/) are one area of Go which does perhaps does deserve the label of simplistic rather than simple. The log package has no levels or interfaces, it simply prints to standard error by default. For many applications, this is enough.
+[Errors](https://blog.golang.org/error-handling-and-go) and [logging](https://golang.org/pkg/log/) are one area of Go which does perhaps does deserve the label of simplistic rather than simple. The log package has no levels or interfaces, it simply prints to standard error by default. For many applications though, this is enough, and there are various logging packages available for more sophisticated requirements. The error type is very simple and errors are stored as strings. 
 
 ## The Error Type
 
@@ -29,7 +29,7 @@ func DoSomething() error {
     }
     // no, error, use value to
     ...
-    return nil
+    return nil // return nil error
 }
 
 func DoSomethingElse() (value, value, error) {
@@ -48,13 +48,13 @@ The caller should always check for errors before using values. _You should favou
 
 ## _Always_ handle Errors
 
-You should never discard errors using \_ variables in production code. If a function returns an error, make sure you check it before using any values returned by that function. Usually if there is an error returned, values are undefined. Handle the error by logging or reporting, or return it, never both.
+You should never discard errors using \_ variables in production code. If a function returns an error, make sure you check it before using any values returned by that function. Usually if there is an error returned, values are undefined. 
 
 ## _Either_ log _or_ return an error
 
-If you're logging an error, you've decided it's not important enough to handle. If you're returning an error \(usually with annotation\), you want the caller to handle it \(which might include logging or reporting it to the user\).
+If you're logging an error, you've decided it's not important enough to handle. If you're returning an error \(usually with annotation\), you want the caller to handle it \(which might include logging or reporting it to the user\). Handle the error by logging / reporting, or return it, never both.
 
-Don't both log and return errors:
+**Don't both log and return errors:**
 
 ```go
 // Don't do this
@@ -86,7 +86,7 @@ func DoSomething() error {
 
 ## Stack traces on errors
 
-If you want to get a stack trace at the point of error which is not a panic, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr, you can panic.
+If you want to get a stack trace at the point of error which is not a panic, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr and terminating the program, you can panic.
 
 ## Recovering from a panic
 
@@ -135,7 +135,7 @@ func p() {
 
 ## Recover must be in the same goroutine
 
-You can only recover from panics in the current goroutine. If you have panics to goroutines deep, recovering at the top level won't catch them \(for example in a web server handler, which then spawns another goroutine, you must protect against panics within the goroutine spawned\).
+You can only recover from panics in the current goroutine. If you have panics two goroutines deep, recovering at the top level won't catch them \(for example in a web server handler which then spawns another goroutine, you must protect against panics within the goroutine spawned\).
 
 ```go
 // if a is run in a goroutine, this panic will crash the program

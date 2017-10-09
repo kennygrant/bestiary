@@ -15,17 +15,15 @@ import (
 )
 ```
 
-has side effects - just the fact. In retrospect this is a bad design and there should be explicit registration of drivers, but because of the Go 1 promise we're stuck with it.
-
 If you import lots of drivers, you will be importing all the code they use, and registering the driver, so only import those you need to use in your program.
 
 ## Opening a connection
 
-When you open a connection to the database, you must ping it to ensure
+When you open a connection to the database, you must ping it to ensure it opened correctly
 
 ```go
 // Open the database (no connection is miade)
-db, err := sql.Open("postgres","postgres://pqgotest:password@localhost/pqgotest?sslmode=verify-full")
+db, err := sql.Open("postgres","postgres://azurediamond:hunter2@localhost/azurediamond?sslmode=verify-full")
         "user:password@tcp(127.0.0.1:3306)/hello")
 if err != nil {
     return err
@@ -42,7 +40,7 @@ if err != nil {
 
 Don't close the connection to the database frequently as it is designed to be recycled,  you should ideally create one connection per datastore which lasts for the lifetime of your application. For example you might call defer db.Close in main.
 
-```
+```go
 defer db.Close()
 ```
 
@@ -123,11 +121,11 @@ func ReadUser(columns map[string]interface{}) *User {
 
 ## Handling Relations
 
-This can seem a bit more fiddly than other languages, however I think the best approach is a straightforward one - retrieve the indexes of relations, and then if you require all of their information, retrieve the relations separately from the database. You can of course retrieve them with a join at the same time, but in complex apps it helps to separate retrieving relations from retrieving the actual relation records, which is not always necessary \(for example you might need to know a user has 8 images, and which ids they have, but not all the image captions and image data\).
+This can seem a bit more fiddly than other languages, however the best approach is a straightforward one - retrieve the indexes of relations, and then if you require all of their information, retrieve the relations separately from the database. You can of course retrieve them with a join at the same time, but in complex apps it helps to separate retrieving relations from retrieving the actual relation records, which is not always necessary \(for example you might need to know a user has 8 images, and which ids they have, but not all the image captions and image data\).
 
 ## Connections are recycled
 
-Your connections may be called from many goroutines and connections are pooled by the driver. So you shouldn't use stateful sql commands like USE, BEGIN or COMMIT, LOCK TABLES etc and instead use the facilities offered by the sql driver. There’s no default limit on the number of connections, so it is possible to exhaust the number of connections allowed by your database. You can use  SetMaxOpenConns and SetMaxIdleConns to control this behaviour.
+Database connections may be called from many goroutines and connections are pooled by the driver. So don't use stateful sql commands like USE, BEGIN or COMMIT, LOCK TABLES etc and instead use the facilities offered by the sql driver. There’s no default limit on the number of connections, so it is possible to exhaust the number of connections allowed by the database. You can use  SetMaxOpenConns and SetMaxIdleConns to control this behaviour.
 
 ```
 db.SetMaxIdleConns(10)
@@ -136,7 +134,7 @@ db.SetMaxOpenConns(100)
 
 ## Null values
 
-If your database may contain null values, you should guard against them. One way to do this is to scan into a map of empty interface and then assert that the interface{} contains the type you \(as opposed to a special null value\). If it fails, use the zero value of the type instead.
+If your database may contain null values, you must guard against them. One way to do this is to scan into a map of empty interface and then assert that the interface{} contains the type you \(as opposed to a special null value\). If it fails, use the zero value of the type instead.
 
 ## Getting Database columns
 
@@ -162,5 +160,5 @@ return id, err
 
 ## Multiple Statements
 
-The database/sql  doesn't specify that drivers should support multiple statements, which means the behaviour is undefined and it's probably best to send single statements, unless your driver explicitly supports it.
+The database/sql interface doesn't specify that drivers should support multiple statements, which means the behaviour is undefined and it's probably best to send single statements, unless your driver explicitly supports it.
 

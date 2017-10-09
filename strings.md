@@ -6,19 +6,25 @@ Source code in Go is in the UTF-8 encoding. This means string literals you creat
 
 Quotation marks in Go source code behave slightly differently from other languages.
 
-If you use double quotes you will get a string, and can include escape codes, like \n for newline but not newlines:
+If you use double quotes you will get a string, and can include escape codes, like \n for newline:
 
 ```go
-// hello is a string ending in newline
-hello := "hello\n" -> "hello\n"
+// hello is a string containing newline & tab
+hello := "hello\n\tworld" 
 ```
 
-If you use back quotes escape codes will not be interpreted, and it can contain newlines:
+> hello  
+>    world
+
+If you use back quotes escape codes will not be interpreted, and the string can contain raw newlines:
 
 ```go
-// hello is a string ending with n
-hello := `hello\n` -> "hello\\n"
+// hello is a string with no newlines
+hello := `hello world\n` 
+    world\\n` 
 ```
+
+> hello world\n
 
 If you use single quotes, you won't create a string at all, these create a rune:
 
@@ -26,6 +32,8 @@ If you use single quotes, you won't create a string at all, these create a rune:
 // hello is a rune, not a string
 hello := 'h'
 ```
+
+> h
 
 This is why if you try to define a string with single quotes, you'll get an error:
 
@@ -42,7 +50,7 @@ To define multi-line strings, including literal control characters like newline,
 ```go
 // A string containing a newline after hello
 `hello
- world`
+  world`
 ```
 
 ## Runes {#runes}
@@ -65,7 +73,7 @@ as you can see if you range over it.
 
 ## Range on Strings {#range}
 
-If you range a string, you will receive the runes which make up the string, not the bytes. In an ASCII string every byte corresponds exactly to one rune, so ranging "hello" will return:
+If you range on a string, you will receive the runes which make up the string, not the bytes. In an ASCII string every byte corresponds exactly to one rune, so ranging "hello" will return:
 
 > 'h', 'e', 'l', 'l', 'o'
 
@@ -79,8 +87,8 @@ Somewhat confusingly, given how ranging works, if you take the index of a string
 
 ```go
 s := "日本語"
-// This returns a byte at index 2, not the second rune as you might expect
-b := s[2]  // the byte at index 2
+// This returns a byte at index 2
+b := s[2]  
 fmt.Println(b)
 ```
 
@@ -90,9 +98,9 @@ Returns the third byte, not the third rune as you might expect:
 
 ## Trimming strings {#encodings}
 
-The strings package contains. Since you'll be using this a lot, you should read it in its entirety at least once. Go do that now. Since you have, it'll come as no surprise that strings.Trim doesn't do quite what you might expect:
+The strings package contains many useful functions for manipulating text, and each one is documented. Some might not do exactly what you expect from the name, for example strings.Trim does not trim a given suffix or prefix: 
 
-```
+```go
 s := "les mots, et les choses"
 t := strings.Trim(s,"les ")
 fmt.Println(t)
@@ -102,9 +110,9 @@ The result may be unexpected:
 
 > mots, et les cho
 
-This function takes a **cutset** string, not a prefix or suffix. If you want to trim a full prefix or suffix, use strings.TrimPrefix and strings.TrimSuffix:
+This function takes a **cutset** string – a list of characters to trim. If you want to trim a full prefix or suffix, use strings.TrimPrefix or strings.TrimSuffix:
 
-```
+```go
 s := "les mots, et les choses"
 t := strings.TrimPrefix(s,"les ")
 fmt.Println(t)
@@ -112,7 +120,7 @@ fmt.Println(t)
 
 ## Formatting Strings {#encodings}
 
-The usual Printf and Sprintf variants are available in the fmt package, so that you can format strings using a [template string](https://golang.org/pkg/fmt/#hdr-Printing) and variables. %v prints the value in a default format and is useful for debugging.
+The usual Printf and Sprintf variants are available in the fmt package, so that you can format strings using a [template string](https://golang.org/pkg/fmt/#hdr-Printing) and variables. The formats accepted are detailed in the strings package documentation. %v prints the value in a default format and is useful for debugging.
 
 ```go
 fmt.Printf("%s at %v", "hello world", time.Now())
@@ -122,11 +130,11 @@ s := fmt.Sprintf("%s at %v", "hello world", time.Now())
 
 ## Encodings {#encodings}
 
-Most of the time when working with unicode strings in Go you won't have to do anything special. If you need to convert from another encoding like Windows 1252 you can use the [encoding](https://godoc.org/golang.org/x/text/encoding) package under golang.org/x/text. There are other utility packages for dealing with text there.
+Most of the time when working with unicode strings in Go you won't have to do anything special. If you need to convert from another encoding like Windows 1252 you can use the [encoding](https://godoc.org/golang.org/x/text/encoding) package under golang.org/x/text. There are also some other utility packages for dealing with text there. The golang.org/x libraries are slightly less stable than the go standard library and are not part of the official distribution, but have many useful utilities. 
 
 ## Strings are immutable {#immutable}
 
-Strings in Go are immutable, you are not allowed to change the backing bytes, and this is dangerous anyway as the string may contain several bytes for each character/rune.
+Strings in Go are immutable, you are not allowed to change the backing bytes, and manipulating bytes directly can be dangerous  as the string _may_ contain several bytes for each character/rune.
 
 ## Don't use pointers to strings
 
@@ -134,7 +142,7 @@ A string value is a fixed size and[ should not be passed as a pointer](https://g
 
 ## Strings are never nil {#zero-value}
 
-They have a zero value of "", and you cannot assign nil to a string.
+You cannot assign nil to a string or compare nil to a string, they have a zero value of "" and can never be nil, only the zero value. 
 
 ## Converting Strings to Ints {#atoi}
 
@@ -157,7 +165,7 @@ Returns
 
 Floats are [imprecise ](http://floating-point-gui.de/)and rounding can be unpredictable. When parsing them from strings and working with them, you need to be aware of this.
 
-```
+```go
 price := "655.18"
 f, _ := strconv.ParseFloat(price, 64)
 c := int(f * 100)
@@ -166,11 +174,11 @@ fmt.Printf("string:%s float:%f cents:%d", price, f, c)
 
 > string:655.18 float:655.180000 cents:65517
 
-If you're parsing a float for a currency value, you should store it as an integer cents value, so consider converting the string to a value in cents first, as you will have work to do anyway to strip currency amounts and deal with missing cents. You can then parse as an integer and avoid any problems with float calculations.
+If you're parsing a float for a currency value, you should store it as an integer cents value, so consider converting the string to a value in cents first, as you will have work to do anyway to strip currency amounts and deal with missing cents. You can then parse as an integer and avoid any problems with storing it as a float.
 
 ## Reading text files
 
-You can read an entire file with ioutil, but if the file is large this will use a large amount of memory:
+The easiest way to read an entire file is with ioutil, but if the file is large this will use a large amount of memory:
 
 ```go
 b, err := ioutil.ReadFile("path/to/file")
@@ -181,7 +189,7 @@ if err != nil {
 fmt.Printf("%s", b)
 ```
 
-Unless you are ready small files like config files, consider reading the file in chunks. The easiest way to read a line-based file is with [bufio.Scanner](https://golang.org/pkg/bufio/). You can also read the entire file into memory with ioutil, but this won't be suitable for parsing large files.
+Unless you are ready small files like config files, consider reading the file in chunks. You can read a line-based file with [bufio.Scanner](https://golang.org/pkg/bufio/) and the Scan function:
 
 ```go
 file, err := os.Open("path/to/file")

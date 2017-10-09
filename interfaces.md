@@ -4,7 +4,7 @@ An interface in go is a contract specifying which method signatures a type must 
 
 ## Keep interfaces simple
 
-Interfaces are at their most powerful when they express a simple contract that any type can easily conform to. If they start to demand a laundry list of functions \(say over around 5\), they have very little advantage over a concrete type as an argument, because the caller is not going to be able to create an alternative type without substantially recreating the original.
+Interfaces are at their most powerful when they express a simple contract that any type can easily conform to. If they start to demand a laundry list of functions \(more than a few is a good heuristic\), they have very little advantage over a concrete type as an argument, because the caller is not going to be able to create an alternative type without substantially recreating the original.
 
 Some examples of useful interfaces from the standard library are:
 
@@ -12,7 +12,7 @@ Some examples of useful interfaces from the standard library are:
 
 Error represents an error condition, and only returns a string with a description of the error.
 
-```
+```go
 type error interface {
     Error() string
 }
@@ -22,7 +22,7 @@ type error interface {
 
 Used when formatting values for fmt.Printf and friends.
 
-```
+```go
 type Stringer interface {
         String() string
 }
@@ -32,7 +32,7 @@ type Stringer interface {
 
 Read reads len\(p\) bytes from the data stream.
 
-```
+```go
 type Reader interface {
         Read(p []byte) (n int, err error)
 }
@@ -42,16 +42,17 @@ type Reader interface {
 
 Write writes len\(p\) bytes from p to a data .stream.
 
-```
+```go
 type Writer interface {
         Write(p []byte) (n int, err error)
+}
 ```
 
 [http.ResponseWriter](https://golang.org/pkg/net/http/#ResponseWriter)
 
 HTTP handlers are passed a ResponseWriter to write the HTTP response to a request.
 
-```
+```go
 type ResponseWriter interface {
         // Header returns the header map used to set headers.
         Header() Header
@@ -68,13 +69,20 @@ You'll notice that all of these extremely popular interfaces have one thing in c
 
 ## Avoid the empty Interface
 
-The empty interface is written like this, but unlike interfaces it requires nothing:
+The empty interface is written like this, but unlike interfaces it requires no methods \(hence the empty brackets\):
 
 ```
 interface{}
 ```
 
-Don't overuse empty interface - it means nothing. If you find yourself using empty interface and then switching on type, consider instead defining separate functions which operate on concrete types. Don't try to use empty interface as a poor man's generics.
+It is the equivalent of:
+
+```
+type MyInterface interface {
+}
+```
+
+Don't overuse empty interface -_ it means nothing_. If you find yourself using empty interface and then switching on type, consider instead defining separate functions which operate on concrete types. Don't try to use empty interface as a poor man's generics - it is possible, but it subverts the type system and makes it very easy to cause panics.
 
 ## Accept interfaces, return types
 
@@ -84,9 +92,9 @@ Do not design interfaces for mocking, design them for real world use, and don't 
 
 ## Don't use pointers to interface
 
-You probably meant to use a pointer to your real type, or just a plain old Interface.
+You probably meant to use a pointer to your real type, or just a plain old Interface. You don't need a pointer to interfaces.
 
-## Interfaces are not pointers
+## Don't compare interface to nil
 
-An interface will only be nil when both their type and value fields are nil, so comparing interface to nil can have unexpected results. Don't do that. 
+An interface will only be nil when both their type and value fields are nil, so comparing interface to nil can have unexpected results. Don't do that.
 

@@ -50,7 +50,7 @@ While it is common in other languages, it is frowned upon in Go to use [self or 
 
 ## Nil pointer dereference
 
-This error is usually caused by failing to check errors properly \(i.e. using a value without checking that there were no errors\), or storing a nil pointer and later trying to use it. **Check and handle all errors**. Never use  \_ as a shortcut in production code. 
+This error is usually caused by failing to check errors properly \(i.e. using a value without checking that there were no errors\), or storing a nil pointer and later trying to use it. **Check and handle all errors**. Never use  \_ as a shortcut in production code.
 
 ```go
 // Don't do this, value may be invalid
@@ -64,7 +64,7 @@ if err != nil {
    return fmt.Errorf("msg %s",err)
 }
 // use value
-... 
+...
 ```
 
 ## Pointers vs Values for Methods
@@ -139,7 +139,7 @@ You can read more about this on this wiki entry on [Method Sets](https://github.
 
 ## Why do new and make exist?
 
-You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead. Perhaps it shouldn't exist? There has been some debate about removing it in a Go version 2. If you wish you can avoid it by using &T{}, or use it if you feel it is clearer. 
+You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead. 
 
 `make` is required for used with maps, slices and channels to initialise them with a given size, for example:
 
@@ -152,7 +152,7 @@ c := make(chan int)  // An unbuffered channel of integers
 
 ## Enums
 
-There are no first class enums in Go. You can use the keyword iota to increment constants from a known base, so the closest to an enum is a set of constants in a file:
+There are no enums in Go. Use the keyword iota to increment constants from a known base, so the closest to an enum is a set of constants in a file:
 
 ```go
 // Describe the constants here
@@ -161,6 +161,25 @@ const (
    RoleReader
    RoleAdmin
 )
+```
+
+For more sophisticated control impose limits or provide string values by using a type:
+
+```
+type Role struct {
+  value int
+}
+
+func (e Role)SetValue(v int) {
+  if v == RoleAnon || v = RoleReader || v = RoleAdmin {
+    e.value = v
+  }
+}
+
+func (e Role)Value(v int) {
+   return e.value 
+}
+
 ```
 
 
