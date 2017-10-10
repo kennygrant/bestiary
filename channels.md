@@ -1,6 +1,6 @@
 # Channels
 
-Channels are a queue of values of a specific type which can be used to share information safely between goroutines. You can read more about the uses of channels with goroutines in the [Pipelines](https://blog.golang.org/pipelines) article on the go blog.
+Channels are a queue of values of a specific type which can be used to share information safely between goroutines. You can read more about the uses of channels with goroutines in the [Pipelines](https://blog.golang.org/pipelines) article on the go blog. Before using channels, consider other options, particularly if you just need to control access to shared state. You can use mutexes to control access to state across goroutines, which is much simpler than channels. Use channels to orchestrate more complex behaviour like signalling between goroutines, passing ownership of data, or distributing units of work.
 
 ## Stopping a goroutine
 

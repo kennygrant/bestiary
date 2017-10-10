@@ -2,6 +2,20 @@
 
 Prefix a function or method call with the `go` keyword to run the call in a new goroutine, asynchronously. The `go` keyword is one of the distinguishing features of Go, but it can lead to subtle bugs if not used carefully.
 
+> Do not communicate by sharing memory; instead, share memory by communicating.
+
+## Asynchronous execution
+
+The simplest usage of a goroutine is simply to execute a function without waiting for a response. For example in a web handler to send a mail, you may not want to delay till the mail is sent before reporting back to the user. 
+
+```go
+// Send a message using the go keyword, without waiting for completion
+message := "hello word"
+go mail.Send(message, example@example.com) 
+
+// Execution continues on the main goroutine without pausing...
+```
+
 ## Waiting for go
 
 When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish, and you're left waiting for godot.
@@ -10,7 +24,7 @@ When a program's main ends,  all running goroutines that were created by the pro
 func main() {
     fmt.Println("waiting...")
     go func() {
-	fmt.Println("godot") // doesn't arrive
+    fmt.Println("godot") // doesn't arrive
     }()
 }
 ```
