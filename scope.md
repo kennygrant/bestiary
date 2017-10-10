@@ -82,7 +82,7 @@ The defer statement freezes its arguments the instant it is evaluated \(the line
 
 ## Switch fall through
 
-Case statements inside a switch in go **do not fall through by default**, so break is not required. You can use the fallthrough keyword to do so if you require. This should be used sparingly and carefully annotated because of the difference with C - programmers not familiar with Go may be tripped up by it so use this sparingly if at all. 
+Case statements inside a switch in go **do not fall through by default**, so break is not required. You can use the fallthrough keyword to do so if you require. This should be used sparingly and carefully annotated because of the difference with C - programmers not familiar with Go may be tripped up by it so use this sparingly if at all.
 
 ```go
 switch(i) {
@@ -103,5 +103,9 @@ In go, naked returns \(the use of the keyword return without parameters\) will r
 
 ## Prefer synchronous functions
 
-Try to write synchronous functions, which can then be transformed by use of the go keyword into asynchronous ones. Do not attempt to make your API async by default by using go keywords within library functions. It is easy to add concurrency with the go keyword, but impossible to remove it if a function uses it internally. 
+Try to write synchronous functions, which can then be transformed by use of the go keyword into asynchronous ones. Do not attempt to make your API async by default by using go keywords within library functions. It is easy to add concurrency with the go keyword, but impossible to remove it if a function uses it internally.
+
+## Prefer functions over methods
+
+Coming from an object-oriented background, many programmers reach for structs and methods first. Before using a method, you should consider whether you could instead use a function. Functions are independent of the data they work with, and ideally use their inputs and no other state, so that the output is predictable. Use a method where you need to reflect the state of the type the method is attached to. 
 
