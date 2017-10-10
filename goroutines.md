@@ -6,7 +6,7 @@ Prefix a function or method call with the `go` keyword to run the call in a new 
 
 ## Asynchronous execution
 
-The simplest usage of a goroutine is simply to execute a function without waiting for a response. For example in a web handler to send a mail, you may not want to delay till the mail is sent before reporting back to the user. 
+The simplest usage of a goroutine is simply to execute a function without waiting for a response. For example in a web handler to send a mail, you may not want to delay till the mail is sent before reporting back to the user.
 
 ```go
 // Send a message using the go keyword, without waiting for completion
@@ -18,7 +18,7 @@ go mail.Send(message, example@example.com)
 
 ## Waiting for go
 
-When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish, and you're left waiting for godot.
+A common failure when using goroutines in a simple program is to fail to wait for them to finish. When a program's main ends,  all running goroutines that were created by the program will also be stopped. So if your main only spins up some goroutines, those goroutines may not have time to finish, and you're left waiting for godot.
 
 ```go
 func main() {
