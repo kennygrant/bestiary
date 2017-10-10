@@ -51,7 +51,7 @@ The full rules for scope in Go are set out in the [Language Spec](https://golang
 
 ## Shadowing
 
-Be careful when using the automatic assignment operator := that you don't accidentally shadow variables from the outer block. In the case below err is created twice, and if you relied on err being set in the outside scope it would not be. In most cases this isn't a problem but it's something to be aware of. Most linters warn about any dangerous instances of shadowing so if you use a linter it is not usually a problem in practice. 
+Be careful when using the automatic assignment operator := that you don't accidentally shadow variables from the outer block. In the case below err is created twice, and if you relied on err being set in the outside scope it would not be. In most cases this isn't a problem but it's something to be aware of. Most linters warn about any dangerous instances of shadowing so if you use a linter it is not usually a problem in practice.
 
 ```go
 // err is created
@@ -97,7 +97,9 @@ default:
 }
 ```
 
-## 
+## Naked Returns
+
+In go, naked returns \(the use of the keyword return without parameters\) will return the current state of the named return values. This is sometimes used as a shortcut to avoid specifying what is returned.  Try to avoid using naked returns, they are unclear, particularly within or at the end of a large function. Instead specify exactly what will be returned, and use nil for values when returning an error. 
 
 
 
