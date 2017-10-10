@@ -188,6 +188,15 @@ func main() {
 }
 ```
 
+## Error strings
+
+Error strings may be used inside other error strings, so they should not be capitalized \(unless beginning with proper nouns or acronyms\) or end with punctuation. Make them composable, so that they can be logged or annotated with other messages:
+
+```go
+// Annotating an error
+return fmt.Errorf("failed to read %s: %v", filename, err)
+```
+
 ## Don't panic
 
 [Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason. In servers, you may never need to use the keyword panic, and should prefer not to.
