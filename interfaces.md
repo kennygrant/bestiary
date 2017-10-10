@@ -4,6 +4,8 @@ An interface in go is a contract specifying which method signatures a type must 
 
 ## Keep interfaces simple
 
+> The bigger the interface, the weaker the abstraction
+
 Interfaces are at their most powerful when they express a simple contract that any type can easily conform to. If they start to demand a laundry list of functions \(more than a few is a good heuristic\), they have very little advantage over a concrete type as an argument, because the caller is not going to be able to create an alternative type without substantially recreating the original.
 
 Some examples of useful interfaces from the standard library are:
@@ -92,7 +94,7 @@ Do not design interfaces for mocking, design them for real world use, and don't 
 
 ## Avoid mixing interface and concrete types
 
-When defining interfaces in a package, don't also provide the implementation in the same package. 
+When defining interfaces in a package, don't also provide the implementation in the same package.
 
 * Define interfaces in the package that uses them
 * Define concrete types in the package that uses the package that accepts an interface

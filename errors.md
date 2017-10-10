@@ -1,8 +1,10 @@
 # Errors & Logging
 
-[Errors](https://blog.golang.org/error-handling-and-go) and [logging](https://golang.org/pkg/log/) are one area of Go which does perhaps does deserve the label of simplistic rather than simple. The log package has no levels or interfaces, it simply prints to standard error by default. For many applications though, this is enough, and there are various logging packages available for more sophisticated requirements. The error type is very simple and errors are stored as strings. 
+[Errors](https://blog.golang.org/error-handling-and-go) and [logging](https://golang.org/pkg/log/) are one area of Go which does perhaps does deserve the label of simplistic rather than simple. The log package has no levels or interfaces, it simply prints to standard error by default. For many applications though, this is enough, and there are various logging packages available for more sophisticated requirements. The error type is very simple and errors are stored as strings.
 
 ## The Error Type
+
+> Errors are values
 
 The [error](https://blog.golang.org/error-handling-and-go) type in go is a very simple interface, with one method. Errors offer no introspection into what went wrong or storage of other data. Often errors are nested, as one error may be annotated several times as it passes up the stack. Try to prefer handling an error as close to the site of the error as possible.
 
@@ -48,7 +50,7 @@ The caller should always check for errors before using values. _You should favou
 
 ## _Always_ handle Errors
 
-You should never discard errors using \_ variables in production code. If a function returns an error, make sure you check it before using any values returned by that function. Usually if there is an error returned, values are undefined. 
+You should never discard errors using \_ variables in production code. If a function returns an error, make sure you check it before using any values returned by that function. Usually if there is an error returned, values are undefined.
 
 ## _Either_ log _or_ return an error
 
@@ -83,6 +85,8 @@ func DoSomething() error {
 
 }
 ```
+
+> Don't just check errors, handle them gracefully
 
 ## Stack traces on errors
 
