@@ -46,18 +46,27 @@ There is no official package manager tool as yet in Go, though work is progressi
 
 ## Internal directories
 
-A subdirectory named 'internal' can be used for packages that can only be imported by nearby code, not by any other package. Packages in an internal directory are only accessible to those in the same file tree, rooted at the parent of the internal directory. So if one project includes 'myproj/example/internal/foo' only packages under myproj can import foo. 
+A subdirectory named 'internal' can be used for packages that can only be imported by nearby code, not by any other package. Packages in an internal directory are only accessible to those in the same file tree, rooted at the parent of the internal directory. So if one project includes 'myproj/example/internal/foo' only packages under myproj can import foo.
 
-This is typically used for dependencies which should not be shared and are for internal use only \(for example libraries with an unstable api\). 
+This is typically used for dependencies which should not be shared and are for internal use only \(for example libraries with an unstable api\).
 
-## Avoid importing unsafe or reflect
+## Don't import unsafe
 
-If you can, avoid using the unsafe or reflect packages in your code – this also applies to libraries you import. 
+If you can, avoid using the unsafe or reflect packages in your code – this also applies to libraries you import. Package unsafe bypasses the Go type system. Packages that import unsafe may be non-portable and are not protected by the Go 1 compatibility guidelines. 
 
-* Package unsafe bypasses the Go type system. Packages that import unsafe may be non-portable and are not protected by the Go 1 compatibility guidelines. 
-* Package reflect also bypasses the Go type system, so programs using it don't have the benefit of strict type checks, programs that use it will typically be slower and more fragile, and may use interface{} too much. It can be temping when writing a library to use reflect and attempt to handle several types in the same function \(for example an array of types or a single type\), but this makes it confusing for users \(no indication of what type should be passed in\), and easy to miss a type and cause panics. 
+## Don't import reflect
 
-## func init
+Package reflect also bypasses the Go type system, so programs using it don't have the benefit of strict type checks, programs that use it will typically be slower and more fragile, and may use interface{} too much. It can be temping when writing a library to use reflect and attempt to handle several types in the same function \(for example an array of types or a single type\), but this makes it confusing for users \(no indication of what type should be passed in\), and easy to miss a type and cause panics. 
+
+## Cgo is not Go
+
+Cgo is a useful crutch to allow calling into C libraries from Go and vice versa. Build times will be slower, and you won't be able to cross compile code easily. This throws away many of the advantages of writing code in Go. You can use it to do some very useful things like running Go programs on iOS or Android, or interfacing with large libraries of existing code written in C, and it is indispensable for those uses, but if you can avoid using it, do so. 
+
+## Syscall and cgo are not portable
+
+If you're using cgo or syscall, your package probably isn't portable, and needs build tags for each platform you're going to target. Unlike other packages in the go ecosystem, the cgo or syscall packages are not portable across platforms. If you import them, you should be aware of this. 
+
+## Init funcs
 
 Packages can contain \(one or several\) init\(\) functions to set up state, these are run after all the imports and package variables have been initialised:
 
@@ -78,6 +87,4 @@ Avoid using this if you can, and particularly avoid using it to set global state
 ## Flags
 
 Libraries and packages should not define their own flags or use the flags package. Instead take parameters to define behaviour - the application \(main\) should be in charge of parsing flags and passing the chosen configuration values in to a package. Otherwise it will be difficult to reuse the package or import it anywhere else.
-
-
 
