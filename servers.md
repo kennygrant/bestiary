@@ -23,56 +23,19 @@ log.Println(srv.ListenAndServeTLS("", ""))
 
 The http server uses goroutines to run your handlers and serve multiple requests in parallel, so **each handler is in a new goroutine**. This means you have to be careful about sharing memory between handlers. If for example you have a global config struct or cache, this must be protected by a mutex.
 
-## Client Timeouts
+## Listen and Serve
 
-The http client has no default timeout, which can be a problem. In this example problem the client waits 1 hour before exiting.
+If you launch the http server in your main goroutine, don't expect control to return to your main function until the end of the program, because it blocks waiting for input until an error occurs.
 
 ```go
-package main
-import (
-  “fmt”
-  “net/http”
-  “net/http/httptest”
-  “time”
-)
 func main() {
-  svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    // handler sleeps for 10 minutes
-    time.Sleep(10 * time.Minute)
-  }))
-  defer svr.Close()
-
-  // Make a get request with default client
-  fmt.Println(“making request”)
-  http.Get(svr.URL)
-  fmt.Println(“finished request”)
+    http.HandleFunc("/hello", HelloServer)
+    err := http.ListenAndServe(":12345", nil)
+    if err != nil {
+       log.Fatal(err)
+    }
+    log.Println("this line will never execute")    
 }
-```
-
-Instead, you should create a client explicitly with a timeout:
-
-```go
-// Create a client with a timeout of 10 seconds
-var netClient = &http.Client{
-  Timeout: time.Second * 10,
-}
-response, _ := netClient.Get(url)
-```
-
-## Handling Responses
-
-### Closing the response body
-
-Don't close the response body before you check if there was an error.
-
-```go
- r, err := http.Get("https://example.com")
- // Don't defer close here
- if err != nil {
-   return err
- }
- // It's safe to defer close once you know there was no error
- defer r.Body.Close()
 ```
 
 ### Serving Files
@@ -128,24 +91,11 @@ and would simply return to the client:
 
 > 400 Bad Request
 
-## ListenAndServe
-
-If you launch the http server in your main goroutine, don't expect control to return to your main function until the end of the program, because it blocks waiting for input until an error occurs.
-
-```go
-func main() {
-    http.HandleFunc("/hello", HelloServer)
-    err := http.ListenAndServe(":12345", nil)
-    if err != nil {
-       log.Fatal(err)
-    }
-    log.Println("this line will never execute")    
-}
-```
-
 ## Panics in goroutines
 
 If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic. See the errors chapter for more details.
+
+One approach to this is never to make mistakes. With unpredictable, malformed or downright malicious data coming from outside the application in parameters or files this can be difficult however, so it may be worth protecting against panics in any goroutines launched from your handlers. 
 
 ## Cryptography
 
@@ -172,6 +122,81 @@ func NewEncryptionKey() *[32]byte {
 ### Comparing Passwords
 
 If you're comparing passwords or other sensitive data, to avoid timing attacks, make use of the [crypto/subtle](https://golang.org/pkg/crypto/subtle/) subtle.ConstantTimeCompare, or better still use the [bcrypt](https://godoc.org/golang.org/x/crypto/bcrypt) package library functions bcrypt.CompareHashAndPassword.
+
+## Making http requests
+
+Your program may need to fetch http resources, and the net/http package offers http.Get or http.Client in order to help with this, but there are some issues you should be aware of. 
+
+### Client Timeouts
+
+The http client has no default timeout, which can be a problem. In this example problem the client waits 1 hour before exiting.
+
+```go
+package main
+import (
+  “fmt”
+  “net/http”
+  “net/http/httptest”
+  “time”
+)
+func main() {
+  svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    // handler sleeps for 10 minutes
+    time.Sleep(10 * time.Minute)
+  }))
+  defer svr.Close()
+
+  // Make a get request with default client
+  fmt.Println(“making request”)
+  http.Get(svr.URL)
+  fmt.Println(“finished request”)
+}
+```
+
+Instead, you should create a client explicitly with a timeout:
+
+```go
+// Create a client with a timeout of 10 seconds
+var netClient = &http.Client{
+  Timeout: time.Second * 10,
+}
+response, _ := netClient.Get(url)
+```
+
+### Closing the response body
+
+Don't close the response body before you check if there was an error.
+
+```go
+ r, err := http.Get("https://example.com")
+ // Don't defer close here
+ if err != nil {
+   return err
+ }
+ // It's safe to defer close once you know there was no error
+ defer r.Body.Close()
+```
+
+### Check Status Codes
+
+Always check the status code of the response when making a request with the Go http client. If the status is in the 200 range you can use the response as is. If it is in the 300 range it is a redirection. If it is in the 400 range you have a problem with your request which you should fix \(e.g. invalid headers, invalid URL\). If it is in the 500 range there was a problem on the server end, so you need to inform the user.
+
+The error returned by http.Get and friends informs you if there was an error reading the response, not if the response was successful. 
+
+```go
+url := "https://example.com"
+resp, err := http.Get(url)
+if err != nil {
+    return fmt.Errorf("error getting %s: %v",url,err)
+}
+
+// Unexpected response, inform the user
+if resp.StatusCode < 200 || resp.StatusCode > 299 {
+    return fmt.Errorf("unexpected http status:%d",resp.StatusCode)
+}
+
+// No errors fetching, so the response is ok to use
+```
 
 ## Profiling
 
