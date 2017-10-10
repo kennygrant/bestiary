@@ -23,6 +23,8 @@ func (d *Data)Add(k,v int) {
 }
 ```
 
+It is often clearer to put the mutex right next to the data they protect; convention is to name them mu and place them above the field which they protect. You should very rarely need to explicitly initialise a mutex or use a pointer to a mutex, the zero value can be used directly as above. 
+
 ## Map values
 
 You cannot take the address of map keys or values. You cannot assign to struct fields for structs stored as values in the map, they are immutable. You should instead store pointers in the map, and you can then mutate the structs those pointers refer to.
@@ -84,7 +86,7 @@ v := m[key]
 
 ## Nil Maps
 
-Maps must always be initialised before use, the zero value is not useful. 
+Maps must always be initialised before use, the zero value is not useful.
 
 ```go
 // Allowed 

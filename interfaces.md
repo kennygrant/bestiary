@@ -90,6 +90,13 @@ Interfaces are a way of avoiding tight coupling between different packages, so t
 
 Do not design interfaces for mocking, design them for real world use, and don't add methods to them before you have a concrete use for the methods. The exception to this is of course the extremely common error interface.
 
+## Avoid mixing interface and concrete types
+
+When defining interfaces in a package, don't also provide the implementation in the same package. 
+
+* Define interfaces in the package that uses them
+* Define concrete types in the package that uses the package that accepts an interface
+
 ## Don't use pointers to interface
 
 You probably meant to use a pointer to your real type, or just a plain old Interface. You don't need a pointer to interfaces.
