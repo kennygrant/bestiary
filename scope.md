@@ -80,9 +80,9 @@ The defer statement freezes its arguments the instant it is evaluated \(the line
   s = "hello world"
 ```
 
-## Switch fallthrough
+## Switch fall through
 
-Case statements inside a switch in go **do not fall through by default**, so break is not required. You can use the fallthrough keyword to do so if you require.
+Case statements inside a switch in go **do not fall through by default**, so break is not required. You can use the fallthrough keyword to do so if you require. This should be used sparingly and carefully annotated because of the difference with C - programmers not familiar with Go may be tripped up by it so use this sparingly if at all. 
 
 ```go
 switch(i) {
@@ -99,7 +99,9 @@ default:
 
 ## Naked Returns
 
-In go, naked returns \(the use of the keyword return without parameters\) will return the current state of the named return values. This is sometimes used as a shortcut to avoid specifying what is returned.  Try to avoid using naked returns, they are unclear, particularly within or at the end of a large function. Instead specify exactly what will be returned, and use nil for values when returning an error. 
+In go, naked returns \(the use of the keyword return without parameters\) will return the current state of the named return values. This is sometimes used as a shortcut to avoid specifying what is returned.  Try to avoid using naked returns, they are unclear, particularly within or at the end of a large function. Instead specify exactly what will be returned, and use nil for values when returning an error.
 
+## Prefer synchronous functions
 
+Try to write synchronous functions, which can then be transformed by use of the go keyword into asynchronous ones. Do not attempt to make your API async by default by using go keywords within library functions. It is easy to add concurrency with the go keyword, but impossible to remove it if a function uses it internally. 
 
