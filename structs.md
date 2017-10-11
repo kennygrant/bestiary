@@ -67,6 +67,10 @@ if err != nil {
 ...
 ```
 
+## Pointers vs Values for constructors
+
+
+
 ## Pointers vs Values for Methods
 
 You can define methods either on the struct value or struct pointer. You should follow these rules for deciding which to use
