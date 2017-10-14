@@ -210,3 +210,7 @@ import _ "net/http/pprof"
 
 **Beware **though if you register it there are hidden side effects. It will attach endpoints to the default serve mux during init. For this and performance reasons you should not import it in production. You can find out more about profiling in [Profiling Go Programs](https://blog.golang.org/profiling-go-programs).
 
+
+## Latency 
+
+When optimising servers it's worth being aware of the comparitive times for operations. If your database is in a different data centre for example on another continent, it doesn't matter how optimised your code is if it needs to spend 150ms for every database request. 1 CPU cycle takes 0.0000003ms, Cache access 0.0000129ms, Solid state disk 0.05ms, Rotational disk access around 1ms and on internet request around 200ms across continents. So make sure you're optimising the right operations - avoiding network access will always be faster than any other optimisation. 
