@@ -12,6 +12,25 @@ where x is the package name. The name should be short, explicit and avoid punctu
 
 Packages are a directory on the file system containing .go files. **You cannot have multiple packages within one directory**. By convention, the package name is the same as the directory name, and the directory should contain a file of the package name with the .go suffix which contains the primary exports. You can if necessary rename packages on import and use a different package name to the folder name.
 
+## Workspaces
+
+A common cause of confusion for beginners with Go is the concept of workspaces, where all your go code lives. These are not checked into version control directly, and when beginning you will just have one workspace which is your gopath. This contains three dirs src, pkg, and bin, as detailed in the getting started section. Projects will typically be hosted under paths like this: src/host/username/project which are used as the import paths, and below that path can contain any directories you want to structure your project. 
+
+## Project structure 
+
+There are few restrictions on structure in a Go project, but for a beginner there are a few guidelines to keep in mind. The simplest structure is [one main package](https://golang.org/doc/code.html#Command) at the top level of your repository. This can be fetched by go get which is what users will expect. Beyond this you can structure it as you wish, with as many directories as you wish, though each directory with go files must be a separate package, and cannot contain more than one package.
+
+A few guidelines to live by: 
+
+* Make your project go-gettable by having the main package at the top level
+* Err on the side of fewer packages, not more
+* Import lower packages from higher levels, and try to avoid interdependencies - low level packages should stand alone
+* Store internal libraries not for export in a directoy named internal
+* Vendor dependencies in a top level directory named vendor
+* Always flatten vendor directories into this one top level folder
+
+Packages can contain as many files as you want, not just one, and typically should be split by file. Don't split packages by type and have one type per package, a package will normall contain several types. 
+
 ## Blank imports
 
 You can import packages with the blank identifier solely for their init function, to do this prefix the import with \_

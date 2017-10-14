@@ -67,21 +67,73 @@ if err != nil {
 ...
 ```
 
-## Pointers vs Values for constructors
-
-
 
 ## Pointers vs Values for Methods
 
-You can define methods either on the struct value or struct pointer. You should follow these rules for deciding which to use
+You can define methods either on the struct value or struct pointer. If unsure, you can follow these guidelines for deciding which to use:
 
 * **If in doubt, use a pointer receiver**
 * If the method modifies the receiver, it must be on a pointer receiver 
 * If the receiver is large, e.g. a big struct, it is cheaper to use a pointer receiver
-* If you need any pointer receivers, make them all pointer receivers
 * If the type is stored in a map or interface, it is not addressable and T cannot use \*T methods
+* If you need any pointer receivers, make them all pointer receivers
 
-For small structs you may want to use values for efficiency, but for large structs or structs which modify themselves, you will want to use pointer receivers.
+The outcome of these guidlines is that usually it's best to work with pointers to structs and thus to define methods on the pointer, not on the value. For small structs you may want to use values for efficiency, but for large structs or structs which modify themselves, you will want to use pointer receivers. There is more detail on the rules for pointer receivers at the end of this chapter in the section on Method Sets. 
+
+## Pointers vs Values in Slices
+
+As you'll probably want to use pointers to structs elsewhere in your code, it makes sense to use slices of pointers, rather than slices of values. This also lets you update the structs in the slice directly. 
+
+## Pointers vs Values for constructors
+
+When writing constructors, default to pointers to structs for the same reasons as above. You can certainly return plain structs or values, particularly for simple values, but typically simple values won't require a constructor.  
+
+## Why do new and make exist?
+
+You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead. 
+
+`make` is required for used with maps, slices and channels to initialise them with a given size, for example:
+
+```
+make(map[int]int)    // A map with no entries
+make(map[int]int,10) // A map with 10 zero entries
+make([]int, 10, 100) // A slice with 10 zero entries, and a capacity of 100 
+c := make(chan int)  // An unbuffered channel of integers
+```
+
+## Enums
+
+There are no enums in Go. Use the keyword iota to increment constants from a known base, so the closest to an enum is a set of constants in a file:
+
+```go
+// Describe the constants here
+const (
+   RoleAnon = iota 
+   RoleReader
+   RoleAdmin
+)
+```
+
+For more sophisticated control impose limits or provide string values by using a type:
+
+```
+type Role struct {
+  value int
+}
+
+func (e Role)SetValue(v int) {
+  if v == RoleAnon || v = RoleReader || v = RoleAdmin {
+    e.value = v
+  }
+}
+
+func (e Role)Value(v int) {
+   return e.value 
+}
+
+```
+
+## Method Sets 
 
 You _normally_ don't have to worry about method sets as the compiler will transform pointers or values to the other in order to use methods defined on the other as a convenience, but this breaks down in some circumstances. The exceptions to this are if a type is stored in a map, or stored in an Interface, or if you want to mutate the value of the receiver within the method. This is a gnarly detail, and effective go is somewhat confusing on this score:
 
@@ -140,51 +192,5 @@ func callFoo(i FI) { i.Foo() }
 ```
 
 You can read more about this on this wiki entry on [Method Sets](https://github.com/golang/go/wiki/MethodSets).
-
-## Why do new and make exist?
-
-You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead. 
-
-`make` is required for used with maps, slices and channels to initialise them with a given size, for example:
-
-```
-make(map[int]int)    // A map with no entries
-make(map[int]int,10) // A map with 10 zero entries
-make([]int, 10, 100) // A slice with 10 zero entries, and a capacity of 100 
-c := make(chan int)  // An unbuffered channel of integers
-```
-
-## Enums
-
-There are no enums in Go. Use the keyword iota to increment constants from a known base, so the closest to an enum is a set of constants in a file:
-
-```go
-// Describe the constants here
-const (
-   RoleAnon = iota 
-   RoleReader
-   RoleAdmin
-)
-```
-
-For more sophisticated control impose limits or provide string values by using a type:
-
-```
-type Role struct {
-  value int
-}
-
-func (e Role)SetValue(v int) {
-  if v == RoleAnon || v = RoleReader || v = RoleAdmin {
-    e.value = v
-  }
-}
-
-func (e Role)Value(v int) {
-   return e.value 
-}
-
-```
-
 
 
