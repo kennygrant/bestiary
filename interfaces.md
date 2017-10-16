@@ -105,5 +105,16 @@ You probably meant to use a pointer to your real type, or just a plain old Inter
 
 ## Don't compare interface to nil
 
-An interface will only be nil when both their type and value fields are nil, so comparing interface to nil can have unexpected results. Don't do that.
+An interface will only be nil when both their type and value fields are nil, so comparing interface to nil can have unexpected results. Don't do that. You can read more about this problem in the, but in summary if any concrete value has ever been stored in the interface, the interface will not be nil. 
 
+// E is a type conforming to the error interface
+type E struct{}
+func (e *E) Error() string { return fmt.Sprintf("%p", e) }
+
+// typederror returns an interface
+func typederror() error {
+	var e *E = nil
+	return e // e is not nil as expected
+}
+
+You can read more about the internals of interfaces in [Go Data Structures: Interfaces](https://research.swtch.com/interfaces) on Russ Cox's blog. 
