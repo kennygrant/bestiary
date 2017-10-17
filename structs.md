@@ -8,6 +8,8 @@ _During a Java user group meeting James Gosling \(Java's inventor\) was asked "I
 
 Go eschews inheritance in favour of composition. If you're accustomed to building large hierarchies of types as a way of organising your data, you might find this jarring at first. Go interfaces provide polymorphism, so if your function needs something which barks, it simply asks for a Barker. Go embedding provides composition, so if your Barker needs to Yap as well, it can embed a struct to do so. Go provides tools which solve the same problems as inheritance, without most of the downsides. You may find you need it less than you think.
 
+Many developers coming to go from more complex OOP languages start by trying to reintroduce inheritance by using embedding. This will lead to frustration, because embedding does not work in the same way as inheritance, by design. 
+
 ## Composition is not inheritance
 
 Composition can do some of the same things as inheritance, but it is not the same. Inheritance was deliberately left out of Go, so don't try to recreate it by the back door. If you find yourself frustrated that your structs are not able to adjust the fields of their embedder, you're not really composing functionality. Always try to go for the simplest solution first, and only use composition if you definitely need to share behaviour between two different structs.
@@ -67,7 +69,6 @@ if err != nil {
 ...
 ```
 
-
 ## Pointers vs Values for Methods
 
 You can define methods either on the struct value or struct pointer. If unsure, you can follow these guidelines for deciding which to use:
@@ -78,19 +79,19 @@ You can define methods either on the struct value or struct pointer. If unsure, 
 * If the type is stored in a map or interface, it is not addressable and T cannot use \*T methods
 * If you need any pointer receivers, make them all pointer receivers
 
-The outcome of these guidlines is that usually it's best to work with pointers to structs and thus to define methods on the pointer, not on the value. For small structs you may want to use values for efficiency, but for large structs or structs which modify themselves, you will want to use pointer receivers. There is more detail on the rules for pointer receivers at the end of this chapter in the section on Method Sets. 
+The outcome of these guidlines is that usually it's best to work with pointers to structs and thus to define methods on the pointer, not on the value. For small structs you may want to use values for efficiency, but for large structs or structs which modify themselves, you will want to use pointer receivers. There is more detail on the rules for pointer receivers at the end of this chapter in the section on Method Sets.
 
 ## Pointers vs Values in Slices
 
-As you'll probably want to use pointers to structs elsewhere in your code, it makes sense to use slices of pointers, rather than slices of values. This also lets you update the structs in the slice directly. 
+As you'll probably want to use pointers to structs elsewhere in your code, it makes sense to use slices of pointers, rather than slices of values. This also lets you update the structs in the slice directly.
 
 ## Pointers vs Values for constructors
 
-When writing constructors, default to pointers to structs for the same reasons as above. You can certainly return plain structs or values, particularly for simple values, but typically simple values won't require a constructor.  
+When writing constructors, default to pointers to structs for the same reasons as above. You can certainly return plain structs or values, particularly for simple values, but typically simple values won't require a constructor.
 
 ## Why do new and make exist?
 
-You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead. 
+You can probably get away without using `new` at all - it simple allocates a new instance of a type, and you can use &T{} instead.
 
 `make` is required for used with maps, slices and channels to initialise them with a given size, for example:
 
@@ -130,10 +131,9 @@ func (e Role)SetValue(v int) {
 func (e Role)Value(v int) {
    return e.value 
 }
-
 ```
 
-## Method Sets 
+## Method Sets
 
 You _normally_ don't have to worry about method sets as the compiler will transform pointers or values to the other in order to use methods defined on the other as a convenience, but this breaks down in some circumstances. The exceptions to this are if a type is stored in a map, or stored in an Interface, or if you want to mutate the value of the receiver within the method. This is a gnarly detail, and effective go is somewhat confusing on this score:
 
@@ -192,5 +192,4 @@ func callFoo(i FI) { i.Foo() }
 ```
 
 You can read more about this on this wiki entry on [Method Sets](https://github.com/golang/go/wiki/MethodSets).
-
 
