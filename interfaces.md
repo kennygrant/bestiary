@@ -8,7 +8,7 @@ An interface in go is a contract specifying which method signatures a type must 
 
 Interfaces are at their most powerful when they express a simple contract that any type can easily conform to. If they start to demand a laundry list of functions \(more than a few is a good heuristic\), they have very little advantage over a concrete type as an argument, because the caller is not going to be able to create an alternative type without substantially recreating the original.
 
-Some examples of useful interfaces from the standard library are:
+Here are some examples of useful interfaces from the standard library, you'll notice that all of these extremely popular interfaces have one thing in common - they all require very few functions.
 
 [error](https://golang.org/ref/spec#Errors)
 
@@ -67,8 +67,6 @@ type ResponseWriter interface {
 }
 ```
 
-You'll notice that all of these extremely popular interfaces have one thing in common - they all require very few functions. For this reason they are used throughout the standard library.
-
 ## Avoid the empty Interface
 
 The empty interface is written like this, but unlike interfaces it requires no methods \(hence the empty brackets\):
@@ -105,16 +103,17 @@ You probably meant to use a pointer to your real type, or just a plain old Inter
 
 ## Don't compare interface to nil
 
-An interface will only be nil when both their type and value fields are nil, so comparing interface to nil can have unexpected results. Don't do that. You can read more about this problem in the, but in summary if any concrete value has ever been stored in the interface, the interface will not be nil. 
+An interface will only be nil when both their type and value fields are nil, so comparing interface to nil can have unexpected results. Don't do that. You can read more about this problem in the, but in summary if any concrete value has ever been stored in the interface, the interface will not be nil.
 
-// E is a type conforming to the error interface
-type E struct{}
-func (e *E) Error() string { return fmt.Sprintf("%p", e) }
+// E is a type conforming to the error interface  
+type E struct{}  
+func \(e \*E\) Error\(\) string { return fmt.Sprintf\("%p", e\) }
 
-// typederror returns an interface
-func typederror() error {
-	var e *E = nil
-	return e // e is not nil as expected
+// typederror returns an interface  
+func typederror\(\) error {  
+    var e \*E = nil  
+    return e // e is not nil as expected  
 }
 
-You can read more about the internals of interfaces in [Go Data Structures: Interfaces](https://research.swtch.com/interfaces) on Russ Cox's blog. 
+You can read more about the internals of interfaces in [Go Data Structures: Interfaces](https://research.swtch.com/interfaces) on Russ Cox's blog.
+

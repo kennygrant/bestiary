@@ -81,16 +81,13 @@ To read a single row into a struct, you can use Query Row. You may want to add a
 // Query a row from the database
 row := db.QueryRow("select id,name,created_at from tablename where id=?", id)
 
-// Read into a struct 
 type Resource struct{
     ID int
     Name string
     CreatedAt time.Time
 }
-
-// This assumes no values are nil in the database
 var r Resource
-err := row.Scan(&r.ID, &r.Name, &r.CreatedAt)
+err := row.Scan(&r.ID, &r.Name, &r.CreatedAt) // This assumes no values are nil in the database
 if err != nil {
     return err
 }
@@ -101,15 +98,12 @@ if err != nil {
 Many database libraries use reflect to attempt to introspect struct fields. You should try to avoid using reflect if you can as it is slow, prone to panics, and requires you to use struct tags and a dsl invented by the database library author. Another approach is to generate a list of columns, and pass them to the struct itself to assign, since it knows all about its fields and which values should go into them.
 
 ```go
-// Read into a struct 
 type User struct {
     ID int
     Name string
     CreatedAt time.Time
 }
 
-// ReadUser fills in a user from database columns
-// the values are validated to not be null before assignment. 
 func ReadUser(columns map[string]interface{}) *User {
     u := &User{}
     u.ID = validateInt(cols["id"])
@@ -127,7 +121,7 @@ This can seem a bit more fiddly than other languages, however the best approach 
 
 Database connections may be called from many goroutines and connections are pooled by the driver. So don't use stateful sql commands like USE, BEGIN or COMMIT, LOCK TABLES etc and instead use the facilities offered by the sql driver. There’s no default limit on the number of connections, so it is possible to exhaust the number of connections allowed by the database. You can use  SetMaxOpenConns and SetMaxIdleConns to control this behaviour.
 
-```
+```go
 db.SetMaxIdleConns(10)
 db.SetMaxOpenConns(100)
 ```

@@ -8,7 +8,7 @@ The zero value of a slice is a nil slice. It has no underlying array, and has 0 
 
 ## Slicing shares data
 
-When you use the slice operator, be aware that the backing data will be shared, using the same underlying array. If you need an independent copy of a slice to manipulate the underlying data, take a copy of it first. After you slice, the new slice will be a view onto the same data, but further operations \(like append\) on that new slice may mean it is copied, so it is usually better not to rely on slices sharing data if you wish to mutate that data. This sharing of a backing store can be very useful if you don't need to change data but just use parts of it as it avoids extra allocations.  
+When you use the slice operator, be aware that the backing data will be shared, using the same underlying array. If you need an independent copy of a slice to manipulate the underlying data, take a copy of it first. After you slice, the new slice will be a view onto the same data, but further operations \(like append\) on that new slice may mean it is copied, so it is usually better not to rely on slices sharing data if you wish to mutate that data. This sharing of a backing store can be very useful if you don't need to change data but just use parts of it as it avoids extra allocations.
 
 ```go
 a := []int{0,1,2,3,4,5}
@@ -48,7 +48,7 @@ While this may seem like a trivial mistake to make, it causes a panic at runtime
 
 ## Slicing is limited by cap
 
-Conversely to indexes \(from 0 to len\), slicing is limited by cap, not by len, as stated in the [spec](https://golang.org/ref/spec#Slice_expressions), which may seem a little counter-intuitive, and you probably shouldn't rely on. This means in some circumstances you can retrieve the backing data for a slice even outside its range, as long as it is between len and cap. If you need to see the original data it is better to keep a copy of the original slice to make the intent clear. 
+Conversely to indexes \(from 0 to len\), slicing is limited by cap, not by len, as stated in the [spec](https://golang.org/ref/spec#Slice_expressions), which may seem a little counter-intuitive, and you probably shouldn't rely on. This means in some circumstances you can retrieve the backing data for a slice even outside its range, as long as it is between len and cap. If you need to see the original data it is better to keep a copy of the original slice to make the intent clear.
 
 ## Appending elements
 
@@ -62,8 +62,11 @@ fmt.Println(s)
 
 Appending _may_ create a new backing array, it's best not to rely on the slice argument not changing - the argument may change in length, and the slice returned may not be the slice which goes in. It does not create a copy of the slice and return it for every append, as this would waste a lot of memory. When you definitely need a copy \(for example you need to preserve the original slice as well as mutate it\), take a copy of the slice \(or the part of the slice you need\) first:
 
-```
+```go
+// Make a new slice
 c := make([]byte, len(s))
+
+// Take a copy
 copy(c, s)
 ```
 

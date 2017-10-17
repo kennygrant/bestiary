@@ -2,13 +2,13 @@
 
 A struct in Go is a sequence of fields, each of which has a name and type public and private rules are the same as names in packages - lowercase names are private , names starting with uppercase are exported. Structs can also have methods, which allows them to fulfil interfaces. Structs do not inherit from each other, but they can embed another struct to gain its fields and behaviour. The embedder does not know anything about the struct it is embedded in and cannot access it.
 
-## Inheritance - let it go
+## Forget inheritance
 
 _During a Java user group meeting James Gosling \(Java's inventor\) was asked "If you could do Java over again, what would you change?". He replied: "I'd leave out classes"_
 
 Go eschews inheritance in favour of composition. If you're accustomed to building large hierarchies of types as a way of organising your data, you might find this jarring at first. Go interfaces provide polymorphism, so if your function needs something which barks, it simply asks for a Barker. Go embedding provides composition, so if your Barker needs to Yap as well, it can embed a struct to do so. Go provides tools which solve the same problems as inheritance, without most of the downsides. You may find you need it less than you think.
 
-Many developers coming to go from more complex OOP languages start by trying to reintroduce inheritance by using embedding. This will lead to frustration, because embedding does not work in the same way as inheritance, by design. 
+Many developers coming to go from more complex OOP languages start by trying to reintroduce inheritance by using embedding. This will lead to frustration, because embedding does not work in the same way as inheritance, by design.
 
 ## Composition is not inheritance
 
@@ -95,7 +95,8 @@ You can probably get away without using `new` at all - it simple allocates a new
 
 `make` is required for used with maps, slices and channels to initialise them with a given size, for example:
 
-```
+```go
+// Using make with maps and slices
 make(map[int]int)    // A map with no entries
 make(map[int]int,10) // A map with 10 zero entries
 make([]int, 10, 100) // A slice with 10 zero entries, and a capacity of 100 
@@ -117,7 +118,7 @@ const (
 
 For more sophisticated control impose limits or provide string values by using a type:
 
-```
+```go
 type Role struct {
   value int
 }

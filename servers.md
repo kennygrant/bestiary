@@ -95,7 +95,7 @@ and would simply return to the client:
 
 If a handler panics, the server assumes that the panic was isolated to the current request, recovers, logs a stack trace to the server log, and closes the connection. So the server will recover from any panics in your handlers, but if your handlers use the go keyword, they must protect against panics** within any separate goroutines** they create, otherwise those goroutines can crash the entire server with a panic. See the errors chapter for more details.
 
-One approach to this is never to make mistakes. With unpredictable, malformed or downright malicious data coming from outside the application in parameters or files this can be difficult however, so it may be worth protecting against panics in any goroutines launched from your handlers. 
+One approach to this is never to make mistakes. With unpredictable, malformed or downright malicious data coming from outside the application in parameters or files this can be difficult however, so it may be worth protecting against panics in any goroutines launched from your handlers.
 
 ## Cryptography
 
@@ -125,7 +125,7 @@ If you're comparing passwords or other sensitive data, to avoid timing attacks, 
 
 ## Making http requests
 
-Your program may need to fetch http resources, and the net/http package offers http.Get or http.Client in order to help with this, but there are some issues you should be aware of. 
+Your program may need to fetch http resources, and the net/http package offers http.Get or http.Client in order to help with this, but there are some issues you should be aware of.
 
 ### Client Timeouts
 
@@ -181,7 +181,7 @@ Don't close the response body before you check if there was an error.
 
 Always check the status code of the response when making a request with the Go http client. If the status is in the 200 range you can use the response as is. If it is in the 300 range it is a redirection. If it is in the 400 range you have a problem with your request which you should fix \(e.g. invalid headers, invalid URL\). If it is in the 500 range there was a problem on the server end, so you need to inform the user.
 
-The error returned by http.Get and friends informs you if there was an error reading the response, not if the response was successful. 
+The error returned by http.Get and friends informs you if there was an error reading the response, not if the response was successful.
 
 ```go
 url := "https://example.com"
@@ -210,7 +210,9 @@ import _ "net/http/pprof"
 
 **Beware **though if you register it there are hidden side effects. It will attach endpoints to the default serve mux during init. For this and performance reasons you should not import it in production. You can find out more about profiling in [Profiling Go Programs](https://blog.golang.org/profiling-go-programs).
 
+## Latency
 
-## Latency 
+When optimising servers it's worth being aware of the comparitive times for operations. If your database is in a different data centre for example on another continent, it doesn't matter how optimised your code is if it needs to spend 150ms for every database request. 
 
-When optimising servers it's worth being aware of the comparitive times for operations. If your database is in a different data centre for example on another continent, it doesn't matter how optimised your code is if it needs to spend 150ms for every database request. 1 CPU cycle takes 0.0000003ms, Cache access 0.0000129ms, Solid state disk 0.05ms, Rotational disk access around 1ms and on internet request around 200ms across continents. So make sure you're optimising the right operations - avoiding network access will always be faster than any other optimisation. 
+1 CPU cycle takes 0.0000003ms, Cache access 0.0000129ms, Solid state disk 0.05ms, Rotational disk access around 1ms and on internet request around 200ms across continents. So make sure you're optimising the right operations - avoiding network access will always be faster than any other optimisation.
+

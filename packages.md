@@ -14,13 +14,13 @@ Packages are a directory on the file system containing .go files. **You cannot h
 
 ## Workspaces
 
-A common cause of confusion for beginners with Go is the concept of workspaces, where all your go code lives. These are not checked into version control directly, and when beginning you will just have one workspace which is your gopath. This contains three dirs src, pkg, and bin, as detailed in the getting started section. Projects will typically be hosted under paths like this: src/host/username/project which are used as the import paths, and below that path can contain any directories you want to structure your project. 
+A common cause of confusion for beginners with Go is the concept of workspaces, where all your go code lives. These are not checked into version control directly, and when beginning you will just have one workspace which is your gopath. This contains three dirs src, pkg, and bin, as detailed in the getting started section. Projects will typically be hosted under paths like this: src/host/username/project which are used as the import paths, and below that path can contain any directories you want to structure your project.
 
-## Project structure 
+## Project structure
 
 There are few restrictions on structure in a Go project, but for a beginner there are a few guidelines to keep in mind. The simplest structure is [one main package](https://golang.org/doc/code.html#Command) at the top level of your repository. This can be fetched by go get which is what users will expect. Beyond this you can structure it as you wish, with as many directories as you wish, though each directory with go files must be a separate package, and cannot contain more than one package.
 
-A few guidelines to live by: 
+A few guidelines to live by:
 
 * Make your project go-gettable by having the main package at the top level
 * Err on the side of fewer packages, not more
@@ -29,7 +29,7 @@ A few guidelines to live by:
 * Vendor dependencies in a top level directory named vendor
 * Always flatten vendor directories into this one top level folder
 
-Packages can contain as many files as you want, not just one, and typically should be split by file. Don't split packages by type and have one type per package, a package will normall contain several types. 
+Packages can contain as many files as you want, not just one, and typically should be split by file. Don't split packages by type and have one type per package, a package will normall contain several types.
 
 ## Blank imports
 
@@ -71,19 +71,24 @@ This is typically used for dependencies which should not be shared and are for i
 
 ## Don't import unsafe
 
-If you can, avoid using the unsafe or reflect packages in your code – this also applies to libraries you import. Package unsafe bypasses the Go type system. Packages that import unsafe may be non-portable and are not protected by the Go 1 compatibility guidelines. 
+If you can, avoid using the unsafe or reflect packages in your code – this also applies to libraries you import. Package unsafe bypasses the Go type system. Packages that import unsafe may be non-portable and are not protected by the Go 1 compatibility guidelines.
 
 ## Don't import reflect
 
-Package reflect also bypasses the Go type system, so programs using it don't have the benefit of strict type checks, programs that use it will typically be slower and more fragile, and may use interface{} too much. It can be temping when writing a library to use reflect and attempt to handle several types in the same function \(for example an array of types or a single type\), but this makes it confusing for users \(no indication of what type should be passed in\), and easy to miss a type and cause panics. 
+Package reflect also bypasses the Go type system, so programs using it don't have the benefit of strict type checks, programs that use it will typically be slower and more fragile, and may use interface{} too much. It can be temping when writing a library to use reflect and attempt to handle several types in the same function \(for example an array of types or a single type\), but this makes it confusing for users \(no indication of what type should be passed in\), and easy to miss a type and cause panics.
+
+```go
+// Think twice!
+import "reflect"
+```
 
 ## Cgo is not Go
 
-Cgo is a useful crutch to allow calling into C libraries from Go and vice versa. Build times will be slower, and you won't be able to cross compile code easily. This throws away many of the advantages of writing code in Go. You can use it to do some very useful things like running Go programs on iOS or Android, or interfacing with large libraries of existing code written in C, and it is indispensable for those uses, but if you can avoid using it, do so. 
+Cgo is a useful crutch to allow calling into C libraries from Go and vice versa. Build times will be slower, and you won't be able to cross compile code easily. This throws away many of the advantages of writing code in Go. You can use it to do some very useful things like running Go programs on iOS or Android, or interfacing with large libraries of existing code written in C, and it is indispensable for those uses, but if you can avoid using it, do so.
 
 ## Syscall and cgo are not portable
 
-If you're using cgo or syscall, your package probably isn't portable, and needs build tags for each platform you're going to target. Unlike other packages in the go ecosystem, the cgo or syscall packages are not portable across platforms. If you import them, you should be aware of this. 
+If you're using cgo or syscall, your package probably isn't portable, and needs build tags for each platform you're going to target. Unlike other packages in the go ecosystem, the cgo or syscall packages are not portable across platforms. If you import them, you should be aware of this.
 
 ## Init funcs
 
