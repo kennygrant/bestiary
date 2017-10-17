@@ -1,5 +1,6 @@
 # Summary
 
+* [Title](title.md)
 * [Introduction](README.md)
 * [Setup](setup.md)
 * [Strings](strings.md)
@@ -15,7 +16,5 @@
 * [Databases](databases.md)
 * [Time](time.md)
 * [Errors](errors.md)
-* [Glossary](/GLOSSARY.md)
-
-
+* Title
 
