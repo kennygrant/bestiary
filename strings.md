@@ -10,7 +10,7 @@ If you use double quotes you will get a string, and can include escape codes, li
 
 ```go
 // hello is a string containing newline & tab
-hello := "hello\n\tworld" 
+hello := "hello\n\tworld"
 ```
 
 > hello  
@@ -21,7 +21,7 @@ If you use back quotes escape codes will not be interpreted, and the string can 
 ```go
 // hello is a string with no newlines
 hello := `hello world\n` 
-    world\\n` 
+    world\\n`
 ```
 
 > hello world\n
@@ -98,7 +98,7 @@ Returns the third byte, not the third rune as you might expect:
 
 ## Trimming strings {#encodings}
 
-The strings package contains many useful functions for manipulating text, and each one is documented. Some might not do exactly what you expect from the name, for example strings.Trim does not trim a given suffix or prefix: 
+The strings package contains many useful functions for manipulating text, and each one is documented. Some might not do exactly what you expect from the name, for example strings.Trim does not trim a given suffix or prefix:
 
 ```go
 s := "les mots, et les choses"
@@ -110,7 +110,7 @@ The result may be unexpected:
 
 > mots, et les cho
 
-This function takes a **cutset** string – a list of characters to trim. If you want to trim a full prefix or suffix, use strings.TrimPrefix or strings.TrimSuffix:
+This function takes a **cutset** string – a list of characters to trim. If you want to trim a full prefix or suffix, use strings.TrimPrefix or strings.TrimSuffix:
 
 ```go
 s := "les mots, et les choses"
@@ -130,7 +130,7 @@ s := fmt.Sprintf("%s at %v", "hello world", time.Now())
 
 ## Encodings {#encodings}
 
-Most of the time when working with unicode strings in Go you won't have to do anything special. If you need to convert from another encoding like Windows 1252 you can use the [encoding](https://godoc.org/golang.org/x/text/encoding) package under golang.org/x/text. There are also some other utility packages for dealing with text there. The golang.org/x libraries are slightly less stable than the go standard library and are not part of the official distribution, but have many useful utilities. 
+Most of the time when working with unicode strings in Go you won't have to do anything special. If you need to convert from another encoding like Windows 1252 you can use the [encoding](https://godoc.org/golang.org/x/text/encoding) package under golang.org/x/text. There are also some other utility packages for dealing with text there. The golang.org/x libraries are slightly less stable than the go standard library and are not part of the official distribution, but have many useful utilities.
 
 ## Strings are immutable {#immutable}
 
@@ -142,7 +142,7 @@ A string value is a fixed size and[ should not be passed as a pointer](https://g
 
 ## Strings are never nil {#zero-value}
 
-You cannot assign nil to a string or compare nil to a string, they have a zero value of "" and can never be nil, only the zero value. 
+You cannot assign nil to a string or compare nil to a string, they have a zero value of "" and can never be nil, only the zero value.
 
 ## Converting Strings to Ints {#atoi}
 
@@ -174,7 +174,7 @@ fmt.Printf("string:%s float:%f cents:%d", price, f, c)
 
 > string:655.18 float:655.180000 cents:65517
 
-If you're parsing a float for a currency value, you should store it as an integer cents value, so consider converting the string to a value in cents first, as you will have work to do anyway to strip currency amounts and deal with missing cents. You can then parse as an integer and avoid any problems with storing it as a float.
+If parsing a float for a currency value, consider converting the string to a value in cents first, as you will have work to do anyway to strip currency amounts and deal with missing cents. You can then parse as an integer and avoid any problems with storing it as a float.
 
 ## Reading text files
 
@@ -189,7 +189,7 @@ if err != nil {
 fmt.Printf("%s", b)
 ```
 
-Unless you are ready small files like config files, consider reading the file in chunks. You can read a line-based file with [bufio.Scanner](https://golang.org/pkg/bufio/) and the Scan function:
+Unless reading very small files like config files which will never be large, consider reading the file in chunks. You can read a line-based file with [bufio.Scanner](https://golang.org/pkg/bufio/) and the Scan function:
 
 ```go
 file, err := os.Open("path/to/file")
