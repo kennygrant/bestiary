@@ -4,10 +4,8 @@
         "margin": {
             "right": 62,
             "left": 62,
-            "top": 62,
+            "top": 72,
             "bottom": 72
-        },
-        "headerTemplate": null,
-        "footerTemplate": "_SECTION_ _PAGENUM_"
+        }
     }
 }
