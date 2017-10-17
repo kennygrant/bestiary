@@ -87,11 +87,11 @@ func DoSomething() error {
 
 ## Stack traces on errors
 
-If you want to get a stack trace at the point of error which is not a panic, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr and terminating the program, you can panic.
+If you want to get a stack trace at the point of error which is not a panic, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr and terminating the program, you can panic. This is useful for debugging but less so in production programs. 
 
 ## Recovering from a panic
 
-You should recover within a **deferred function** to recover from a [panic](https://blog.golang.org/defer-panic-and-recover). Without a defer to make sure the recover executes last, recover will return nil and have no other effect. If the current goroutine is in a panic, a call to recover will capture the value given in panic, and swallow it. For example this will not work:
+You should recover within a **deferred function** to recover from a [panic](https://blog.golang.org/defer-panic-and-recover). Without a defer to make sure the recover executes last, recover will return nil and have no other effect. For example this will not work:
 
 ```go
 func p() {
@@ -99,7 +99,6 @@ func p() {
     if r := recover(); r != nil {
         fmt.Println("recover", r)
     }
-
     // Something is wrong, this panic will end the program
     panic("panic")
 }
@@ -110,15 +109,12 @@ You need to use defer to recover:
 ```go
 func main() {
     fmt.Println("calling p")
-   
     p() // Call p to panic and recover
-
     // Recovered
     fmt.Println("panic over")
 }
 
 func p() {
-    
     defer func() { // Defer recover to the end of this function
         // Recover from panic
         if r := recover(); r != nil {
@@ -133,7 +129,7 @@ func p() {
 
 ## Recover must be in the same goroutine
 
-You can only recover from panics in the current goroutine. If you have panics two goroutines deep, recovering at the top level won't catch them \(for example in a web server handler which then spawns another goroutine, you must protect against panics within the goroutine spawned or be sure that your code is infallible\).
+You can only recover from panics in the current goroutine. If you have panics two goroutines deep, recovering at the top level won't catch them. For example in a web server handler which spawns a goroutine, you should protect against panics.
 
 ```go
 func a() {
@@ -147,7 +143,6 @@ func main() {
             fmt.Println("catch panic main")
         }
     }()
-
     fmt.Println("start")
     go a() // use of go means recover above won't work
     time.Sleep(1 * time.Second)
@@ -193,9 +188,7 @@ return fmt.Errorf("failed to read %s: %v", filename, err)
 
 [Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason. In servers, you may never need to use the keyword panic, and should prefer not to. Panic is fine for programming errors, or really exceptional situations \(this should never happen\), but try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
 
-## Don't use log.Fatalf or log.Panic
-
-For the same reasons, don't use log.Fatalf or log.Panic except in tests or short programs, because they will halt your program without cleanup and are equivalent to calling panic.In almost all cases you can recover gracefully from errors.
+For the same reasons, don't use log.Fatalf or log.Panic except in tests or short programs, because they will halt your program without cleanup and are equivalent to calling panic.In almost all cases you should recover gracefully from errors instead.
 
 ## Asserts & Exceptions
 
