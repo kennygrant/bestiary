@@ -2,7 +2,7 @@
 
 ##### If you have already written and compiled Go code before you can probably skip this section.
 
-To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation – you can find the latest installers at the [download](https://golang.org/dl/) page. 
+To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation – you can find the latest installers at the [download](https://golang.org/dl/) page.
 
 You can use homebrew to install go on macs, but you're probably better sticking with the official installer package available on golang.org. Do not use both.
 
@@ -47,8 +47,12 @@ package main
 
 import "fmt"
 
+// Main is the entry point of your program
 func main() {
+    
+    // Print to stdout
     fmt.Printf("hello, 世界\n")
+
 }
 ```
 
