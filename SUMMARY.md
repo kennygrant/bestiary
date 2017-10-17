@@ -1,6 +1,5 @@
 # Summary
 
-* [Title](title.md)
 * [Introduction](README.md)
 * [Setup](setup.md)
 * [Strings](strings.md)
