@@ -59,9 +59,8 @@ If you're logging an error, you've decided it's not important enough to handle. 
 **Don't both log and return errors:**
 
 ```go
-// Don't do this
 if err != nil {
-// Don't do this
+    // Don't do this, either deal with or return an error
     log.Printf("pkgname: failed to log stats:%s",err)
     return err
 }
@@ -71,7 +70,6 @@ If it's not important, log and move on, if it stops processing in this function,
 
 ```go
 func DoSomething() error {
-
    // For an error you can handle in this function without telling the user:
    if err != nil {
      // Not important, just log the error and continue with processing
@@ -82,7 +80,6 @@ func DoSomething() error {
     if err != nil  {
        return fmt.Errorf("pkgname: failed to do something %s",err) 
     }
-
 }
 ```
 
@@ -112,20 +109,17 @@ You need to use defer to recover:
 
 ```go
 func main() {
-        // Start
     fmt.Println("calling p")
-
-    // Call p to panic and recover
-    p()
+   
+    p() // Call p to panic and recover
 
     // Recovered
     fmt.Println("panic over")
 }
 
-// p panics and recovers
 func p() {
-    // Defer recover to the end of this function
-    defer func() {
+    
+    defer func() { // Defer recover to the end of this function
         // Recover from panic
         if r := recover(); r != nil {
             fmt.Println("recover", r)
@@ -142,13 +136,12 @@ func p() {
 You can only recover from panics in the current goroutine. If you have panics two goroutines deep, recovering at the top level won't catch them \(for example in a web server handler which then spawns another goroutine, you must protect against panics within the goroutine spawned or be sure that your code is infallible\).
 
 ```go
-// if a is run in a goroutine, this panic will crash the program
 func a() {
-    panic("panic a")
+    panic("panic a") // this panic will crash the program
 }
 
 func main() {
-        // This recover does nothing
+    // This recover does nothing
     defer func() {
         if x := recover(); x != nil {
             fmt.Println("catch panic main")
@@ -164,10 +157,9 @@ func main() {
 In order to catch the panic in a, a recover within that goroutine is required. Note this is not to do with function scope \(removing the go before a\(\) would allow the recover in main to work. For more detail see [Handling Panics](https://golang.org/ref/spec#Handling_panics) in the Go spec.
 
 ```go
-// if a is run in a goroutine, this panic will not crash the program
 func a() {
     // This recover is required to catch the panic in a
-    defer func() {
+    defer func() { // recovers panic in a
         if x := recover(); x != nil {
             fmt.Println("catch panic a")
         }
@@ -177,7 +169,7 @@ func a() {
 
 func main() {
         // this recover does nothing
-    defer func() {
+    defer func() { // does nothing
         if x := recover(); x != nil {
             fmt.Println("catch panic main")
         }
