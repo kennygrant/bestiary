@@ -183,12 +183,19 @@ Error strings may be used inside other error strings, so they should not be capi
 
 ```go
 // Annotating an error
-return fmt.Errorf("failed to read %s: %v", filename, err)
+return fmt.Errorf("pkgname: failed to read %s: %v", filename, err)
+
+// Returning an error without comment - prefer annotating if possible
+return err
 ```
+
+By convention, errors are annotated with the package name or function involved, to make it easy to find the error. You should try to make your error strings unique so that there is no confusion over where the error may have been emitted. 
 
 ## Don't panic
 
 [Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason. In servers, you may never need to use the keyword panic, and should prefer not to. Panic is fine for programming errors, or really exceptional situations \(this should never happen\), but try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
+
+## Don't use log.Fatalf or log.Panic
 
 For the same reasons, don't use log.Fatalf or log.Panic except in tests or short programs, because they will halt your program without cleanup and are equivalent to calling panic.In almost all cases you should recover gracefully from errors instead.
 
