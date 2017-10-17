@@ -33,16 +33,18 @@ func DoSomething() error {
     ...
     return nil // return nil error
 }
+```
 
+```go
 func DoSomethingElse() (value, value, error) {
-    ...
-    if err != nil {
-       // Annotate the error and return nil value + error
-       return nil, nil, fmt.Errorf("pkgname: failed to do something %s",err) 
-    }
-    ...
-    // Return completed values and nil error 
-    return v, vv, nil
+  ...
+  if err != nil {
+  // Annotate the error and return nil value + error
+    return nil, nil, fmt.Errorf("pkgname: failed to do something %s",err) 
+  }
+  ...  
+  // Return completed values and nil error
+  return v, vv, nil
 }
 ```
 
@@ -87,7 +89,7 @@ func DoSomething() error {
 
 ## Stack traces on errors
 
-If you want to get a stack trace at the point of error which is not a panic, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr and terminating the program, you can panic. This is useful for debugging but less so in production programs. 
+If you want to get a stack trace at the point of error which is not a panic, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr and terminating the program, you can panic. This is useful for debugging but less so in production programs.
 
 ## Recovering from a panic
 
