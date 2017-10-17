@@ -2,7 +2,9 @@
 
 ##### If you have already written and compiled Go code before you can probably skip this section.
 
-To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation – you can find the latest installers at the [download](https://golang.org/dl/) page. You can use homebrew to install go on macs, but you're probably better sticking with the official installer package available on golang.org. Do not use both.
+To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation – you can find the latest installers at the [download](https://golang.org/dl/) page. 
+
+You can use homebrew to install go on macs, but you're probably better sticking with the official installer package available on golang.org. Do not use both.
 
 ## Setting GOPATH
 
@@ -30,7 +32,7 @@ The similarly named ENV variable `GOROOT`  need only be set** if installing to a
 
 To test your setup and confirm go is installed correctly, try the go command
 
-```
+```bash
 go version
 ```
 
@@ -40,7 +42,7 @@ You should see output something like this telling you the go version and the ins
 
 Then try a very simple program. Save this file in  `$GOPATH/src/hello.go` :
 
-```
+```go
 package main 
 
 import "fmt"
@@ -52,7 +54,7 @@ func main() {
 
 and use the go command to run it:
 
-```
+```bash
 go run $GOPATH/src/hello.go
 ```
 
@@ -66,7 +68,7 @@ If you don't, your installation is not working and you should recheck the steps 
 
 You can use Go to compile programs not just for the platform you're on, but for another supported platform, like Windows or Linux if you're working on a mac. This makes it very easy to deploy programs as single binaries, without worrying about the dependencies or building on your server. For example if you want to build the hello.go program above for the Linux platform, you could use:
 
-```
+```bash
 GOOS=linux GOARCH=arm go build -o hello-linux $GOPATH/src/hello.go
 ```
 
