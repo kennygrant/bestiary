@@ -47,7 +47,7 @@ func main() {
 }
 ```
 
-The full rules for scope in Go are set out in the [Language Spec](https://golang.org/ref/spec#Declarations_and_scope). It is broadly similar to other languages in the C family, and there are few surprises here apart from shadowing variables inadvertently \(see below\).
+The full rules for scope in Go are set out in the [Language Spec](https://golang.org/ref/spec#Declarations_and_scope). Blocks all create a new scope, so an if statement will start a new block, and variables declared within it will go out of scope when it ends. In contrast with Java, blocks protect their variables from the outer scope, you can overwrite a variable in the outer scope by declaring a new one in an inner scope. If required declare the variable before an if block and use it within. Otherwise Go is broadly similar to other languages in the C family, and there are few surprises here apart from shadowing variables inadvertently \(see below\).
 
 ## Shadowing
 
@@ -107,5 +107,5 @@ Try to write synchronous functions, which can then be transformed by use of the 
 
 ## Prefer functions over methods
 
-Coming from an object-oriented background, many programmers reach for structs and methods first. Before using a method, you should consider whether you could instead use a function. Functions are independent of the data they work with, and ideally use their inputs and no other state, so that the output is predictable. Use a method where you need to reflect the state of the type the method is attached to. 
+Coming from an object-oriented background, many programmers reach for structs and methods first. Before using a method, you should consider whether you could instead use a function. Functions are independent of the data they work with, and ideally use their inputs and no other state, so that the output is predictable. Use a method where you need to reflect the state of the type the method is attached to.
 
