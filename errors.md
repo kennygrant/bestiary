@@ -139,7 +139,7 @@ func p() {
 
 ## Recover must be in the same goroutine
 
-You can only recover from panics in the current goroutine. If you have panics two goroutines deep, recovering at the top level won't catch them \(for example in a web server handler which then spawns another goroutine, you must protect against panics within the goroutine spawned\).
+You can only recover from panics in the current goroutine. If you have panics two goroutines deep, recovering at the top level won't catch them \(for example in a web server handler which then spawns another goroutine, you must protect against panics within the goroutine spawned or be sure that your code is infallible\).
 
 ```go
 // if a is run in a goroutine, this panic will crash the program
@@ -199,9 +199,7 @@ return fmt.Errorf("failed to read %s: %v", filename, err)
 
 ## Don't panic
 
-[Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason. In servers, you may never need to use the keyword panic, and should prefer not to.
-
-Panic is fine for programming errors, or really exceptional situations \(this should never happen\), but try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
+[Panic](https://blog.golang.org/defer-panic-and-recover) is intended as a mechanism to report exceptional errors which require the program to exit immediately, or to report programmer error which should be fixed. You don't want to see it in production, nor should you use it to try to reproduce exceptions, which were left out of the language for a reason. In servers, you may never need to use the keyword panic, and should prefer not to. Panic is fine for programming errors, or really exceptional situations \(this should never happen\), but try to avoid using it if you can, especially if you're writing a library. Your users will thank you.
 
 ## Don't use log.Fatalf or log.Panic
 

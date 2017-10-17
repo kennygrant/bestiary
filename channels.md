@@ -113,10 +113,6 @@ func main() {
 Go channels created with make\(chan T\) without a size are not buffered. An unbuffered channel is synchronous, you can only send when there is a receiver. If the reads don't match the writes, the anon goroutines deadlock.
 
 ```go
-package main
-
-import "fmt"
-
 func main() {
     channel := make(chan string)
     done_channel := make(chan bool)
@@ -134,10 +130,6 @@ func main() {
 > fatal error: all goroutines are asleep - deadlock!
 
 ```go
-package main
-
-import "fmt"
-
 func main() {
     channel := make(chan string)
     done_channel := make(chan bool)
@@ -160,10 +152,6 @@ func main() {
 If you want to know how many elements are in a channel, you can just use len\(channel\)
 
 ```go
-package main
-
-import "fmt"
-
 func main() {
         c := make(chan int, 100)
         for i := 0; i < 34; i++ {
@@ -172,8 +160,6 @@ func main() {
         fmt.Println(len(c))
 }
 ```
-
-## 
 
 
 
