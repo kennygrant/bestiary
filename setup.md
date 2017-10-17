@@ -30,7 +30,7 @@ The similarly named ENV variable `GOROOT`  need only be set** if installing to a
 
 ## Checking your setup
 
-To test your setup and confirm go is installed correctly, try the go command
+To test your setup and confirm go is installed correctly, try the go command:
 
 ```bash
 go version
@@ -45,11 +45,13 @@ Then try a very simple program. Save this file in  `$GOPATH/src/hello.go` :
 ```go
 package main 
 
-import "fmt"
+import (
+    "fmt"
+)
 
 // Main is the entry point of your program
 func main() {
-    
+
     // Print to stdout
     fmt.Printf("hello, 世界\n")
 
