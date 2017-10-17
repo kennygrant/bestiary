@@ -1,6 +1,4 @@
-# The Go Bestiary
-
-### Bugs, gotchas and guidelines for Go programmers
+# Introduction
 
 ---
 
@@ -8,7 +6,7 @@
 
 The Go language is deceptively simple, with only 25 [keywords](https://golang.org/ref/spec#Keywords) and few data structures. The syntax is very like other languages in the C family, and programmers coming from other languages with this heritage will find it easy to get started with the language, but it can be difficult to assimilate the culture of radical minimalism. Some feel keenly the lack of familiar tools which Go simply leaves out - inheritance, assertions, exceptions, the ternary operator, enums, and generics are all missing [by design](https://golang.org/doc/faq#Why_doesnt_Go_have_feature_X). Some chafe  at the strict rules on formatting or the culture of limited dependencies and minimal abstraction.
 
-The corollary to this culture of simplicity, and one of the most rewarding aspects of programming in Go, is the clarity and stability of the language and standard library, encapsulated in the [Go 1 promise](https://golang.org/doc/go1compat) made way back in 2012 \(which still holds today\), or Brad Fitzpatrick's whimsical description of the language as [asymptotically approaching boring](https://golangnews.com/stories/845-video-introducing-go-1.6-asymptotically-approaching-boring-by-brad-fitzpatrick). If you build an app today, it will probably compile with minimal or no changes until Go 2. While being difficult for maintainers, this is a liberating promise for Go programmers as it means you don't have to worry about churn at that level of the ecosystem. 
+The corollary to this culture of simplicity, and one of the most rewarding aspects of programming in Go, is the clarity and stability of the language and standard library, encapsulated in the [Go 1 promise](https://golang.org/doc/go1compat) made way back in 2012 \(which still holds today\), or Brad Fitzpatrick's whimsical description of the language as [asymptotically approaching boring](https://golangnews.com/stories/845-video-introducing-go-1.6-asymptotically-approaching-boring-by-brad-fitzpatrick). If you build an app today, it will probably compile with minimal or no changes until Go 2. While being difficult for maintainers, this is a liberating promise for Go programmers as it means you don't have to worry about churn at that level of the ecosystem.
 
 So if you're looking for a cutting-edge language which explores recent research, or one which favours terse abstractions, Go is not for you – Go is boring by design.
 
@@ -24,7 +22,7 @@ These are trivial errors, but are easy to make in any sufficiently large program
 
 ### Why read this book?
 
-The intention of this book is to let a programmer who has some experience in other languages get up to speed quickly in Go, while being aware of the idioms, problems and possible bugs lurking in their new Go code. The book therefore presents a mix of advice for structuring your Go programs and descriptions of common mistakes to avoid, with liberal code examples. Typically Go programmers get up to speed quickly and feel productive within days or weeks, but it can be harder to learn the culture and edge cases of the language. 
+The intention of this book is to let a programmer who has some experience in other languages get up to speed quickly in Go, while being aware of the idioms, problems and possible bugs lurking in their new Go code. The book therefore presents a mix of advice for structuring your Go programs and descriptions of common mistakes to avoid, with liberal code examples. Typically Go programmers get up to speed quickly and feel productive within days or weeks, but it can be harder to learn the culture and edge cases of the language.
 
 If you're familiar with Go but not an expert, hopefully there will also be a few interesting facts about the language you haven't yet uncovered, and some potential bugs which you might not be aware of. You may want to skip the sections on setup and packages in this case, as they will cover familiar ground.
 
