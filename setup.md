@@ -2,7 +2,7 @@
 
 ##### If you have already written and compiled Go code before you can probably skip this section.
 
-To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation – you can find the latest installers at the [download](https://golang.org/dl/) page. 
+To get up and running with Go, you should follow the [Getting Started](https://golang.org/doc/install) instructions on the go website. If you're on Mac or Windows there is an installer which will make life easier for you and is the recommended route to installation – you can find the latest installers at the [download](https://golang.org/dl/) page.
 
 ## Setting GOPATH
 
@@ -18,11 +18,11 @@ $HOME/go
 * src - for go source code
 * pkg - a cache for intermediate build products
 
-You may want to add your `$GOPATH/bin` folder to your path so that installed go tools are found automatically.  
+You may want to add your `$GOPATH/bin` folder to your path so that installed go tools are found automatically.
 
-So you don't need to set it explicitly, but you do need to put all your go code under `$GOPATH/src`  for go tools to work correctly. This is where code will be installed when you run go get, and this is where your dependencies will be stored. There is no concept of versioning in the go get tool, so it will fetch the latest master of any dependencies. 
+So you don't need to set it explicitly, but you do need to put all your go code under `$GOPATH/src`  for go tools to work correctly. This is where code will be installed when you run go get, and this is where your dependencies will be stored. There is no concept of versioning in the go get tool, so it will fetch the latest master of any dependencies.
 
-While it can be frustrating for newcomers, you should accept that all go code will live in your `GOPATH` – there are workarounds to attempt to keep code elsewhere, but the standard tools at present assume you use `GOPATH` for your code. You may find projects sometimes use folders called pkg or src internally inside their main go gettable folder, but this is unrelated to `GOPATH` and is just a way of organising their code. The only special src folder is that at the root of your `GOPATH`. 
+While it can be frustrating for newcomers, you should accept that all go code will live in your `GOPATH` – there are workarounds to attempt to keep code elsewhere, but the standard tools at present assume you use `GOPATH` for your code. You may find projects sometimes use folders called pkg or src internally inside their main go gettable folder, but this is unrelated to `GOPATH` and is just a way of organising their code. The only special src folder is that at the root of your `GOPATH`.
 
 The similarly named ENV variable `GOROOT`  need only be set** if installing to a custom location**. In most circumstances you can ignore `GOROOT`, as it is not required for a normal Go setup. You may find some old instructions which reference it, but you can safely ignore those with a new install. So for a new version of Go install don't need to set `GOROOT` or `GOPATH` yourself.
 
@@ -86,7 +86,7 @@ If you pay attention to linter warnings, and make sure you fix them all, you'll 
 
 > Duplication is far cheaper than the wrong abstraction - Sandi Metz
 
-There is a culture of limiting dependencies in Go, unlike some other ecosystems, the design of Go does not encourage importing libraries for trivial functions. If you're coming from node this will come as a shock, but you should try to adapt to the very different culture, as there are some advantages. 
+There is a culture of limiting dependencies in Go, unlike some other ecosystems, the design of Go does not encourage importing libraries for trivial functions. If you're coming from node this will come as a shock, but you should try to adapt to the very different culture, as there are some advantages.
 
 The biggest problem with dependencies in the long term is entropy over time - the more dependencies you have, the greater the chance of changes which break your build \(for security, or api changes, or new features\), and the more painful it becomes to keep up to date with the ecosystem you've bought into. This is why it is useful to limit your dependencies, and explicitly version those you have, and why vendoring \(taking a copy of dependencies frozen at a given version\) has become an accepted solution in the Go community to importing dependencies.
 
@@ -94,13 +94,7 @@ Although Go is statically typed which offers some protection, you should not ass
 
 ## Resources
 
-You should start by working through the[ Go Tour](https://tour.golang.org/welcome/1)
-
-You should then skim [Effective Go](https://golang.org/doc/effective_go.html) \(you will want to come back to this later\)
-
-You should read the [docs](https://golang.org/pkg/) from the standard library, which contain lots of examples
-
-You might want to refer to [Go By Example](https://gobyexample.com/) - a set of code snippets
+You should start by working through the[ Go Tour](https://tour.golang.org/welcome/1), you should then skim [Effective Go](https://golang.org/doc/effective_go.html) \(you will want to come back to this later\). You should read the [docs](https://golang.org/pkg/) from the standard library, which contain lots of examples, and finally you might want to refer to [Go By Example](https://gobyexample.com/) - a set of code snippets.
 
 ### Go Playground
 
@@ -134,7 +128,7 @@ There are many videos from Go conferences at [GopherVids](https://gophervids.app
 
 [Just for func](https://www.youtube.com/channel/UC_BzFbxG2za3bp5NRRRXJSw) is a great podcast on Go programming by the inimitable [@francesc](https://twitter.com/francesc)
 
-There are a huge number of meetups and conferences about Go, you can find more on the [Community](https://github.com/golang/go/wiki#the-go-community) page of the wiki. 
+There are a huge number of meetups and conferences about Go, you can find more on the [Community](https://github.com/golang/go/wiki#the-go-community) page of the wiki.
 
 ## Writing Idiomatic Go {#style}
 
