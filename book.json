@@ -1,5 +1,11 @@
 {
     "pdf": {
-        "paperSize": "legal"
+        "paperSize": "legal",
+        "margin": {
+            "right": 62,
+            "left": 62,
+            "top": 72,
+            "bottom": 72
+        }
     }
 }
