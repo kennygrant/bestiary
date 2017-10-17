@@ -1,6 +1,6 @@
 # Introduction
 
----
+### 
 
 ### About Go
 
@@ -22,7 +22,7 @@ These are trivial errors, but are easy to make in any sufficiently large program
 
 ### Why read this book?
 
-_The Go Bestiary_ provides a quick guide to allow a programmer who has some experience in other languages get up to speed quickly in Go, while being aware of the idioms, problems and possible bugs lurking in their new Go code. The book presents a mix of advice for structuring your Go programs and descriptions of common mistakes to avoid, with liberal code examples. Typically Go programmers get up to speed quickly and feel productive within days or weeks, but it can be harder to assimilate the culture and be aware of the subtle problems that can occur. 
+_The Go Bestiary_ provides a quick guide to allow a programmer who has some experience in other languages get up to speed quickly in Go, while being aware of the idioms, problems and possible bugs lurking in their new Go code. The book presents a mix of advice for structuring your Go programs and descriptions of common mistakes to avoid, with liberal code examples. Typically Go programmers get up to speed quickly and feel productive within days or weeks, but it can be harder to assimilate the culture and be aware of the subtle problems that can occur.
 
 If you're familiar with Go but not an expert, hopefully there will also be a few interesting facts about the language you haven't yet uncovered, and some potential bugs which you might not be aware of. You may want to skip the sections on setup and packages in this case, as they will cover familiar ground.
 
