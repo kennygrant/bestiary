@@ -1,22 +1,24 @@
-#   
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+---
 
 #   
-
-#   
-
-#   
-
-#    
-
-#   
-
-#   
-
-#  
 
 # The Go Bestiary
 
-## Bugs, gotchas and guidelines for Go programmers
+### Bugs, gotchas and guidelines for Go programmers
+
+#   
 
 ---
 
