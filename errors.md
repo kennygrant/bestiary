@@ -91,6 +91,59 @@ func DoSomething() error {
 
 If you want to get a stack trace at the point of error which is not a panic, you can use the runtime package to determine the caller. You can also use the unofficial [go-errors](https://github.com/go-errors/errors) package to record the stack trace. Finally, if you don't mind dumping a stack trace to stderr and terminating the program, you can panic. This is useful for debugging but less so in production programs.
 
+## Interpreting a panic stack trace 
+
+If you don't have much experience with stack traces, the output of a panic may seem inscrutible at first. To generate a stack trace, consider this simple program:
+
+```go
+package main
+
+type T struct {
+	s string
+}
+
+func foo(t *T) *T {
+	defer panic("panic in foo")
+	return t
+}
+
+func main() {
+	foo(&T{})
+}
+```
+
+Which produces the following panic:
+
+```shell
+panic: panic in foo
+
+goroutine 1 [running]:
+main.foo(0x1042bfa4, 0x0, 0x10410008, 0x0)
+	/tmp/sandbox611247315/main.go:13 +0xdb
+main.main()
+	/tmp/sandbox611247315/main.go:18 +0x40
+```
+
+The first line gives the message passed to panic, which should be as informative as possible. 
+
+The lines after detail the crashing go routine (by default this is restricted to just the crashing one since Go 1.6). 
+First we encounter the rather inscrutible message:
+
+main.foo(0x1042bfa4, 0x0, 0x10410008, 0x0)
+
+This details the function with the panic, and may provide some clues if you have a nil pointer exception as to which pointer is nil - it includes the arguments to the function (including the method struct if any, which is always the first argument), and the return values. In this case, beacuse the program uses defer to panic, the return values are filled in before panic, hence the argument and return pointers are the same value of 0x10410008. Without the defer the second two words would both be nil. 
+
+Then the more important line which tells us which file and line the problem occured at:
+
+/tmp/sandbox611247315/main.go:13 +0xdb
+
+If nothing else, this is the line you need to read, as it clearly states exactly where the problem occurred. Where you have deliberately panicked using panic() this will normally be obvious anyway, but where you have a nil pointer or index out of range it can be useful for tracking down the bug. 
+
+Remember that methods can be called on nil pointers, which can lead to subtle bugs if the callee never expects this and then tries to use the pointer as if it is initialised. 
+
+If you're debugging complex stack traces featuring many goroutines with similar stack traces you may find [panicparse](https://github.com/maruel/panicparse) library useful. 
+
+
 ## Recovering from a panic
 
 You should recover within a **deferred function** to recover from a [panic](https://blog.golang.org/defer-panic-and-recover). Without a defer to make sure the recover executes last, recover will return nil and have no other effect. For example this will not work:
