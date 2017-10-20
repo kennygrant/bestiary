@@ -1,10 +1,14 @@
 .pdf-header {
-    margin-top: 50px;
+    margin-top: 60px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #000;
     color: #000;
 }
 
 .pdf-footer {
+    color: #000;
+}
+
+a {
     color: #000;
 }
