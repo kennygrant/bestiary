@@ -6,9 +6,13 @@
 }
 
 .pdf-footer {
+    border: none;
     color: #000;
 }
 
-a {
-    color: #000;
+a,
+p a,
+a:visited,
+a:active {
+    color: #000!important;
 }
