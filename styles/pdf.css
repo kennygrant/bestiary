@@ -11,8 +11,19 @@
 }
 
 a,
-p a,
-a:visited,
-a:active {
-    color: #000!important;
+.link-inherit {
+    color: #000;
+    &:hover,
+    &:focus {
+        color: #000;
+    }
+}
+
+.hljs-comment {
+    color: #444!important;
+}
+
+pre {
+    border: 1px solid #444;
+    background-color: #fff!important;
 }
