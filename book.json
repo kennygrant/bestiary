@@ -3,8 +3,8 @@
         "fontSize": 16,
         "paperSize": "legal",
         "margin": {
-            "right": 62,
-            "left": 62,
+            "right": 80,
+            "left": 80,
             "top": 72,
             "bottom": 72
         }

@@ -2,5 +2,9 @@
     margin-top: 50px;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
-    color: #aaa;
+    color: #000;
+}
+
+.pdf-footer {
+    color: #000;
 }
