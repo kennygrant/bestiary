@@ -16,6 +16,26 @@ s := a[:]
 s2 := s[1:3]
 ```
 
+This can be confusing though if you don't recognise what is happening. For example if you take two slices of data, then append to one of them, the results for the other view into that data are unpredictable and depend on the length of data:
+
+```go
+	// start with an array
+	data := []int{0, 1, 2}
+
+	// Get two views on data, showing positions 0 and 1
+	a := data[0:1] // 0
+	b := data[1:2] // 1
+
+	a = append(a, 3, 4) // append two numbers to a, which overwrites b
+	//	a = append(a, 3, 4, 5) // append three numbers to a, growing the slice, leaving b alone
+
+	println(a[0]) // the new slice a is as expected
+	println(b[0]) // but the values in b may surprise
+```
+
+For this reason if mutating a slice with append, you may need to take a copy of data before using it elsewhere or face unexpected side effects. This bug may hit you if you use [bytes.Split](https://golang.org/pkg/bytes/#Split) or similar functions to return sections of data from a slice of bytes.
+
+
 ## Slicing retains the original
 
 Slicing a slice doesn't copy the underlying array, so the full array will be kept in memory until it is no longer referenced. If you're just using a small part of a large slice, consider copying that new slice into another shorter one so that the original data can be released.
