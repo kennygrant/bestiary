@@ -1,5 +1,6 @@
 {
     "pdf": {
+        "fontSize": 16,
         "paperSize": "legal",
         "margin": {
             "right": 62,
