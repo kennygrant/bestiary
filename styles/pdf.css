@@ -1,6 +1,6 @@
 .pdf-header {
     margin-top: 60px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     border-bottom: 1px solid #000;
     color: #000;
 }
@@ -28,7 +28,20 @@ a:focus,
 
 pre,
 code,
-pre p {
-    border: none;
+pre p,
+pre span,
+pre div {
     background-color: #fff!important;
+}
+
+h1 {
+    margin: 2em 0 0.5em 0;
+}
+
+h2 {
+    margin: 1em 0 0.2em 0;
+}
+
+h3 {
+    margin: 0.8em 0 0 0;
 }
