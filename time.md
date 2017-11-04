@@ -2,6 +2,10 @@
 
 Go includes a good set of primitives for dealing with time in the standard library. There are a few oddities detailed below.
 
+# Time on Go Playground
+
+The playground starts with the same time for every run to make sure output is deterministic, so examples including time may not function as you expect on the playground. For more details see [Inside the Go Playground.](https://blog.golang.org/playground). 
+
 ## Time Formatting
 
 Datetime formatting in Go is rather unusual. It uses a format string which functions as an example, unfortunately in practice this is rather difficult to remember. The Parse and Format functions take this format layout:
@@ -41,9 +45,7 @@ For example subtracting one month from October 31 yields October 1st
     }
 ```
 
-The results will be unpredictable and depend on the day chosen and the number of days in the end month. If the number of days of the start month and the end month do not match, results will be unexpected. This is important if your users expect to add 9 months and 1 day to a given date to conform with accounting rules for example - typically this means 9 calendar months without rollover. 
-
-There is no way round this except writing your own code to handle adding months in a more predictable way. I have a solution to this but the margin is too small to contain it.
+The results will be unpredictable and depend on the day chosen and the number of days in the target month. If the number of days of the start month and the end month do not match, results can be unexpected. This is important if your users expect to add 9 months and 1 day to a given date to conform with accounting rules for example - typically this means 9 calendar months without rollover and then 1 day to be added. There is no way round this except writing your own code to handle adding months in a more predictable way. 
 
 ## Time Zones
 
@@ -67,7 +69,8 @@ Since `Go 1.9`, the [time](https://golang.org/pkg/time/) package now transparent
 
 Times may not contain a monotonic clock reading if they pass through functions like AddDate Round or Truncate, or if they come from parsed external sources, so don't assume they always will have.
 
-# Time on Go Playground
+## Comparing time
 
-The playground starts with the same time for every run to make sure output is deterministic, so examples including time may not function as you expect on the playground. For more details see [Inside the Go Playground.](https://blog.golang.org/playground)
+When comparing time you should usually use the [Time.Equal](https://golang.org/pkg/time/#Time.Equal) method rather than ==, as the == operator also compares Location and the monotonic clock reading, which can be stripped in some circumstances. 
 
+> Note that the Go == operator compares not just the time instant but also the Location and the monotonic clock reading. Therefore, Time values should not be used as map or database keys without first guaranteeing that the identical Location has been set for all values, which can be achieved through use of the UTC or Local method, and that the monotonic clock reading has been stripped by setting t = t.Round(0). In general, prefer t.Equal(u) to t == u, since t.Equal uses the most accurate comparison available and correctly handles the case when only one of its arguments has a monotonic clock reading.

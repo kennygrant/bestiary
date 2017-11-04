@@ -132,13 +132,31 @@ s := fmt.Sprintf("%s at %v", "hello world", time.Now())
 
 Most of the time when working with unicode strings in Go you won't have to do anything special. If you need to convert from another encoding like Windows 1252 you can use the [encoding](https://godoc.org/golang.org/x/text/encoding) package under golang.org/x/text. There are also some other utility packages for dealing with text there. The golang.org/x libraries are slightly less stable than the go standard library and are not part of the official distribution, but have many useful utilities.
 
+## Translating encodings {#translating-encodings}
+
+The go external package [text/encoding](https://godoc.org/golang.org/x/text/encoding) packages provide utilties for translating strings from Go's native UTF-8 to popular encodings and back (such as UTF-16, EUC-JP, GBK and Big5). Encoders and Decoders are available for working with arrays of bytes or strings.
+
+```go
+   // Convert from Go's native UTF-8 to UTF-16
+   // using golang.org/x/text/encoding/unicode
+	s := "エヌガミ"
+
+	// Encode native UTF-8 to UTF-16
+	encoder := unicode.UTF16(unicode.LittleEndian, unicode.UseBOM).NewEncoder()
+	utf16, err := encoder.String(s)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("utf16:", utf16)
+```
+
 ## Strings are immutable {#immutable}
 
 Strings in Go are immutable, you are not allowed to change the backing bytes, and manipulating bytes directly can be dangerous  as the string _may_ contain several bytes for each character/rune.
 
-## Don't use pointers to strings
+## Don't use pointers to strings {#string-pointers}
 
-A string value is a fixed size and[ should not be passed as a pointer](https://github.com/golang/go/wiki/CodeReviewComments#pass-values).
+A string value is a fixed size and [should not be passed as a pointer](https://github.com/golang/go/wiki/CodeReviewComments#pass-values).
 
 ## Strings are never nil {#zero-value}
 
@@ -161,7 +179,7 @@ Returns
 
 > string:99 int:99
 
-## Parsing floats
+## Parsing floats {#floats}
 
 Floats are [imprecise ](http://floating-point-gui.de/)and rounding can be unpredictable. When parsing them from strings and working with them, you need to be aware of this.
 
@@ -176,9 +194,9 @@ fmt.Printf("string:%s float:%f cents:%d", price, f, c)
 
 If parsing a float for a currency value, consider converting the string to a value in cents first, as you will have work to do anyway to strip currency amounts and deal with missing cents. You can then parse as an integer and avoid any problems with storing it as a float.
 
-## Reading text files
+## Reading text files {#reading-files}
 
-The easiest way to read an entire file is with ioutil, but if the file is large this will use a large amount of memory:
+The easiest way to read an entire file is with ioutil, but unless the file is small (e.g. a config file) this can use a large amount of memory:
 
 ```go
 b, err := ioutil.ReadFile("path/to/file")
