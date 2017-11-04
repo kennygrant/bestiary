@@ -13,10 +13,13 @@
 a,
 .link-inherit {
     color: #000;
-    &:hover,
-    &:focus {
-        color: #000;
-    }
+}
+
+a:hover,
+a:focus,
+.link-inherit:hover,
+.link-inherit:focus {
+    color: #000;
 }
 
 .hljs-comment {
