@@ -241,7 +241,7 @@ Don't close the response body before you check if there was an error.
 
 ### Accepting uploads
 
-If accepting uploads via a multipart form, be aware that temp files created will not be automatically deleted by Go. You should therefore delete them with [Form.RemoveAll](https://golang.org/pkg/mime/multipart/#Form.RemoveAll) after they have been used by the server.
+If accepting uploads via a multipart form, be aware that temp files created will not be automatically deleted by Go. You should therefore delete them with [Request.Form.RemoveAll](https://golang.org/pkg/mime/multipart/#Form.RemoveAll) after they have been used by the server.
 
 
 ### Check Status Codes
