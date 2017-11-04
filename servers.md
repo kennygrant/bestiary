@@ -239,6 +239,11 @@ Don't close the response body before you check if there was an error.
  defer r.Body.Close()
 ```
 
+### Accepting uploads
+
+If accepting uploads via a multipart form, be aware that temp files created will not be automatically deleted by Go. You should therefore delete them with [Form.RemoveAll](https://golang.org/pkg/mime/multipart/#Form.RemoveAll) after they have been used by the server.
+
+
 ### Check Status Codes
 
 Always check the status code of the response when making a request with the Go http client. If the status is in the 200 range you can use the response as is. If it is in the 300 range it is a redirection. If it is in the 400 range you have a problem with your request which you should fix \(e.g. invalid headers, invalid URL\). If it is in the 500 range there was a problem on the server end, so you need to inform the user.

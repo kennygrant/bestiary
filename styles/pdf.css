@@ -26,7 +26,9 @@ a:focus,
     color: #444!important;
 }
 
-pre {
-    border: 1px solid #444;
+pre,
+code,
+pre p {
+    border: none;
     background-color: #fff!important;
 }
