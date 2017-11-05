@@ -39,19 +39,21 @@ You should see output something like this telling you the go version and the ins
 
 > go version go1.9 darwin/amd64
 
-Then try a very simple program to check that your go setup is working. Save this file in  `$GOPATH/src/hello.go` :
+Then try a very simple program to check that your go setup is working. First save the following text file in  `$GOPATH/src/hello.go` with UTF-8 encoding:
 
 ```go
+// Package main contains the entrypoint of the program
 package main 
 
+// The imports list dependencies 
 import (
     "fmt"
 )
 
-// Main is the entry point of your program
+// The function main is the entry point of your program
 func main() {
 
-    // Print to stdout
+    // Print a string to stdout
     fmt.Printf("hello, 世界\n")
 
 }
