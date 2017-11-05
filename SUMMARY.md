@@ -1,6 +1,7 @@
-# Summary
+# Summary 
 
 * [Introduction](README.md)
+* [Title](TITLE.md)
 * [Setup](setup.md)
 * [Strings](strings.md)
 * [Structs](structs.md)
@@ -12,10 +13,12 @@
 * [Packages](packages.md)
 * [Interfaces](interfaces.md)
 * [Servers](servers.md)
+* [Templates](templates.md)
 * [Databases](databases.md)
 * [Time](time.md)
 * [Errors](errors.md)
 * [Glossary](/glossary.md)
+* [Colophon](/colophon.md)
 
 
 
