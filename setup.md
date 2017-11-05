@@ -39,7 +39,7 @@ You should see output something like this telling you the go version and the ins
 
 > go version go1.9 darwin/amd64
 
-Then try a very simple program. Save this file in  `$GOPATH/src/hello.go` :
+Then try a very simple program to check that your go setup is working. Save this file in  `$GOPATH/src/hello.go` :
 
 ```go
 package main 
@@ -67,7 +67,7 @@ You should see the output:
 
 > hello, 世界
 
-If you don't, your installation is not working and you should recheck the steps above.
+If you don't, your installation is not working and you should recheck the steps above and check the [Installation](https://golang.org/doc/install) instructions on the Go website.
 
 ## Cross Compiling
 

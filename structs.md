@@ -12,9 +12,7 @@ Many developers coming to go from more complex OOP languages start by trying to 
 
 ## Composition is not inheritance
 
-Composition can do some of the same things as inheritance, but it is not the same. Inheritance was deliberately left out of Go, so don't try to recreate it by the back door. If you find yourself frustrated that your structs are not able to adjust the fields of their embedder, you're not really composing functionality. Always try to go for the simplest solution first, and only use composition if you definitely need to share behaviour between two different structs.
-
-For example, don't try to do this:
+Composition can do some of the same things as inheritance, but it is not the same. For example, don't try to do this:
 
 ```go
 package main
@@ -46,6 +44,12 @@ A.Foo will call A.Bar, not B.Foo as it might if B inherited from A, so it will o
 
 > This is a method on A
 
+Inheritance was deliberately left out of Go, so don't try to recreate it with composition. If you find yourself frustrated that structs are not able to adjust the fields of their embedder, you're not really composing functionality. Always try to use the simplest solution first, and only use composition if you definitely need to share behaviour between two different structs.
+
+## Don't use this or self
+
+While it is common in other languages, it is frowned upon in Go to use [self or this](https://github.com/golang/go/wiki/CodeReviewComments#Receiver_Names) in receiver names, instead use the first letter of the receiver. Go has no language support for these words, it does not use them as keywords as other languages do and it is therefore confusing to use them in a Go context.
+
 ## Type assertions 
 
 Use a type assertion to check the type wrapped in an interface is of the expected type, or to retrieve the value. If type assertions are used without the , ok form, a panic ensues if the type is not as expected, so it's always better to use the comma ok form and check the boolean returned. 
@@ -69,10 +73,6 @@ if !ok {
 // panic, because y is not of type int
 //b = y.(int)
 ```
-
-## Don't use this or self
-
-While it is common in other languages, it is frowned upon in Go to use [self or this](https://github.com/golang/go/wiki/CodeReviewComments#Receiver_Names) in receiver names, instead use the first letter of the receiver. Go has no language support for these words, it does not use them as keywords as other languages do and it is therefore confusing to use them in a Go context.
 
 ## Nil pointer dereference
 

@@ -29,8 +29,10 @@ This can be confusing though if you don't recognise what is happening. For examp
 	a = append(a, 3, 4) // append two numbers to a, which overwrites b
 	//	a = append(a, 3, 4, 5) // append three numbers to a, growing the slice, leaving b alone
 
-	println(a[0]) // the new slice a is as expected
-	println(b[0]) // but the values in b may surprise
+    // the new slice a is as expected
+    println(a[0]) 
+    // but the values in b may surprise
+	println(b[0]) 
 ```
 
 For this reason if mutating a slice with append, you may need to take a copy of data before using it elsewhere or face unexpected side effects. This bug may hit you if you use [bytes.Split](https://golang.org/pkg/bytes/#Split) or similar functions to return sections of data from a slice of bytes.
@@ -84,6 +86,8 @@ dst := make([]int, len(src))
 n := copy(dst, src)
 ```
 
+If you try to copy a src of lenght 100 into a destination slice of length 1, only 1 entry will be copied into the destination.
+
 ## Appending elements
 
 Use the built in append function to add an element to a slice.
@@ -110,7 +114,7 @@ Because of this behaviour it is best to always assign the result of append to th
 
 You can use the append function to concatenate slices, in combination with the variadic operator to turn the second slice argument into an array of elements.
 
-```
+```go
 s = append(s,b...)
 ```
 
@@ -136,7 +140,7 @@ sort.Slice(people, func(i, j int) bool {
 
 Slices have been kept intentionally simple, which means you'll be using the for range idiom a lot to perform operations on them. There is no map or forEach function, just use a range on the slice.
 
-```
+```go
 for _, v := range s {
    f(v)
 }
@@ -146,7 +150,7 @@ for _, v := range s {
 
 If you have a slice of \[\]T and wish to convert it to a slice of type \[\]interface{}, or vice versa, you will have to do it by hand with a for loop. They do not have the same representation in memory and there is no convenient way to do it.
 
-```
+```go
 t := []int{1, 2, 3, 4}
 s := make([]interface{}, len(t))
 for i, v := range t {

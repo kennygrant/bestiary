@@ -19,18 +19,17 @@ hello := "hello\n\tworld"
 If you use back quotes escape codes will not be interpreted, and the string can contain raw newlines:
 
 ```go
-// hello is a string with no newlines
-hello := `hello world\n` 
-    world\\n`
+// hello is a string with no newline
+hello := `hello world\n`
 ```
 
+This results in no newline:
 > hello world\n
 
 If you use single quotes, you won't create a string at all, these create a rune:
 
 ```go
-// hello is a rune, not a string
-hello := 'h'
+hello := 'h' // a rune
 ```
 
 > h

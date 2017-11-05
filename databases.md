@@ -6,17 +6,18 @@ You can find a list of go database drivers on the Go wiki page [SQL Drivers](htt
 
 ## Importing a driver
 
-Importing a database driver registers the database driver. In retrospect this is an unfortunate design decision, and it would be better to register drivers explicitly, but it won't change in Go 1. So import the driver as follows in order to use a given database:
+Importing a database driver is used to register the database driver. In retrospect this is an unfortunate design decision, and it would be better to register drivers explicitly, but it won't change in Go 1. So import the driver as follows in order to register it and use a given database:
 
 ```go
 import (
   "database/sql"
-  // This line registers the database driver and exposes the standard database/sql interface
+  // This line registers the database driver 
+  // and exposes the standard database/sql interface
   _ "github.com/lib/pq" 
 )
 ```
 
-If you import lots of drivers, you will be importing all the code they use, and registering the driver, so only import those you need to use in your program. If you import drivers this way you can only use the standard sql interface defined in database/sql, which makes it easier to change drivers later. You may find you want to use a higher level package to simplify common operations, or write you own wrapper for the database in complex applications. 
+If code imports lots of drivers, it will be importing all the code, and registering the drivers on init, so only import those you need to use in a program. If importing drivers with the blank identifier as above you can only use the standard sql interface defined in database/sql. You may find you want to use a higher level package to simplify common operations, or write your own wrapper for the database in complex applications. 
 
 ## Opening a connection
 
@@ -55,6 +56,8 @@ The different databases use different formats for parameter placeholders, for ex
 
 ### Reading values
 
+To read Values from the database, use db.Query to fetch a result:
+
 ```go
 // Select from the db
 sql := "select count from users where status=100"
@@ -63,7 +66,11 @@ if err != nil {
     return err
 }
 defer rows.Close()
+```
 
+And rows.Scan to scan in the rows received back:
+
+```go
 // Read the count (just one row and one col)
 var count int 
 for rows.Next() {
@@ -96,7 +103,7 @@ if err != nil {
 
 ### Scanning into a struct
 
-Many database libraries use reflect to attempt to introspect struct fields. You should try to avoid using reflect if you can as it is slow, prone to panics, and requires you to use struct tags and a dsl invented by the database library author. Another approach is to generate a list of columns, and pass them to the struct itself to assign, since it knows all about its fields and which values should go into them.
+Many database libraries use reflect to attempt to introspect struct fields. You should try to avoid using reflect if you can as it is slow, prone to panics, and requires you to use struct tags and a dsl invented by the database library author. Another approach is to generate a list of columns, and pass them to the struct itself to assign, since it knows all about its fields and which values should go into them. This will require the struct to validate the column values and deal with nulls.  
 
 ```go
 type User struct {
@@ -116,7 +123,7 @@ func ReadUser(columns map[string]interface{}) *User {
 
 ## Handling Relations
 
-This can seem a bit more fiddly than other languages, however the best approach is a straightforward one - retrieve the indexes of relations, and then if you require all of their information, retrieve the relations separately from the database. You can of course retrieve them with a join at the same time, but in complex apps it helps to separate retrieving relations from retrieving the actual relation records, which is not always necessary \(for example you might need to know a user has 8 images, and which ids they have, but not all the image captions and image data\).
+This can seem a bit more fiddly than other languages, however the best approach is a straightforward one - retrieve the indexes of relations, and then if you require all of their information, retrieve the relations separately from the database. You can of course retrieve them with a join at the same time, but in complex apps it helps to separate retrieving relations from retrieving the actual relation records, which is often not necessary \(for example you might need to know a user has 8 images, and which ids they have, but not all the image captions and image data\).
 
 ## Connections are recycled
 

@@ -44,7 +44,7 @@ This makes it clear the package is unused but the init function will be called \
 
 ## Don't import main
 
-You should never try to import the main package. Always try to import from the top level down, so your lowest level packages know nothing about the levels above. This is not always possible but is a good guideline to limit fragile web of dependencies.
+You should never try to import the main package. Always try to import from the top level down, so your lowest level packages know nothing about the levels above. This is not always possible but is a good guideline – avoid a fragile web of dependencies between internal packages which makes your program harder to reason about - prefer some copying to interdependent packages.
 
 ## Cyclic dependencies
 

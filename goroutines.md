@@ -3,6 +3,7 @@
 Prefix a function or method call with the `go` keyword to run the call in a new goroutine, asynchronously. The `go` keyword is one of the distinguishing features of Go, but it can lead to subtle bugs if not used carefully.
 
 > Do not communicate by sharing memory; instead, share memory by communicating.
+> Rob Pike
 
 ## Asynchronous execution
 
@@ -80,7 +81,7 @@ for _, v := range values {
 
 > first second last
 
-**This is probably the most common error when using goroutines. **
+This is probably the most common error when using goroutines, and is easy to make as it's natural to use the values of range within the loop. Always watch for this if using a goroutine inside a for loop - some linters may warn on this.
 
 ## Goroutines & Blocking functions
 
@@ -105,7 +106,7 @@ go func() {
 
 If two goroutines access the same memory without access control, this causes a race condition. Race detection is not yet automatic at compile time, but fortunately it's easy to detect at runtime with the [race detector](https://golang.org/doc/articles/race_detector.html).  To find data races, run your program with the -race option and it will warn you if races are detected:
 
-```
+```go
 go run -race race.go
 ```
 

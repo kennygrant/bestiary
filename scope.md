@@ -9,7 +9,7 @@ Go scope is defined by blocks. A block is a possibly empty sequence of declarati
 
 For example package block identifiers:
 
-```
+```go
 // An exported variable
 var Exported = "hello"
 
@@ -19,15 +19,16 @@ var pkgOnly = 1
 
 Function block identifiers:
 
-```
+```go
+// Functions define a block
 func (receiver T)Function(argument int) (returnValue int) {
    var v int
 }
 ```
 
-Block within a function:
+A block within a function:
 
-```
+```go
 func (receiver T) Function(argument int) (returnValue int) {
     var v int
 

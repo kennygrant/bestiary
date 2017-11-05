@@ -36,13 +36,14 @@ The AddDate function adjusts dates according to arbitrary overflow rules to ensu
 For example subtracting one month from October 31 yields October 1st
 
 ```go
-    // Oct 31st minus 1 month is Oct 1st, not Sept 30th according to Go
-    input := time.Date(2016, 10, 31, 0, 0, 0, 0, time.UTC)
-    output := time.Date(2016, 9, 30, 0, 0, 0, 0, time.UTC)
-    result := input.AddDate(0, -1, 0)
-    if result != output {
-        fmt.Printf("got:%v want:%v\n", result, output)
-    }
+// Oct 31st minus 1 month is Oct 1st, 
+// not Sept 30th according to Go
+input := time.Date(2016, 10, 31, 0, 0, 0, 0, time.UTC)
+output := time.Date(2016, 9, 30, 0, 0, 0, 0, time.UTC)
+result := input.AddDate(0, -1, 0)
+if result != output {
+    fmt.Printf("got:%v want:%v\n", result, output)
+}
 ```
 
 The results will be unpredictable and depend on the day chosen and the number of days in the target month. If the number of days of the start month and the end month do not match, results can be unexpected. This is important if your users expect to add 9 months and 1 day to a given date to conform with accounting rules for example - typically this means 9 calendar months without rollover and then 1 day to be added. There is no way round this except writing your own code to handle adding months in a more predictable way. 
@@ -74,3 +75,15 @@ Times may not contain a monotonic clock reading if they pass through functions l
 When comparing time you should usually use the [Time.Equal](https://golang.org/pkg/time/#Time.Equal) method rather than ==, as the == operator also compares both Location, which sets the time zone offset but not the absolute time, and the monotonic clock reading, which can be stripped in some circumstances. 
 
 > In general, prefer t.Equal(u) to t == u, since t.Equal uses the most accurate comparison available and correctly handles the case when only one of its arguments has a monotonic clock reading.
+
+## Formats vs Values 
+
+Despite their beguiling appearance, time formats are not time values, so if testing parsing, be aware that using a format as a value is often invalid due to formatting directives in the format string which are not valid in a time:
+
+```go
+// Time formats are not always valid values
+_, err := time.Parse(time.RFC3339, time.RFC3339)
+fmt.Println("error", err) // RFC3339 is not a valid time
+```
+
+> error parsing time "2006-01-02T15:04:05Z07:00": extra text: 07:00

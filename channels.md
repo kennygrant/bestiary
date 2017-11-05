@@ -4,21 +4,23 @@ Channels are a queue of values of a specific type which can be used to share inf
 
 ## Nil Channels
 
-Sending to a nil channel blocks forever
+Sending to a nil channel blocks forever:
 
 ```go
 func main() {
     var c chan string
-    c <- "test" // send to nil channel blocks forever
+    // send to nil channel blocks forever
+    c <- "test" 
 }
 ```
 
-Receive on a nil channel blocks forever
+Receive on a nil channel blocks forever:
 
 ```go
 func main() {
     var c chan string
-    fmt.Println(<-c) // receive on nil blocks forever
+    // receive on nil blocks forever
+    fmt.Println(<-c) 
 }
 ```
 

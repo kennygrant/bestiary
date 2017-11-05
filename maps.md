@@ -40,6 +40,8 @@ m := map[int]T{1:{F:1}}
 m[1].F = 4
 ```
 
+This produces the result: 
+
 > cannot assign to struct field m\[1\].F in map
 
 ## Key order
@@ -112,5 +114,5 @@ A nil map behaves like an empty map when reading, so if you are sure you should 
 
 ## Use the right data structure
 
-If you need fast access, use a map. If you need to fast iteration or sorting, use a slice. Iterating a map is significantly slower than iterating over a slice.
+If you need fast random access, use a map (for example if storing cache items by key). If you need fast iteration or sorting, use a slice – iterating a map is significantly slower than iterating over a slice.
 

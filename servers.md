@@ -206,7 +206,7 @@ Your program may need to fetch http resources, and the net/http package offers h
 
 ### Client Timeouts
 
-The http client has no default timeout, which can be a problem. In this example problem the client waits 1 hour before exiting.
+The http client has no default timeout, which can be a problem. In this example problem the client waits 10 minutes before exiting.
 
 ```go
 package main
@@ -250,7 +250,8 @@ Don't close the response body before you check if there was an error.
  if err != nil {
    return err
  }
- // It's safe to defer close once you know there was no error
+ // It's safe to defer close 
+ // once you know there was no error
  defer r.Body.Close()
 ```
 
@@ -286,26 +287,26 @@ Under the net/http package are several utility packages which make life easier w
 
 In particular, the [httputil](https://golang.org/pkg/net/http/httputil) package provides:
 
-#### [httputil.DumpRequest](https://golang.org/pkg/net/http/httputil/#DumpRequest)
+[httputil.DumpRequest](https://golang.org/pkg/net/http/httputil/#DumpRequest)
 
 DumpRequest outputs a nicely formatted version of the request passed to it, making the request content much clearer. 
 
-#### [httputil.DumpResponse](https://golang.org/pkg/net/http/httputil/#DumpResponse)
+[httputil.DumpResponse](https://golang.org/pkg/net/http/httputil/#DumpResponse)
 
 DumpResponse outputs a nicely formatted version of the response passed to it, making the response content much clearer. 
 
-#### [httputil.ReverseProxy](https://golang.org/pkg/net/http/httputil/#ReverseProxy) 
+[httputil.ReverseProxy](https://golang.org/pkg/net/http/httputil/#ReverseProxy) 
 
 Provides a simple reverse proxy handler
 
 And the [httptest](https://golang.org/pkg/net/http/httptest) package provides several useful functions and types:
 
-#### [httptest.NewRequest](https://golang.org/pkg/net/http/httptest/#NewRequest)
+[httptest.NewRequest](https://golang.org/pkg/net/http/httptest/#NewRequest)
 
 Provides a new request suitable for sending to a Handler for testing. 
 
 
-#### [httptest.ResponseRecorder](https://golang.org/pkg/net/http/httptest/#ResponseRecorder)
+[httptest.ResponseRecorder](https://golang.org/pkg/net/http/httptest/#ResponseRecorder)
 
 ResponseRecorder is a ResponseWriter which records the response data written by a handler so that it can be compared in tests to the expected response. 
 
