@@ -127,8 +127,11 @@ The printf function is available in templates to print values as strings:
 
 If you need to add newlines in your template for legibility (for example when outputing many columns of csv), you can invoke the line eater with the - symbol beside the braces (either start or end braces). Thus the template:
 
-```go  {{- .One }}
+```go
+
+{{- .One }}
 {{- .Two -}}
+
 ```
 
 will output the values with whitespace removed:
@@ -146,10 +149,12 @@ Templates can only include to those in the same set, so you may find it convenie
 To render a template within another template, assuming they are in the same set, use the template function, which takes the name of htecontent to place, and the data context to render it with (you can use . to use the current context). 
 
 ```go
+
 <body>
 <h1>Hello</h1>
 {{ template "views/content.html.got" . }}
 </body>
+
 ```
 
 
@@ -158,12 +163,14 @@ To render a template within another template, assuming they are in the same set,
 Template blocks, introduced in Go 1.6, can be used to define areas of a template to replace with other content. The master template should be created as normal, then Clone used to copy it with an overlay template. This may seem counter-intuitive at first. Another approach to achieve a similar result is to have a layout template with a .content key which has another tempalte rendered and inserted into it as the data for content.  
 
 ```go
+
 <body>
 <h1>Hello</h1>
 {{block "content" .}}
 <p>Default content</p>
 {{ end }}
 </body>
+
 ```
 
 
