@@ -5,6 +5,7 @@
 ## The Error Type
 
 > Errors are values
+> Rob Pike
 
 The [error](https://blog.golang.org/error-handling-and-go) type in go is a very simple interface, with one method. Errors offer no introspection into what went wrong or storage of other data. Often errors are nested, as one error may be annotated several times as it passes up the stack. Try to prefer handling an error as close to the site of the error as possible.
 
@@ -85,7 +86,8 @@ func DoSomething() error {
 }
 ```
 
-> Don't just check errors, handle them gracefully
+Dave Cheney has written a talk about handling errors in go – [Don't just check errors, handle them gracefully](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
+
 
 ## Stack traces on errors
 

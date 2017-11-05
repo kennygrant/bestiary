@@ -8,7 +8,8 @@ When writing servers in go, you'll probably make extensive use of the standard l
 Running a simple server is drop-dead simple in Go, and to get started all you need is a handlerFunc as the http package contains a default router and server you can use. A Handler in go is a function which responds to http requests, usually for a specific route on your server (thought they can be general, like an error handler or a static file handler). It is a very simple function with two arguments: the Request, and an http.ResponseWriter to write a response to. Except for reading the body, handlers should not modify the provided Request.
 
 ```go
-// A handler function in go writes a response to the Request to the ResponseWriter
+// A handler function in go reads the request
+// and writes a response to the ResponseWriter
 func HelloServer(w http.ResponseWriter, req *http.Request) {
 	io.WriteString(w, "hello, world!\n")
 }
@@ -17,7 +18,8 @@ func main() {
     // Attach our handler function to the default mux 
     http.HandleFunc("/hello", HelloServer)
 
-    // Ask the http package to start a server at port 8080
+    // Ask the http package to start a server
+    // on port 8080 (note the port is a string)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
@@ -39,14 +41,17 @@ You normally should not use the http.DefaultServeMux, in case other packages hav
 
 Also set the timeouts on your server explicitly to sensible defaults as the default timeouts are not advisable, but cannot be changed because of the Go 1 promise. You can read more about these timeouts in[ the complete guide to net/http timeouts](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/) and [So you want to expose go on the internet](https://blog.cloudflare.com/exposing-go-on-the-internet/) by @filosottile at cloudflare. If you're interested in networking, the cloudflare blog has a lot of good articles on Go.
 
-```
-// Setting up your own server, specifying some default timeouts
+```go
+// Setting up your own server, 
+// specifying some default timeouts
 srv := &http.Server{  
     ReadTimeout:  5 * time.Second,
     WriteTimeout: 10 * time.Second,
     IdleTimeout:  120 * time.Second,
-    TLSConfig:    tlsConfig, // set TLS config 
-    Handler:      serveMux, // always set this to avoid using http.DefaultServeMux
+    TLSConfig:    tlsConfig, 
+    // Always set the router to avoid using http.DefaultServeMux
+    // which is accessible to all other packages 
+    Handler:      serveMux, 
 }
 log.Println(srv.ListenAndServeTLS("", ""))
 ```
@@ -113,9 +118,10 @@ http.ServeFile(w, r, localPath)
 
 ### Bad Requests
 
-The built in Go server will reject bad requests before they hit your handlers, so you will never see them. It will return a code 400 Bad Request to the client. There is at present no way to override this. Normally this isn't a problem but it's something to be aware of. For example this bad request would never hit your handlers:
+The built in Go server will reject bad requests before they hit your handlers, so you will never see them. It will return a code 400 Bad Request to the client. There is at present no way to override this. Normally this isn't a problem but it's something to be aware of. For example this bad request using curl to hit a local go server would never hit your handlers:
 
 ```
+# Perform an invalid request using curl
 curl http://localhost:3000/%3
 ```
 
@@ -141,8 +147,9 @@ If generating random numbers for a server, you probably want them to be unpredic
 
 ```go
 // Example by George Tankersley
-// NewEncryptionKey generates a random 256-bit key for Encrypt() and
-// Decrypt(). It panics if the source of randomness fails.
+// NewEncryptionKey generates a random 256-bit key
+// for Encrypt() and Decrypt(). 
+// It panics if the source of randomness fails.
 func NewEncryptionKey() *[32]byte {
     key := [32]byte{}
     _, err := io.ReadFull(rand.Reader, key[:])
@@ -165,14 +172,22 @@ Cookies are just headers passed between client and server, so they're not comple
 // handler sets a cookie on the request
 func handler(w http.ResponseWriter, r *http.Request) {
 	cookie := http.Cookie{
-		Name:     "session_name",              // Set the name
-		Value:    "cookie_value",              // Set a value on the cookie
-		Domain:   "example.com",               // Always set the domain
-		Path:     "/",                         // Always set the path
-		Expires:  time.Now().AddDate(1, 0, 0), // Optional expiry time
-		MaxAge:   0,                           // MaxAge=0 means no Max-Age
-		HttpOnly: true,                        // Allow only the server to access the cookie
-		Secure:   true,                        // Set this if using https
+        // Set the name
+        Name:     "session_name",
+        // Set a value on the cookie
+        Value:    "cookie_value",
+        // Always set the domain
+        Domain:   "example.com",
+        // Always set the path
+        Path:     "/",
+        // Optional expiry time
+        Expires:  time.Now().AddDate(1, 0, 0),
+        // MaxAge=0 means no Max-Age
+        MaxAge:   0,
+        // Allow only the server to access the cookie
+        HttpOnly: true,
+        // Set this if using https
+		Secure:   true,
 	}
 	// Set the cookie on the response
 	http.SetCookie(w, &cookie)

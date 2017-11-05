@@ -92,7 +92,8 @@ If you pay attention to linter warnings, and make sure you fix them all, you'll 
 
 ## Dependencies
 
-> Duplication is far cheaper than the wrong abstraction - Sandi Metz
+> Duplication is far cheaper than the wrong abstraction
+> Sandi Metz
 
 There is a culture of limiting dependencies in Go, unlike some other ecosystems, the design of Go does not encourage importing libraries for trivial functions. If you're coming from node this will come as a shock, but you should try to adapt to the very different culture, as there are some advantages.
 
@@ -112,7 +113,12 @@ The playground has certain limitations, mostly for security reasons it restricts
 
 ### Stack Overflow
 
-You can find the answer to many questions about Go on [stackoverflow](https://stackoverflow.com/questions/tagged/go), in particular small questions of grammar. Be sure to search for related questions before you post your own. Try to use the right tags and post a full explanation of your problem with code to get a good response.
+You can find the answer to many questions about Go on [stackoverflow](https://stackoverflow.com/questions/tagged/go), in particular small questions of grammar. A few tips for using this resource:
+
+* Be sure to search for related questions with the go tag before you post your own. 
+* Try to post a link to a reproduction of the problem on play.golang.org
+* Include the full code and an explanation of the problem
+* Accepted answers on stack overflow are sometimes wrong
 
 ## Community
 

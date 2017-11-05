@@ -62,7 +62,7 @@ if err != nil {
 }
 ```
 
-## Defer runs at the end of the function
+## Defer runs after the function
 
 The defer statement does not run at the end of a block, but at the end of the containing function.
 

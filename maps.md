@@ -6,8 +6,6 @@ Maps in Go are hash tables, which provide fast access to values for a given key,
 
 Go maps are not thread safe. If you need to access a map across goroutines \(for example in a handler\), you should use a [mutex](https://golang.org/pkg/sync/#Mutex) to protect access and make it a private variable protected by that mutex. Any access to the map should lock the mutex first, perform the operation, and then unlock it again. You can also use a RWMutex if you have a lot of reads and few writes.
 
-Be careful when using mutexes or maps not to inadvertently make copies of them \(for example if you passed Data below by value to a function, the mutex would be copied along with the data\). For this reason you will sometimes see mutexes declared as pointers, but the important point is not to copy them \(or their data\).
-
 ```go
 type Data struct {
     // mu protects access to values
@@ -22,6 +20,8 @@ func (d *Data)Add(k,v int) {
   d.mu.Unlock
 }
 ```
+
+Be careful when using mutexes or maps not to inadvertently make copies of them \(for example if you passed Data below by value to a function, the mutex would be copied along with the data\). For this reason you will sometimes see mutexes declared as pointers, but the important point is not to copy them \(or their data\).
 
 It is often clearer to put the mutex right next to the data they protect; convention is to name them mu and place them above the field which they protect. You should very rarely need to explicitly initialise a mutex or use a pointer to a mutex, the zero value can be used directly as above. 
 

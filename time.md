@@ -71,6 +71,6 @@ Times may not contain a monotonic clock reading if they pass through functions l
 
 ## Comparing time
 
-When comparing time you should usually use the [Time.Equal](https://golang.org/pkg/time/#Time.Equal) method rather than ==, as the == operator also compares Location and the monotonic clock reading, which can be stripped in some circumstances. 
+When comparing time you should usually use the [Time.Equal](https://golang.org/pkg/time/#Time.Equal) method rather than ==, as the == operator also compares both Location, which sets the time zone offset but not the absolute time, and the monotonic clock reading, which can be stripped in some circumstances. 
 
-> Note that the Go == operator compares not just the time instant but also the Location and the monotonic clock reading. Therefore, Time values should not be used as map or database keys without first guaranteeing that the identical Location has been set for all values, which can be achieved through use of the UTC or Local method, and that the monotonic clock reading has been stripped by setting t = t.Round(0). In general, prefer t.Equal(u) to t == u, since t.Equal uses the most accurate comparison available and correctly handles the case when only one of its arguments has a monotonic clock reading.
+> In general, prefer t.Equal(u) to t == u, since t.Equal uses the most accurate comparison available and correctly handles the case when only one of its arguments has a monotonic clock reading.

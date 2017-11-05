@@ -11,27 +11,12 @@
 }
 
 a,
-.link-inherit {
-    color: #000;
-}
-
 a:hover,
 a:focus,
+.link-inherit,
 .link-inherit:hover,
 .link-inherit:focus {
     color: #000;
-}
-
-.hljs-comment {
-    color: #444!important;
-}
-
-pre,
-code,
-pre p,
-pre span,
-pre div {
-    background-color: #fff!important;
 }
 
 h1 {

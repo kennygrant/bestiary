@@ -58,6 +58,11 @@ func readHeader(file string) {
 }
 ```
 
+## Slicing is limited by cap
+
+Conversely to indexes \(from 0 to len\), slicing is limited by cap, not by len, as stated in the [spec](https://golang.org/ref/spec#Slice_expressions), which may seem a little counter-intuitive, and you probably shouldn't rely on. This means in some circumstances you can retrieve the backing data for a slice even outside its range, as long as it is between len and cap. If you need to see the original data it is better to keep a copy of the original slice to make the intent clear.
+
+
 ## Index out of range
 
 One of the most common slice mistakes is to attempt to access an index past the length of an array or slice, due to programmer error. This will result in a panic at runtime:
@@ -66,9 +71,18 @@ One of the most common slice mistakes is to attempt to access an index past the 
 
 While this may seem like a trivial mistake to make, it causes a panic at runtime, and you should take care to avoid it by always bounding index operations at the length of the slice. To catch this kind of error with varied input you should try running your code through [go-fuzz](https://github.com/dvyukov/go-fuzz#trophies). You can read more about how to use Go Fuzz in [Fuzzing a DNS Parser](https://blog.cloudflare.com/dns-parser-meet-go-fuzzer/).
 
-## Slicing is limited by cap
+## Copying slices 
 
-Conversely to indexes \(from 0 to len\), slicing is limited by cap, not by len, as stated in the [spec](https://golang.org/ref/spec#Slice_expressions), which may seem a little counter-intuitive, and you probably shouldn't rely on. This means in some circumstances you can retrieve the backing data for a slice even outside its range, as long as it is between len and cap. If you need to see the original data it is better to keep a copy of the original slice to make the intent clear.
+To copy a slice and duplicate the backing data, use the built-in copy function. The destination comes first in the arguments to copy. Beware when copying - the minimum of len(dst) and len(src) is chosen as the length of the new slice, so the destination will need enough space to fit src. Do not attempt to copy into an empty slice as it will not expand automatically. 
+
+```go
+// Make a new slice to copy
+src := []int{1,2,3}
+// Make sure dst has enough capacity for src
+dst := make([]int, len(src))
+// Copy from src to dst, n is the no of elements copied
+n := copy(dst, src)
+```
 
 ## Appending elements
 
@@ -139,6 +153,10 @@ for i, v := range t {
     s[i] = v
 }
 ```
+
+## Passing slices to functions
+
+Be aware when passing a slice to a function that while the slice itself is passed by value, it points to a backing array which does not change, even if the slice is copied, so modifying the elemnts of the slice passed in will modify elements of the original backing array. 
 
 ## Multi-dimensional slices or maps
 

@@ -3,10 +3,11 @@
 In Go packages are a way of scoping code, and map exactly to folders. Within a package, code can refer to any identifier within that package, public or private, while those importing the package may only reference public identifiers beginning with an uppercase letter. Each package can contain multiple Go files, and each Go file in a package begins with a declaration at the top of the file for the form:
 
 ```
+// Package x ... this comment explains succinctly what the package does
 package x
 ```
 
-where x is the package name. The name should be short, explicit and avoid punctuation - see [Package Names](https://blog.golang.org/package-names) on the Go blog.
+where x is the package name. The name should be short, explicit and avoid punctuation - see [Package Names](https://blog.golang.org/package-names) on the Go blog. The line preceeding the package declaration can be used to document the package - typically this will be done in the most important file in the package, the one which has the same name as the package itself. 
 
 ## Packages vs Dirs
 

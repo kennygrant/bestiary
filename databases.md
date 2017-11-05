@@ -6,16 +6,17 @@ You can find a list of go database drivers on the Go wiki page [SQL Drivers](htt
 
 ## Importing a driver
 
-Importing a database driver initialises the database. In retrospect this is an unfortunate design decision, and it would be better to register drivers explicitly, but it won't change in Go 1. So import the driver as follows in order to use a given database:
+Importing a database driver registers the database driver. In retrospect this is an unfortunate design decision, and it would be better to register drivers explicitly, but it won't change in Go 1. So import the driver as follows in order to use a given database:
 
 ```go
 import (
   "database/sql"
+  // This line registers the database driver and exposes the standard database/sql interface
   _ "github.com/lib/pq" 
 )
 ```
 
-If you import lots of drivers, you will be importing all the code they use, and registering the driver, so only import those you need to use in your program.
+If you import lots of drivers, you will be importing all the code they use, and registering the driver, so only import those you need to use in your program. If you import drivers this way you can only use the standard sql interface defined in database/sql, which makes it easier to change drivers later. You may find you want to use a higher level package to simplify common operations, or write you own wrapper for the database in complex applications. 
 
 ## Opening a connection
 
