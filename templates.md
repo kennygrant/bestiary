@@ -105,7 +105,7 @@ range with i extract
 
 ## Writing comma separated lists
 
-If you use range in templates to write a list, which must be comma separated (JSON for example requires commas on all array items, but not the last). The neatest way to do this is to use {{ if $i }} immediately after the range call:
+If you use range in templates to write a list, which must be comma separated (JSON for example requires commas on all array items, but not the last). The neatest way to do this is to use if $i immediately after the range call:
 
 ```go 
 
