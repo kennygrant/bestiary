@@ -1,7 +1,7 @@
 # Summary 
 
 * [Introduction](README.md)
-* [Title](TITLE.md)
+* [Title](title.md)
 * [Setup](setup.md)
 * [Strings](strings.md)
 * [Structs](structs.md)
