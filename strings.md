@@ -38,7 +38,8 @@ hello := 'h'
 This is why if you try to define a string with single quotes, you'll get an error:
 
 ```
-'hello'
+// This is not a valid string
+hello := 'hello'
 ```
 
 > 'invalid character literal \(more than one character\)'
@@ -69,7 +70,7 @@ but is represented by these runes:
 
 > \[72 101 108 108 111 44 32 19990 30028\]
 
-as you can see if you range over it.
+as you can see if you range over it (see below).
 
 ## Range on Strings {#range}
 
@@ -117,6 +118,8 @@ s := "les mots, et les choses"
 t := strings.TrimPrefix(s,"les ")
 fmt.Println(t)
 ```
+
+Which will remove the suffix or prefix provided as you would expect.
 
 ## Formatting Strings {#encodings}
 
@@ -219,7 +222,6 @@ defer file.Close()
 
 scanner := bufio.NewScanner(file)
 for scanner.Scan() {
-    // Do something with line
     fmt.Println("line:%s", scanner.Text())
 }
 
@@ -227,6 +229,3 @@ if err := scanner.Err(); err != nil {
     fmt.Println("error reading file: %s", err)
 }
 ```
-
-
-

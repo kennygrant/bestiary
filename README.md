@@ -24,7 +24,7 @@ Some are caused by unexpected data - a look at the [Trophy Cabinet](https://gith
 
 These are trivial errors, but are easy to make in any sufficiently large program, and are usually due to expectations about data passed in from outside the program which don't hold true \(hence they are easier to find with a fuzzer\). 
 
-There are also a few mistakes which are easy to make when learning Go which a fuzzer might not detect, such as not correctly passing values to a goroutine within a range loop, or misuse of an API. These are the bugs which this book will help the reader avoid.
+There are also a few mistakes which are easy to make when learning Go which a fuzzer might not detect, such as not correctly passing values to a goroutine within a range loop, misuse of an API, or lack of familiarity with the tradeoffs in the design of slices or strings in Go. These are the classes of bugs which this book will hopefully help the reader avoid.
 
 ### Why read this book?
 

@@ -26,12 +26,11 @@ So you don't need to set it explicitly, but you do need to put all your go code 
 
 While it can be frustrating for newcomers, you should accept that all go code will live in your `GOPATH` – there are workarounds to attempt to keep code elsewhere, but the standard tools at present assume you use `GOPATH` for your code. You may find projects sometimes use folders called pkg or src internally inside their main go gettable folder, but this is unrelated to `GOPATH` and is just a way of organising their code. The only special src folder is that at the root of your `GOPATH`.
 
-The similarly named ENV variable `GOROOT`  need only be set** if installing to a custom location**. In most circumstances you can ignore `GOROOT`, as it is not required for a normal Go setup. You may find some old instructions which reference it, but you can safely ignore those with a new install. So for a new version of Go install don't need to set `GOROOT` or `GOPATH` yourself.
+The similarly named ENV variable `GOROOT`  need only be set** if installing to a custom location**. In most circumstances you can ignore `GOROOT`, as it is not required for a normal Go setup. 
 
 ## Checking your setup
 
 To test your setup and confirm go is installed correctly, try the go command:
-
 ```bash
 go version
 ```
