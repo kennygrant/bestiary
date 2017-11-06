@@ -8,7 +8,7 @@ The playground starts with the same time for every run to make sure output is de
 
 ## Time Formatting
 
-Datetime formatting in Go is rather unusual. It uses a format string which functions as an example, unfortunately in practice this is rather difficult to remember. The Parse and Format functions take this format layout:
+Datetime formatting in Go is rather unusual. It uses a format string which also functions as an example time; unfortunately in practice this is rather difficult to remember. The Parse and Format functions take this format layout:
 
 ```
 Mon Jan 2 15:04:05 -0700 MST 2006

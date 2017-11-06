@@ -78,13 +78,13 @@ There is a uniform interface for fields and methods of a struct - the . operator
 
 ## Func Maps
 
-Templates have a set of global functions available, which are documented in the [text/template](https://golang.org/pkg/text/template/#hdr-Functions) package. 
+Templates have a set of global functions available, which are documented in the [text/template](https://golang.org/pkg/text/template/#hdr-Functions) package, these offer logical operations, printing and a few other conveniences. 
 
-Templates have a FuncMap, which allows you to add functions to templates if you need to format data in a particular way (for example formatting currencies), or provide global data like the title of your website or string translations without threading it through all the different handlers and setting it explicitly as part of the data provided to templates. Don't get too carried away adding functions to your templates though - they are deliberately pared down version of go so that most of the logic resides in your .go files, rather than in template files, and to keep the attack surface to a minimum. 
+To extend these Templates offer a FuncMap, which allows you to add functions to templates if you need to format data in a particular way (for example formatting currencies), or provide global data like the title of your website or string translations without threading it through all the different handlers and setting it explicitly as part of the data provided to templates. Don't get too carried away adding functions to your templates though - they are deliberately pared down version of go so that most of the logic resides in your .go files, rather than in template files, and to keep the attack surface to a minimum. Templates are deliberately minimalist in Go and you should strive to keep them so. 
 
 ## Prefix operators 
 
-The boolean operators available in templates are all functions strictly speaking, which means they use prefix notation. Use and x y, not x and y. If you're coming from Ruby this may come as a surprise, as the function will work with one argument and may appear to work, but is subtly different in behaviour.  
+The boolean operators available in templates are all functions, which means they use prefix notation. Use _and_ x y, not x _and_ y. If you're coming from Ruby this may come as a surprise, as using _and_ with one argument will appear to work, but does not behave as you might expect. 
 
 ```go
 {{/* Don't do this, it will always be true if x is non nil */}}
@@ -153,10 +153,11 @@ To render a template within another template, assuming they are in the same set,
 ```go
 <body>
 <h1>Hello</h1>
-{{ template "views/content.html.got" . }}
+{{ template "views/users/content.html.got" . }}
 </body>
 ```
 
+This will render the template with name "views/users/content.html.got" inside the main template above.
 
 ## Template Blocks
 

@@ -5,7 +5,7 @@ An interface in go is a contract specifying which method signatures a type must 
 ## Keep interfaces simple
 
 > The bigger the interface, the weaker the abstraction
-> Rob Pike
+> – Rob Pike
 
 Interfaces are at their most powerful when they express a simple contract that any type can easily conform to. If they start to demand a laundry list of functions \(_more than a few_ is a good rule of thumb\), they have very little advantage over a concrete type as an argument, because the caller is not going to be able to create an alternative type without substantially recreating the original.
 
@@ -109,11 +109,11 @@ An interface will only be nil when both their type and value fields are nil, so 
 ```go
 // E is a type conforming to the error interface  
 type E struct{}  
-func \(e \*E\) Error\(\) string { return fmt.Sprintf\("%p", e\) }
+func (e *E) Error() string { return fmt.Sprintf("%p", e) }
 
 // typederror returns an interface  
-func typederror\(\) error {  
-    var e \*E = nil  
+func typederror() error {  
+    var e *E = nil  
     return e // e is not nil as expected  
 }
 ```

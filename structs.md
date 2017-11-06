@@ -1,12 +1,12 @@
 # Structs & Types
 
-A struct in Go is a sequence of fields, each of which has a name and type public and private rules are the same as names in packages - lowercase names are private , names starting with uppercase are exported. Structs can also have methods, which allows them to fulfil interfaces. Structs do not inherit from each other, but they can embed another struct to gain its fields and behaviour. The embedder does not know anything about the struct it is embedded in and cannot access it.
+A struct in Go is a sequence of fields, each of which has a name and type public and private rules are the same as names in packages - lowercase names are private, names starting with Uppercase are exported. Structs can also have methods, which allows them to fulfil interfaces. Structs do not inherit from each other, but they can embed another struct to gain its fields and behaviour. The embedder does not know anything about the struct it is embedded in and cannot access it.
 
 ## Forget inheritance
 
 _During a Java user group meeting James Gosling \(Java's inventor\) was asked "If you could do Java over again, what would you change?". He replied: "I'd leave out classes"_
 
-Go eschews inheritance in favour of composition. If you're accustomed to building large hierarchies of types as a way of organising your data, you might find this jarring at first. Go interfaces provide polymorphism, so if your function needs something which barks, it simply asks for a Barker. Go embedding provides composition, so if your Barker needs to Yap as well, it can embed a struct to do so. Go provides tools which solve the same problems as inheritance, without most of the downsides. You may find you need it less than you think.
+Go eschews inheritance in favour of composition. If you're accustomed to building large hierarchies of types as a way of organising your data, you might find this jarring at first. Go interfaces provide polymorphism, so if your function needs something which Barks, it simply asks for a Barker. Go embedding provides composition, so if your Barker needs to Yap as well, it can embed a struct to do so. Go provides tools which solve the same problems as inheritance, without most of the downsides. You may find you need it less than you think.
 
 Many developers coming to go from more complex OOP languages start by trying to reintroduce inheritance by using embedding. This will lead to frustration, because embedding does not work in the same way as inheritance, by design.
 
@@ -32,7 +32,8 @@ type B struct{
   A // Embeds A - note this is not inhertance 
 }
 
-// Type B attempts to redefine Bar() but type A doesn't know about it
+// Type B attempts to redefine Bar() 
+// but type A doesn't know about it
 func (b B) Bar() { fmt.Println("This is a method on B") }
 
 func main() {
@@ -40,11 +41,9 @@ func main() {
 }
 ```
 
-A.Foo will call A.Bar, not B.Foo as it might if B inherited from A, so it will output:
+A.Foo will call A.Bar, not B.Foo as it might if B inherited from A, because A does not know about B.
 
-> This is a method on A
-
-Inheritance was deliberately left out of Go, so don't try to recreate it with composition. If you find yourself frustrated that structs are not able to adjust the fields of their embedder, you're not really composing functionality. Always try to use the simplest solution first, and only use composition if you definitely need to share behaviour between two different structs.
+Inheritance was deliberately left out of Go, so don't try to recreate it with composition. If you find yourself frustrated that embedded structs don't know about the embedder, you're not really composing functionality. Always try to use the simplest solution first (separate structs), and only use composition if you definitely need to share the same behaviour between two types.
 
 ## Don't use this or self
 
@@ -52,7 +51,7 @@ While it is common in other languages, it is frowned upon in Go to use [self or 
 
 ## Type assertions 
 
-Use a type assertion to check the type wrapped in an interface is of the expected type, or to retrieve the value. If type assertions are used without the , ok form, a panic ensues if the type is not as expected, so it's always better to use the comma ok form and check the boolean returned. 
+Use a type assertion to check the type wrapped in an interface is of the expected type, or to retrieve the value, rather than attempting to use it without checks. If type assertions are used _without_ the comma ok form, a panic ensues if the type is not as expected, so it's always better to use the comma ok form and check the boolean returned. 
 
 ```go
 // Convert from interface back to underlying type int
@@ -76,13 +75,17 @@ if !ok {
 
 ## Nil pointer dereference
 
-This error is usually caused by failing to check errors properly \(i.e. using a value without checking that there were no errors\), or storing a nil pointer and later trying to use it. **Check and handle all errors**. Never use  \_ as a shortcut in production code.
+This error is usually caused by failing to check errors properly \(i.e. using a value without checking that there were no errors\), or storing a nil pointer and later trying to use it. **Check and handle all errors**. Never use  \_ as a shortcut in production code:
 
 ```go
-// Don't do this, value may be invalid
+// Don't do this, value may well be invalid
 value, _ := f() 
 ...
+```
 
+Instead, always check errors:
+
+```go
 // Do this 
 value, err := f()
 if err != nil {
@@ -174,8 +177,10 @@ func (t *T) Bar() { fmt.Println("bar") }
 
 
 func main() {
-   // t can call methods Foo and Bar as is is addressable
-   // but beware if Bar() changes the receiver changes will be lost
+   // t can call methods Foo and Bar 
+   // as is is addressable
+   // but beware if Bar() changes 
+   // the receiver changes will be lost
    t := T{}
    t.Foo()
    t.Bar() // compiler converts to (&t).Bar() 

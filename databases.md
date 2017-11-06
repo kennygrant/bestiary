@@ -123,7 +123,9 @@ func ReadUser(columns map[string]interface{}) *User {
 
 ## Handling Relations
 
-This can seem a bit more fiddly than other languages, however the best approach is a straightforward one - retrieve the indexes of relations, and then if you require all of their information, retrieve the relations separately from the database. You can of course retrieve them with a join at the same time, but in complex apps it helps to separate retrieving relations from retrieving the actual relation records, which is often not necessary \(for example you might need to know a user has 8 images, and which ids they have, but not all the image captions and image data\).
+This can seem a bit more fiddly than other languages, however the best approach is a straightforward one - retrieve the indexes of relations, and then if you require all of their information, retrieve the relations separately from the database. 
+
+You can of course retrieve them with a join at the same time, but in complex apps it helps to separate retrieving relations from retrieving the actual relation records, which is often not necessary \(for example you might need to know a user has 8 images, and which ids they have, but not all the image captions and image data\). Being forced to handle relations manually does have advantages compared to the say ActiveRecord which can pull in far too much data behind the scenes.
 
 ## Connections are recycled
 

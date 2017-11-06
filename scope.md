@@ -7,7 +7,7 @@ Go scope is defined by blocks. A block is a possibly empty sequence of declarati
 3. Function block - receivers, arguments, return values and identifiers within a function
 4. Inner Blocks - identifiers declared within an inner block in a function end at the end of that block
 
-For example package block identifiers:
+For example package block identifiers include variables and functions within the package:
 
 ```go
 // An exported variable
@@ -17,7 +17,7 @@ var Exported = "hello"
 var pkgOnly = 1
 ```
 
-Function block identifiers:
+Function block identifiers include receivers, arguments, return values and identifiers within a function:
 
 ```go
 // Functions define a block

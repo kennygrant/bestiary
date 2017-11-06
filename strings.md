@@ -1,6 +1,6 @@
 # Strings
 
-Source code in Go is in the UTF-8 encoding. This means string literals you create will be UTF strings, and the source files themselves are UTF-8. The string type offers no such guarantees, it stores an array of bytes, but by convention it is usually UTF-8, and you should convert to Unicode at the boundaries of your app. For a detailed overview of the internal workings of strings in Go see this [strings overview](https://blog.golang.org/strings) on the official Go blog.
+Source code in Go is in the UTF-8 encoding. This means string literals you create will be UTF strings, and the source files themselves are UTF-8. The string type offers no such guarantees, it stores an array of bytes, but by convention it is usually UTF-8, and you should convert to Unicode at the boundaries of your app. For a detailed overview of the internal workings of strings in Go see [Strings, bytes, runes and characters in Go](https://blog.golang.org/strings) on the official Go blog.
 
 ## Declaring strings {#declaring}
 
@@ -209,7 +209,7 @@ if err != nil {
 fmt.Printf("%s", b)
 ```
 
-Unless reading very small files like config files which will never be large, consider reading the file in chunks. You can read a line-based file with [bufio.Scanner](https://golang.org/pkg/bufio/) and the Scan function:
+So consider reading large files in chunks. You can read a line-based file with [bufio.Scanner](https://golang.org/pkg/bufio/) and the Scan function:
 
 ```go
 file, err := os.Open("path/to/file")
@@ -218,13 +218,13 @@ if err != nil {
     return
 }
 defer file.Close()
-
 scanner := bufio.NewScanner(file)
 for scanner.Scan() {
     fmt.Println("line:%s", scanner.Text())
 }
-
 if err := scanner.Err(); err != nil {
     fmt.Println("error reading file: %s", err)
 }
 ```
+
+Also consider that files conform to io.Reader and io.Writer from the io package, and can be used directly with functions which accept an io.Reader.

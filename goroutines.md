@@ -3,7 +3,7 @@
 Prefix a function or method call with the `go` keyword to run the call in a new goroutine, asynchronously. The `go` keyword is one of the distinguishing features of Go, but it can lead to subtle bugs if not used carefully.
 
 > Do not communicate by sharing memory; instead, share memory by communicating.
-> Rob Pike
+> – Rob Pike
 
 ## Asynchronous execution
 

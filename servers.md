@@ -197,7 +197,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-If you want to store information in cookies you should try to keep it limited, and encrypt the information stored, as it is stored on the client machine outside your control. The [gorilla/sessions](http://www.gorillatoolkit.org/pkg/sessions) package allows you to use encrypted cookies. 
+If you want to store information in cookies you should try to keep it limited, and encrypt the information stored, as it is stored on the client machine outside your control. 
+
+The [gorilla/sessions](http://www.gorillatoolkit.org/pkg/sessions) package allows you to use encrypted cookies and store session-specific information. 
 
 
 ## Making http requests
@@ -321,7 +323,7 @@ To use it, simply import the package:
 import _ "net/http/pprof"
 ```
 
-**Beware **though if you register it there are hidden side effects. It will attach endpoints to the default serve mux during init. For this and performance reasons you should not import it in production. You can find out more about profiling in [Profiling Go Programs](https://blog.golang.org/profiling-go-programs).
+**Beware** though if you register it there are hidden side effects. The pprof package will attach endpoints to the default serve mux during init, but unfortunately this behaviour cannot change due to the Go 1 promise. For this and performance reasons you should not import it in production, but use it for development only. You can find out more about profiling in [Profiling Go Programs](https://blog.golang.org/profiling-go-programs).
 
 ## Latency
 

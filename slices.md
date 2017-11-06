@@ -162,7 +162,7 @@ for i, v := range t {
 
 Be aware when passing a slice to a function that while the slice itself is passed by value, it points to a backing array which does not change, even if the slice is copied, so modifying the elemnts of the slice passed in will modify elements of the original backing array. 
 
-## Multi-dimensional slices or maps
+## Multi-dimensional slices
 
 Go doesn't have multi-dimensional  slices or maps, you have to create them by hand, initialising each subslice.
 
