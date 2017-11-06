@@ -135,9 +135,9 @@ First we encounter the rather inscrutable message:
 
 > main.foo(0x1042bfa4, 0x0, 0x10410008, 0x0)
 
-This details the function with the panic, and may provide some clues if you have a nil pointer exception as to which pointer is nil - it includes the arguments to the function (including the method struct if any, which is always the first argument), and the return values. In this case, beacuse the program uses defer to panic, the return values are filled in before panic, hence the argument and return pointers are the same value of 0x10410008. Without the defer the second two words would both be nil. 
+This details the function with the panic, and may provide some clues if you have a nil pointer exception as to which pointer is nil - it includes the arguments to the function (including the method struct if any, which is always the first argument), and the return values. In this case, because the program uses defer to panic, the return values are filled in before panic, hence the argument and return pointers are the same value of 0x10410008. Without the defer the second two words would both be nil. 
 
-Then the more important line which tells us which file and line the problem occured at:
+Then the more important line which tells us which file and line the problem occurred at:
 
 > /tmp/sandbox611247315/main.go:13 +0xdb
 
@@ -145,7 +145,7 @@ If nothing else, this is the line you need to read, as it clearly states exactly
 
 Remember that methods can be called on nil pointers, which can lead to subtle bugs if the callee never expects this and then tries to use the pointer as if it is initialised. 
 
-If you're debugging complex stack traces featuring many goroutines with similar stack traces you may find [panicparse](https://github.com/maruel/panicparse) library useful. 
+If you're debugging complex stack traces featuring many goroutines with similar stack traces you may find the [panicparse](https://github.com/maruel/panicparse) library useful. 
 
 
 ## Recovering from a panic

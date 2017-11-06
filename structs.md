@@ -106,7 +106,7 @@ You can define methods either on the struct value or struct pointer. If unsure, 
 * If the type is stored in a map or interface, it is not addressable and T cannot use \*T methods
 * If you need any pointer receivers, make them all pointer receivers
 
-The outcome of these guidlines is that usually it's best to work with pointers to structs and thus to define methods on the pointer, not on the value. For small structs you may want to use values for efficiency, but for large structs or structs which modify themselves, you will want to use pointer receivers. There is more detail on the rules for pointer receivers at the end of this chapter in the section on Method Sets.
+The outcome of these guidelines is that usually it's best to work with pointers to structs and thus to define methods on the pointer, not on the value. For small structs you may want to use values for efficiency, but for large structs or structs which modify themselves, you will want to use pointer receivers. There is more detail on the rules for pointer receivers at the end of this chapter in the section on Method Sets.
 
 ## Pointers vs Values in Slices
 

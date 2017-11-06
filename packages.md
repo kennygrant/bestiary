@@ -7,7 +7,7 @@ In Go packages are a way of scoping code, and map exactly to folders. Within a p
 package x
 ```
 
-where x is the package name. The name should be short, explicit and avoid punctuation - see [Package Names](https://blog.golang.org/package-names) on the Go blog. The line preceeding the package declaration can be used to document the package - typically this will be done in the most important file in the package, the one which has the same name as the package itself. 
+where x is the package name. The name should be short, explicit and avoid punctuation - see [Package Names](https://blog.golang.org/package-names) on the Go blog. The line preceding the package declaration can be used to document the package - typically this will be done in the most important file in the package, the one which has the same name as the package itself. 
 
 ## Packages vs Dirs
 

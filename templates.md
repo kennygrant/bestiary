@@ -129,7 +129,7 @@ The printf function is available in templates to print values as strings:
 
 ## The line eater
 
-If you need to add newlines in your template for legibility (for example when outputing many columns of csv), you can invoke the line eater with the - symbol beside the braces (either start or end braces). The template:
+If you need to add newlines in your template for legibility (for example when outputting many columns of csv), you can invoke the line eater with the - symbol beside the braces (either start or end braces). The template:
 
 ```go
 {{- .One }}

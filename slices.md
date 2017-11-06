@@ -86,7 +86,7 @@ dst := make([]int, len(src))
 n := copy(dst, src)
 ```
 
-If you try to copy a src of lenght 100 into a destination slice of length 1, only 1 entry will be copied into the destination.
+If you try to copy a src of length 100 into a destination slice of length 1, only 1 entry will be copied into the destination.
 
 ## Appending elements
 
@@ -160,7 +160,7 @@ for i, v := range t {
 
 ## Passing slices to functions
 
-Be aware when passing a slice to a function that while the slice itself is passed by value, it points to a backing array which does not change, even if the slice is copied, so modifying the elemnts of the slice passed in will modify elements of the original backing array. 
+Be aware when passing a slice to a function that while the slice itself is passed by value, it points to a backing array which does not change, even if the slice is copied, so modifying the elements of the slice passed in will modify elements of the original backing array. 
 
 ## Multi-dimensional slices
 
