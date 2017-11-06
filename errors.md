@@ -20,7 +20,7 @@ You can use your own type for error, as long as it conforms to this interface, i
 If you're defining interfaces, prefer requiring the error interface rather than a concrete type. You can use type assertions to determine if an error is of the type you're interested in.
 
 ## to, err := human\(\)
-> – Francesc Campoy
+> to, err := human\(\) – Francesc Campoy
 
 The convention in Go code is always to return an error as the last argument of a function, so if it has multiple arguments. Return an error as the last argument, and try to make it as specific as possible:
 
@@ -87,8 +87,7 @@ func DoSomething() error {
 }
 ```
 
-Dave Cheney has written a talk about handling errors in go – [Don't just check errors, handle them gracefully](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
-
+Dave Cheney has written a talk about handling errors in go – [Don't just check errors, handle them gracefully](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully), which covers how to handle errors gracefully and avoid falling into the pitfalls outlined above. 
 
 ## Stack traces on errors
 
@@ -266,12 +265,17 @@ For the same reasons, don't use log.Fatalf or log.Panic except in tests or short
 
 In almost all cases you should recover gracefully from errors instead of calling a function which terminates the program.
 
+```go 
+    // Don't do this, handle the error
+    log.Fatalf("broken:%s",err)
+```
+
 ## Asserts & Exceptions
 
 Go doesn't provide asserts or exceptions by design. There are reasons given for both decisions in the [FAQ](https://golang.org/doc/faq#exceptions) on the Go website. 
 
 ## Go is boring
 
-As you'll have gathered, the Go language is deliberately limited and boring. If you want a stable platform on which to build exciting programs, this is a feature, not a bug. The language keeps getting better with every iteration (faster, fewer pauses, bugs fixed) without breaking your programs. 
+Hopefully by now it is clear the Go language is deliberately limited and boring. If you want a stable platform on which to build exciting programs, this is a feature, not a bug. The language keeps getting a little better with every iteration (faster, fewer pauses, bugs fixed) without breaking your programs or introducing surprising new idioms. 
 
 Less, in the case of programming languages, is more.

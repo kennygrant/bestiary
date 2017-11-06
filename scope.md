@@ -72,6 +72,7 @@ The defer statement does not run at the end of a block, but at the end of the co
 The defer statement freezes its arguments the instant it is evaluated \(the line it occurs in the source code\), not when it executes after leaving the containing function. This means any values changed after it occurs do not get passed to defer.
 
 ```go
+  // Define a string s "hello"
   s := "hello"
 
   // At point of defer, s is "hello"
@@ -88,11 +89,15 @@ Case statements inside a switch in go **do not fall through by default**, so bre
 ```go
 switch(i) {
 case 0:
-// do something
+// do something here
+// ...
 case 1:
-// do something
+// do something here
+// ...
 case 3:
-   fallthrough // the fallthrough keyword is required to fall through explicitly
+    // the fallthrough keyword is required 
+    // to fall through explicitly
+   fallthrough 
 default:
 // do something
 }
@@ -100,7 +105,7 @@ default:
 
 ## Naked Returns
 
-In go, naked returns \(the use of the keyword return without parameters\) will return the current state of the named return values. This is sometimes used as a shortcut to avoid specifying what is returned.  Try to avoid using naked returns, they are unclear, particularly within or at the end of a large function. Instead specify exactly what will be returned, and use nil for values when returning an error.
+In go, naked returns \(the use of the keyword return without parameters\) will return the current state of the named return values. This is sometimes used as a shortcut to avoid specifying what is returned, but has fallen somewhat out of favour. Try to avoid using naked returns in your go code, they are unclear, particularly within or at the end of a large function. Instead specify exactly what will be returned, and use nil or zero value for all values when returning an error.
 
 ## Prefer synchronous functions
 

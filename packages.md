@@ -83,6 +83,14 @@ Package reflect also bypasses the Go type system, so programs using it don't hav
 ```go
 // Think twice!
 import "reflect"
+
+// Using reflect and empty interfaces
+// obscures your intent for callers
+// and subverts the type system
+func MyAPIFunc(myvar interface{}) {
+    // ... requires typecasts and perhaps reflect
+}
+
 ```
 
 ## Cgo is not Go

@@ -76,6 +76,14 @@ When comparing time you should usually use the [Time.Equal](https://golang.org/p
 
 > In general, prefer t.Equal(u) to t == u, since t.Equal uses the most accurate comparison available and correctly handles the case when only one of its arguments has a monotonic clock reading.
 
+```go
+    t := time.Now()
+    t2 := time.Now().UTC()
+    if t.Equal(t2) {
+        // Use t.Equal to compare times
+    }
+```
+
 ## Formats vs Values 
 
 Despite their beguiling appearance, time formats are not time values, so if testing parsing, be aware that using a format as a value is often invalid due to formatting directives in the format string which are not valid in a time:
