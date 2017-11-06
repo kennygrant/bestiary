@@ -139,17 +139,17 @@ Most of the time when working with unicode strings in Go you won't have to do an
 The go external package [text/encoding](https://godoc.org/golang.org/x/text/encoding) packages provide utilties for translating strings from Go's native UTF-8 to popular encodings and back (such as UTF-16, EUC-JP, GBK and Big5). Encoders and Decoders are available for working with arrays of bytes or strings.
 
 ```go
-   // Convert from Go's native UTF-8 to UTF-16
-   // using golang.org/x/text/encoding/unicode
-	s := "エヌガミ"
+// Convert from Go's native UTF-8 to UTF-16
+// using golang.org/x/text/encoding/unicode
+s := "エヌガミ"
 
-	// Encode native UTF-8 to UTF-16
-	encoder := unicode.UTF16(unicode.LittleEndian, unicode.UseBOM).NewEncoder()
-	utf16, err := encoder.String(s)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("utf16:", utf16)
+// Encode native UTF-8 to UTF-16
+encoder := unicode.UTF16(unicode.LittleEndian, unicode.UseBOM).NewEncoder()
+utf16, err := encoder.String(s)
+if err != nil {
+    fmt.Println(err)
+}
+fmt.Println("utf16:", utf16)
 ```
 
 ## Strings are immutable {#immutable}
