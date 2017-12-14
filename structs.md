@@ -41,7 +41,7 @@ func main() {
 }
 ```
 
-A.Foo will call A.Bar, not B.Foo as it might if B inherited from A, because A does not know about B.
+A.Foo will call A.Bar, not B.Bar as it might if B inherited from A, because A does not know about B. 
 
 Inheritance was deliberately left out of Go, so don't try to recreate it with composition. If you find yourself frustrated that embedded structs don't know about the embedder, you're not really composing functionality. Always try to use the simplest solution first (separate structs), and only use composition if you definitely need to share the same behaviour between two types.
 
