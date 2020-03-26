@@ -124,7 +124,7 @@ func main() {
         done_channel <- true
     }()
     variable := <-channel // read 1    
-    ok <-done_channel
+    ok := <-done_channel
     fmt.Println(variable,ok)
 }
 ```
